@@ -1,34 +1,40 @@
-import React, { ComponentElement } from "react";
+import React from "react";
 import { Trainer } from "../models/Trainer";
-import {Batch} from '../models/Batch';
-import {getBatchById} from '../api/batch'
+import { Batch } from "../models/Batch";
+import { getBatchById } from "../api/batch";
+
+import { allTheMapStateToProps } from "../redux/reducers";
+import { allTheActionMappers } from "../redux/action-mapper";
+import { batch, connect } from "react-redux";
+import {Alert} from "reactstrap"
+import { trackPromise } from 'react-promise-tracker';
+import {Spinner} from "../GeneralPurposeComponents/spinner/spinner"
+
 
 import {
   getAllTrainers,
   createConsentRequest,
 
-  getAllEligibleTrainers
+  getAllEligibleTrainers,
+  createTrainerBatch
 } from '../api/consent';
 
 import {
-  Form,
-  FormGroup,
-  Label,
   Col,
-  Input,
   Button,
-  Toast,
-  ToastHeader,
-  ToastBody,
   ListGroupItem,
   ListGroup,
   Row,
   Container,
 } from "reactstrap";
-import { Consent } from "../models/Consent";
 import { assignTrainer } from "../api/batch";
 import { PageTitleBar } from "../Components/GenerateBatch/PageTitleBar";
 import { smallBtnStyles } from "../Styles/generateBatchStlyes";
+
+interface ITrainerProps {
+  currentBatch: Batch; //we must give this component a batch for it to work
+  parentTop: any;
+}
 
 
 interface IAssignmentComponentState {
@@ -37,10 +43,12 @@ interface IAssignmentComponentState {
   updateArray: Trainer[];
   buttonArray: any[];
   batch: Batch | null;
+  assignIsOpen: boolean;
+  requestIsOpen: boolean;
 }
 
 export class TrainerAssignmentComponent extends React.Component<
-  any,
+  ITrainerProps,
   IAssignmentComponentState
 > {
   constructor(props: any) {
@@ -50,22 +58,25 @@ export class TrainerAssignmentComponent extends React.Component<
       eligibleTrainers: [],
       updateArray: [],
       buttonArray: [],
-      batch: null
+      batch: null,
+      assignIsOpen: false,
+      requestIsOpen: false
     };
   }
+
 
 
   // componentDidMount() {
   //   this.getAllTrainers();
   // }
-  async componentDidMount(){
-     
+  async componentDidMount() {
     //this.getAllTrainers();
+
+    let allTrainers: Trainer[] = await getAllTrainers();
+
     
 
-    let allTrainers : Trainer[] = await getAllTrainers();
-
-    let batch = await  getBatchById(2);
+    let batch = await  getBatchById(this.props.currentBatch.batchId);
     
     // this.setState({
     //   trainers:allTrainers
@@ -74,7 +85,7 @@ export class TrainerAssignmentComponent extends React.Component<
     //   this.getAllEligibleTrainers(2);
     //  });
 
-    let eligibleTrainers : Trainer[] = await getAllEligibleTrainers(2);
+    let eligibleTrainers : Trainer[] = await getAllEligibleTrainers(this.props.currentBatch.batchId);
     // this.setState({
     //   trainers:allTrainers,
     //   eligibleTrainers:trainers
@@ -82,70 +93,98 @@ export class TrainerAssignmentComponent extends React.Component<
     // this.sleep(50).then(()=>{
     //   this.assignEligibility();
     //  });
-    
-  
-    let tempButtonArray:any[] = [];
-    let eligibleTrainerIds = eligibleTrainers.map((trainer) =>{
+
+    let tempButtonArray: any[] = [];
+    let eligibleTrainerIds = eligibleTrainers.map((trainer) => {
       return trainer.trainerId;
-    })
+    });
     // console.log("debugging");
     // console.log(allTrainers);
     // console.log(allEligible);
-    
+
     let i = 0;
-    
-    allTrainers.forEach(trainer =>{
+
+    allTrainers.forEach((trainer) => {
       console.log(eligibleTrainerIds.includes(trainer.trainerId));
       console.log(eligibleTrainerIds);
-      if(eligibleTrainerIds.includes(trainer.trainerId)){
+      if (eligibleTrainerIds.includes(trainer.trainerId)) {
         trainer.isEligible = true;
-      } else{
+      } else {
         trainer.isEligible = false;
       }
       // this.sleep(50).then(()=>{
       //   let newButton = this.getButton(trainer, i , trainer.trainerId);
       //   tempButtonArray.push(newButton);
-        
-      // });
-       i = i + 1;
-    })
-    this.setState({
-      trainers:allTrainers,
-      eligibleTrainers:eligibleTrainers,
-      batch:batch
-    })
-   
 
-    
+      // });
+      i = i + 1;
+    });
+    this.setState({
+      trainers: allTrainers,
+      eligibleTrainers: eligibleTrainers,
+      batch: batch,
+    });
   }
 
+  sleep = (milliseconds: any) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
+  // setUserid =(id: any) => {
+  //     this.setState({
+  //         userid: id.currentTarget.value,
+  //       })
+  //     this.sleep(50).then(() => {
+  //         this.updateReimbursements();
+  //       })
 
-sleep = (milliseconds : any) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
-// setUserid =(id: any) => {
-//     this.setState({
-//         userid: id.currentTarget.value,
-//       }) 
-//     this.sleep(50).then(() => {
-//         this.updateReimbursements();
-//       })
-    
-// }
-
+  // }
 
   // assign = async (trainer: Trainer, batchId: number) => {
   //   await assignTrainer(trainer.trainerId, batchId);
   // };
   assign = async(trainerId:number, batchId:number) =>{
-      await assignTrainer(trainerId, 8);
+
+    trackPromise(
+      createTrainerBatch(trainerId,batchId)
+        .then((consentRequests) =>{
+          this.setState({
+              assignIsOpen:true
+          })
+        }), "loading-area"
+    );
+      //await assignTrainer(trainerId, batchId);
+      //let success: boolean|undefined = await createTrainerBatch(trainerId, batchId);
+
+      // if(success){
+      //   this.setState({
+      //     assignIsOpen:true
+      //   })
+      // }
+      
+      
   }
   // request = async (trainer: Trainer, batchId: number) => {
   //   await createConsentRequest(trainer.trainerId, null, batchId);
   // };
   request = async(trainer:Trainer, batchId:number)=>{
+
+    trackPromise(
+      createConsentRequest(trainer.trainerId, null, batchId)
+        .then((consentRequests) =>{
+          this.setState({
+            requestIsOpen:true
+          })
+        }),"loading-area"
+    );
       
-      await createConsentRequest(trainer.trainerId, null, 2);
+      //let success:boolean|undefined = await createConsentRequest(trainer.trainerId, null, batchId);
+
+      // if(success){
+      //   this.setState({
+      //     requestIsOpen:true
+      //   })
+      // }
+      
   }
 
 
@@ -184,15 +223,11 @@ sleep = (milliseconds : any) => {
     
     let jsxElement =(<><h4>test</h4></>);
     if(trainer.isEligible){
-      return <Button color="primary" style={smallBtnStyles} id={i.toString()} onClick={()=>this.assign(trainerId, 8) }>Assign</Button>
+      return <Button color="primary" style={smallBtnStyles} id={i.toString()} onClick={()=>this.assign(trainerId, this.props.currentBatch.batchId) }>Assign</Button>
     }else{
-      return <Button color="primary" style={smallBtnStyles} id={i.toString()} onClick={()=>this.request(trainer, 8)}>Request Consent</Button>
+      return <Button color="primary" style={smallBtnStyles} id={i.toString()} onClick={()=>this.request(trainer, this.props.currentBatch.batchId)}>Request Consent</Button>
     }
-    
-
-    };
-  
-  
+  };
 
   // let get_All_Trainers = async () => {
 
@@ -227,13 +262,13 @@ sleep = (milliseconds : any) => {
   //   console.log("debugging");
   //   console.log(allTrainers);
   //   console.log(allEligible);
-    
+
   //   let i = 0;
-    
+
   //   allTrainers.forEach(trainer =>{
   //     console.log(eligibleTrainerIds.includes(trainer.trainerId));
   //     if(eligibleTrainerIds.includes(trainer.trainerId)){
-        
+
   //       trainer.isEligible = true;
   //       updateArray.push(trainer);
   //     } else{
@@ -251,8 +286,7 @@ sleep = (milliseconds : any) => {
   //     buttonArray:tempButtonArray
   //   })
   //   console.log(this.state.buttonArray);
-    
-    
+
   // }
 
   //   let allTrainers: Trainer[] = await getAllTrainers();
@@ -267,41 +301,67 @@ sleep = (milliseconds : any) => {
   //     trainers: allTrainers,
   //   });
   // };
-  
+  toggleAssign(){
+    this.setState({
+      assignIsOpen: !this.state.assignIsOpen
+    })
+  }
+
+  toggleRequest(){
+    this.setState({
+      requestIsOpen: !this.state.requestIsOpen
+    })
+  }
 
   render() {
-    console.log(this.state.trainers)
-    let buttonArray:any[] = []
+    console.log(this.state.trainers);
+    let buttonArray: any[] = [];
     let trainers = this.state.trainers;
-    let i =0;
-    trainers.forEach(trainer=>{
-        let button = this.getButton(trainer, i, trainer.trainerId);
-        buttonArray.push(button);
-    })
+    let i = 0;
+    trainers.forEach((trainer) => {
+      let button = this.getButton(trainer, i, trainer.trainerId);
+      buttonArray.push(button);
+    });
     return (
       <>
-        <Container><PageTitleBar pageTitle={"Trainer Assignment"}/></Container>
+        <div>
+        <Spinner area="loading-area" />
+        </div>
+        <Alert color="primary" isOpen={this.state.assignIsOpen} toggle={this.toggleAssign.bind(this)}>Trainer Assigned!</Alert>
+        <Alert color="primary" isOpen={this.state.requestIsOpen} toggle={this.toggleRequest.bind(this)}>Trainer Requested!</Alert>
+        {/* <Container><PageTitleBar pageTitle={"Trainer Assignment"}/></Container> */}
         <ListGroup>
-          {this.state.trainers.map((trainer: Trainer, i) => {
-            //trying to use the same item display everywhere
-            return (
-              <ListGroupItem key={i}>
-                <Row>
-                  <Col>
-                    <Row>
-                      <Col>{trainer.firstName + ' ' + trainer.lastName}</Col>
-                    </Row>
-                    <Row>
-                      <Col>{buttonArray[i]}</Col>
-                    </Row>
-                    <Row>{/* <Col>{this.getButton(trainer, i)}</Col> */}</Row>
-                  </Col>
-                </Row>
-              </ListGroupItem>
-            );
-          })}
+          {
+              this.state.trainers.length==0?
+                <>There are no trainers</>
+              :
+                this.state.trainers.map((trainer: Trainer, i) => 
+                {
+                    //trying to use the same item display everywhere
+                    return (
+                      <ListGroupItem key={i}>
+                        <Row>
+                          <Col>
+                            <Row>
+                              <Col>{trainer.firstName + ' ' + trainer.lastName}</Col>
+                            </Row>
+                            <Row>
+                              <Col>{buttonArray[i]}</Col>
+                            </Row>
+                            <Row>{/* <Col>{this.getButton(trainer, i)}</Col> */}</Row>
+                          </Col>
+                        </Row>
+                      </ListGroupItem>
+                    )
+                  })
+          }
         </ListGroup>
       </>
     );
   }
 }
+
+export const TrainerAssignmentRedux = connect(
+  allTheMapStateToProps,
+  allTheActionMappers
+)(TrainerAssignmentComponent);

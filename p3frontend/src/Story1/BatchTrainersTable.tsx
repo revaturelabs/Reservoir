@@ -1,22 +1,15 @@
 import React from "react";
-import { Table, Button, Container, Row, Col, Spinner } from "reactstrap";
-import { Associate } from "../models/Associate";
-import { getAllAssociates, updateAssociate } from "../models/Associate";
-import { getBatchById } from "../api/batch";
+import { Container, Spinner } from "reactstrap";
 import { Batch } from "../models/Batch";
 import { ErrorAlert } from "../GeneralPurposeHelpers/ErrorAlert";
 import { prnt } from "../GeneralPurposeHelpers/Prnt";
 import { axiosClient } from "../api/axios";
 import { DualTables } from "./DualTables";
-import { batch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { Trainer } from "../models/Trainer";
 import { getAllTrainers } from "../api/consent";
 import { allTheMapStateToProps } from "../redux/reducers";
-import {
-  allTheActionMappers,
-  addTrainerToBatchActionMapper,
-  removeTrainerFromBatchActionMapper,
-} from "../redux/action-mapper";
+import { allTheActionMappers } from "../redux/action-mapper";
 import { store } from "../redux/store";
 import { PageTitleBar } from "../Components/GenerateBatch/PageTitleBar";
 
@@ -38,7 +31,7 @@ interface IPBatchTrainersTable {
   removeTrainerFromBatchActionMapper: (batch: Batch, trainer: Trainer) => void;
 }
 
-export default class BatchTrainersTable extends React.Component<
+export class BatchTrainersTable extends React.Component<
   IPBatchTrainersTable,
   any
 > {
@@ -97,7 +90,6 @@ export default class BatchTrainersTable extends React.Component<
 
     return (
       <Container>
-        <PageTitleBar pageTitle="Batch Trainers" />
         <ErrorAlert
           error={this.state.errorObject}
           message={this.state.errorMessage}
@@ -155,9 +147,11 @@ export default class BatchTrainersTable extends React.Component<
           batchId: this.props.currentBatch.batchId,
         };
 
-        prnt(doPrnt, `patch request=`, request);
+        prnt(doPrnt, `post request=`, request);
 
-        await axiosClient.post("/trainerBatch", request);
+        let response = await axiosClient.post("/trainerBatch", request);
+        prnt(doPrnt, `response.data=${response.data}`);
+
         this.props.addTrainerToBatchActionMapper(
           store.getState().batch.batch,
           train
@@ -171,7 +165,9 @@ export default class BatchTrainersTable extends React.Component<
         };
         prnt(doPrnt, `delete request=`, request);
 
-        await axiosClient.delete("/trainerBatch", request);
+        let response = await axiosClient.delete("/trainerBatch", request);
+        prnt(doPrnt, `response.data=${response.data}`);
+
         this.props.removeTrainerFromBatchActionMapper(
           store.getState().batch.batch,
           train

@@ -1,47 +1,163 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  BrowserRouter,
-  NavLink,
+  Redirect,
+  Link,
 } from "react-router-dom";
 
 import { ReduxInProgress } from "./Story1/InProgress";
-import { Navbar, NavbarToggler, Nav, NavItem, Container } from "reactstrap";
-import { TestConvertToObject } from "./GeneralPurposeHelpers/convertToObject";
+import {
+  Navbar,
+  Nav,
+  Container,
+  NavbarBrand,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+} from "reactstrap";
 import { OverviewClientDemand } from "./Story2/OverviewClientDemand";
 import { OverviewTraining } from "./Story3/OverviewTraining";
-import { TestdateDifferenceWeeks } from "./GeneralPurposeHelpers/dateDifferenceWeeks";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import {BatchViewModal} from "./Story1/BatchViewModal";
-import { ColumnChartTest } from "./Story2/colGraphComponent";
-import { TrainerAssignmentComponent } from "./Story4/TrainerAssignment";
 import { ViewConsentRequests } from "./GeneralPurposeComponents/ViewConsentRequests";
-import { BatchTableTester } from "./Story1/BatchAssocTableTester";
-import { FilterForm } from "./Story1/FilterForm";
+import { HomePage } from "./Homepage";
+import { PageFooter } from "./Footer";
 
 export class App extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      isBatchOpen: false,
+      isTrainerOpen: false,
+    };
   }
 
-  toggleNavbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    setIsOpen(!isOpen);
+  toggleBatches = () => {
+    this.setState({
+      isBatchOpen: !this.state.isBatchOpen,
+      isTrainerOpen: false,
+    });
+  };
+
+  toggleTrainers = () => {
+    this.setState({
+      isTrainerOpen: !this.state.isTrainerOpen,
+      isBatchOpen: false,
+    });
+  };
+
+  /*  
+    returns a jsx component with the navbar and endpoint routes.
+    creates that stuff from the array of endpoints and nav names
+*/
+  createRoutesAndNavbar = (array: any) => {
+    return (
+      <Router>
+        <div className="main-container">
+          <Navbar color="light" light expand="md">
+            {array.map((navEnd: any) => {
+              if (navEnd.end === "/home") {
+                return (
+                  <NavbarBrand
+                    key={navEnd.name}
+                    href={navEnd.end}
+                    className="nav-link"
+                    activeClassName="active"
+                  >
+                    {navEnd.name}
+                  </NavbarBrand>
+                );
+              }
+            })}
+            <Nav className="mr-auto" navbar>
+              <UncontrolledDropdown
+                isOpen={this.state.isBatchOpen}
+                toggle={this.toggleBatches}
+                onClick={this.toggleBatches}
+                nav
+                inNavbar
+              >
+                <DropdownToggle nav caret>
+                  Batches
+                </DropdownToggle>
+                <DropdownMenu>
+                  {array.map((navEnd: any) => {
+                    if (navEnd.end.indexOf("/batch") > -1) {
+                      return (
+                        <>
+                          <Link
+                            to={navEnd.end}
+                            className="nav-link"
+                            key={navEnd.end}
+                          >
+                            {navEnd.name}
+                          </Link>
+                        </>
+                      );
+                    }
+                  })}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              {/* <UncontrolledDropdown
+                isOpen={this.state.isTrainerOpen}
+                onClick={this.toggleTrainers}
+                toggle={this.toggleTrainers}
+                nav
+                inNavbar
+              >
+                <DropdownToggle nav caret>
+                  Trainers
+                </DropdownToggle>
+                <DropdownMenu>
+                  {array.map((navEnd: any) => {
+                    if (navEnd.end.indexOf("/trainers") > -1) {
+                      return (
+                        <Link
+                          to={navEnd.end}
+                          className="nav-link"
+                          key={navEnd.end}
+                        >
+                          {navEnd.name}
+                        </Link>
+                      );
+                    }
+                  })}
+                </DropdownMenu>
+              </UncontrolledDropdown> */}
+            </Nav>
+          </Navbar>
+          <Switch>
+            <Provider store={store}>
+              <Container className="wrapping-container">
+                <Route exact path="/">
+                  <Redirect to="/home" />
+                </Route>
+                {array.map((navEnd: any) => {
+                  return (
+                    <Route key={navEnd.name} path={navEnd.end}>
+                      {navEnd.comp}
+                    </Route>
+                  );
+                })}
+                <Route exact path="*">
+                  <Redirect to="/home" />
+                </Route>
+              </Container>
+            </Provider>
+          </Switch>
+          <PageFooter />
+        </div>
+      </Router>
+    );
   };
 
   render() {
     return (
-      <Container>
-        <link
-          rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        />
-
+      <>
         {
           /*
             Generate all the navbar items and routes from the given json
@@ -50,77 +166,48 @@ export class App extends React.Component<any, any> {
             name: is displayed in the navbar to look nice
             comp: is the component to display within the route
           */
-          createRoutesAndNavbar(this.toggleNavbar, [
+          this.createRoutesAndNavbar([
             {
-              end: "/in-progress",
-              name: "S1 In Progress",
+              end: "/home",
+              name: "Reservoir",
+              comp: <HomePage />,
+            },
+            {
+              end: "/batch/in-progress",
+              name: "Batches in Progress",
               comp: <ReduxInProgress />,
             },
             {
-              end: "/overview-demand",
-              name: "S2 Overview Demand",
+              end: "/batch/demand-overview",
+              name: "Supply & Demand",
               comp: <OverviewClientDemand />,
             },
             {
-              end: "/overview-training",
-              name: "S3 Overview Training",
+              end: "/batch/training-overview",
+              name: "Generate Batches",
               comp: <OverviewTraining />,
             },
+            // {
+            //   end: "/trainer-assign",
+            //   name: "Trainer assignment",
+            //   comp: <TrainerAssignmentComponent />,
+            // },
             {
-              end: "/trainer-assign",
-              name: "Trainer assignment",
-              comp: <TrainerAssignmentComponent />,
-            },
-            {
-              end: "/consent-requests",
+              end: "/trainers/consent-requests",
               name: "Consent requests",
               comp: <ViewConsentRequests />,
             },
-
-
-            { end: "/test-convert", name: "TCO", comp: <TestConvertToObject /> },
-            { end: "/test-ASTable", name: "BTT", comp: <BatchTableTester /> },
+            // {
+            //   end: "/test-convert",
+            //   name: "TCO",
+            //   comp: <TestConvertToObject />,
+            // },
+            // { end: "/test-ASTable", name: "BTT", comp: <BatchTableTester /> },
           ])
         }
-      </Container>
+      </>
     );
   }
-}
-
-/*  
-    returns a jsx component with the navbar and endpoint routes.
-    creates that stuff from the array of endpoints and nav names
-*/
-function createRoutesAndNavbar(toggler: any, array: any) {
-  return (
-    <Router>
-      <Navbar color="light" light expand="md">
-        <NavbarToggler onClick={toggler} />
-        <Nav className="mr-auto" tabs>
-          {array.map((navEnd: any) => {
-            return (
-              <NavItem>
-                <NavLink
-                  to={navEnd.end}
-                  className="nav-link"
-                  activeClassName="active"
-                >
-                  {navEnd.name}
-                </NavLink>
-              </NavItem>
-            );
-          })}
-        </Nav>
-      </Navbar>
-      <Switch>
-        <Provider store={store}>
-          {array.map((navEnd: any) => {
-            return <Route path={navEnd.end}>{navEnd.comp}</Route>;
-          })}
-        </Provider>
-      </Switch>
-    </Router>
-  );
 }
 
 export default App;
