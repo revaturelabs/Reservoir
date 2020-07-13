@@ -37,6 +37,10 @@ Reports Service uses Feign Client to access Data Service Endpoints to get lists 
 ### SQS Service
 The SQS Service receives messages in a standard queue from other parts of Revature. The SQS Service manipulates the messages it receives in order to modify the database used by Reservoir. Currently, the SQS Service can add, update, and delete on **Batches, Skills, Associates, and Trainers** depending on the message received. All the messages received are JSON, and have key value pairs for *objectType*, *requestType*, and *values*. The *objectType* is a string that specifies the object that will be passed in. The *values* are the objects contained in an array. The *requestType* is a string that determines which CRUD operation to perform in our SQS Service. It should be noted that *Read* is not an option provided by this service (look into data service or report service).
 
+### Testing
+The link below details the QC considersations and testing done for Reservoir:
+https://docs.google.com/document/d/1fQQrJagsrcd6AHQ7Z_wkABkK3EyJziBAnjlPdNukbU4/edit#
+
 ## Front End
 The front end of Reservoir is a single-page application which can display batch data, assign trainers and associates to batches, create consent requests for trainers being assigned to a batch, and generate potential batches based on associate availability and client demand. See "Usage" section for details.
 
