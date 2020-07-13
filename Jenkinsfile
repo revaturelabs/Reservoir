@@ -67,7 +67,7 @@ npm run build'''
 
       }
       environment {
-        SONAR_TOKEN = 'a2e5c7a9aa7bfe9aac8f03ba24f74aae3b6d879a'
+        SONAR_TOKEN = credentials('sonar-token')
       }
       steps {
         sh '''cd p3backend/DataService
