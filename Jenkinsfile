@@ -11,9 +11,9 @@ pipeline {
           env.BRANCH_NAME == 'development-dataservice' ||
           env.CHANGE_TARGET == 'master' ||
           env.CHANGE_TARGET == 'development' ||
-          env.CHANGE_TARGET == 'development-dataservice' 
-
+          env.CHANGE_TARGET == 'development-dataservice'
         }
+
       }
       environment {
         SPRING_PROFILES_ACTIVE = 'local'
@@ -31,6 +31,7 @@ chmod +x mvnw
         docker {
           image 'node:13-alpine'
         }
+
       }
       when {
         expression {
@@ -46,6 +47,7 @@ chmod +x mvnw
           env.CHANGE_TARGET == 'development-reportservice' ||
           env.CHANGE_TARGET == 'development-sqsservice'
         }
+
       }
       environment {
         npm_config_cache = 'npm-cache'
@@ -54,6 +56,23 @@ chmod +x mvnw
         sh '''cd p3frontend/
 npm i
 npm run build'''
+      }
+    }
+
+    stage('SonarCloud') {
+      when {
+        expression {
+          env.BRANCH_NAME == 'development'
+        }
+
+      }
+      environment {
+        SONAR_TOKEN = credentials('sonar-token')
+      }
+      steps {
+        sh '''cd p3backend/DataService
+chmod +x mvnw
+./mvnw verify sonar:sonar'''
       }
     }
 
