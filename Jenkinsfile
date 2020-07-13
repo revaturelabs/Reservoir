@@ -63,6 +63,11 @@ npm run build'''
       environment {
         SONAR_TOKEN = 'a2e5c7a9aa7bfe9aac8f03ba24f74aae3b6d879a'
       }
+      when {
+        expression {
+          env.BRANCH_NAME == 'development'
+        }
+      }
       steps {
         sh '''chmod +x mvnw
 ./mvnw verify sonar:sonar'''
