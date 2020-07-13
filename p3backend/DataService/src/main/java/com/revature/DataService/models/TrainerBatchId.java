@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class TrainerBatchId implements Serializable {
 
-  
-  
+
+
   private Integer trainerId;
-  
+
   private Integer batchId;
 
   public Integer getTrainerId() {
@@ -43,28 +43,39 @@ public class TrainerBatchId implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     TrainerBatchId other = (TrainerBatchId) obj;
     if (batchId == null) {
-      if (other.batchId != null)
+      if (other.batchId != null) {
         return false;
-    } else if (!batchId.equals(other.batchId))
-      return false;
+      }
+    } else {
+      if (!batchId.equals(other.batchId)) {
+        return false;
+      }
+    }
     if (trainerId == null) {
-      if (other.trainerId != null)
+      if (other.trainerId != null) {
         return false;
-    } else if (!trainerId.equals(other.trainerId))
-      return false;
+      }
+    } else {
+      if (!trainerId.equals(other.trainerId)) {
+        return false;
+      }
+    }
     return true;
   }
-  
+
   public TrainerBatchId() {
-    
+
   }
-  
+
 }

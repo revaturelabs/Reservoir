@@ -15,7 +15,7 @@ public class BatchService {
 
   @Autowired
   BatchRepository batchRepository;
-  
+
   @Autowired
   TrainerRepository trainerRepository;
 
@@ -65,23 +65,25 @@ public class BatchService {
     return existingBatch;
 
   }
-  
+
   public Batch batchtrain(Integer trainerId, Integer batchId) throws Exception {
-    
+
     Optional<Batch> existingBatch = batchRepository.findById(batchId);
     Optional<Trainer> trainer = trainerRepository.findById(trainerId);
-       
-    
+
+
     if (existingBatch.isPresent()) {
-     Batch batch=existingBatch.get();
-     Trainer trainers=trainer.get();
-     batch.setTrainerOne(trainers); //pushes a trainer into the list
-     return batchRepository.save(batch);
-     
-     
+      Batch batch = existingBatch.get();
+      if (trainer.isPresent()) {
+        Trainer trainers = trainer.get();
+        batch.setTrainerOne(trainers); // pushes a trainer into the list
+      }
+      return batchRepository.save(batch);
+
+
     } else {
       throw new Exception("batch failed to update");
     }
-    
+
   }
 }

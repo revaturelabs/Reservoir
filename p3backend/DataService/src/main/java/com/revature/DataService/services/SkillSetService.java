@@ -19,6 +19,10 @@ public class SkillSetService {
 
   public Skillset getById(Integer id) {
     Optional<Skillset> skillset = skillSetRepository.findById(id);
-    return skillset.get();
+    if (skillset.isPresent()) {
+      return skillset.get();
+    } else {
+      return null;
+    }
   }
 }
