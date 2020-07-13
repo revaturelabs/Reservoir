@@ -18,6 +18,9 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Hoxton.SR5</spring-cloud.version>
+		<sonar.projectKey>revaturelabs_Reservoir</sonar.projectKey>
+  		<sonar.organization>revaturelabs-screenforce</sonar.organization>
+  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
