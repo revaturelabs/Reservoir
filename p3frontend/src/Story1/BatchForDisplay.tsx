@@ -48,8 +48,18 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
     this.state = {
       //batch: props.batch,
 
-      dateStartText: dateStart.toDateString(), //used to display the date
-      dateEndText: dateEnd.toDateString(),
+      dateStartText:
+        dateStart.toDateString().substring(0, 3) +
+        "." +
+        dateStart.toDateString().substring(3, 10) +
+        "," +
+        dateStart.toDateString().substring(10, 15), //used to display the date
+      dateEndText:
+        dateEnd.toDateString().substring(0, 3) +
+        "." +
+        dateEnd.toDateString().substring(3, 10) +
+        "," +
+        dateEnd.toDateString().substring(10, 15),
 
       dateSortStart: dateStart.getTime(), //used to sort the dates
       dateSortEnd: dateEnd.getTime(),
@@ -105,6 +115,7 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
     return this.displayAsTableRow();
   }
 
+  upperCaseName = () => {};
   /*
     Displays the batchForDisplay as something presentable for a row in a table.
     Maybe there will be other kinds of displays for a batch.
@@ -112,82 +123,54 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
   displayAsTableRow = () => {
     return (
       <>
+        <td className="batchTable">
+          <strong>ID: </strong>
+          {this.props.batch.batchId}
+        </td>
         <td>
+          <strong>Started: </strong> {this.state.dateStartText}
+          <br />
+          <strong>Ends: </strong>
+          {this.state.dateEndText}
+          <br />
+          <strong>Current Week: </strong>
+          {this.state.jsxWeekCurrent}
+        </td>
+
+        <td>
+          <strong>Location: </strong>
+          {locationGetName(this.props.batch.location)}
+          <br />
+          <strong>Curriculum: </strong>
+          {this.props.batch.curriculum.curriculumSkillset.skillSetName}
+          <br />
+          <strong>Trainer(s): </strong>
+          {this.props.batch.trainers.length == 0 ? (
+            <> nobody</>
+          ) : (
+            this.props.batch.trainers.map((trainer: any) => {
+              let firstLetter: string = trainer.firstName.slice(0, 1);
+              firstLetter = firstLetter.toUpperCase();
+              return <>{firstLetter + trainer.firstName.slice(1)}, </>;
+            })
+          )}
+          <br />
+          <strong>Associates: </strong>
+          {this.props.batch.associates
+            ? this.props.batch.associates.length
+            : "none"}
+        </td>
+        <td className="batchTable">
           <BatchViewModalRedux
             currentBatch={this.props.batch}
             parentTop={this.props.parentTop}
           />
           <br />
-          ID {this.props.batch.batchId}
+
           {/* <br />
           C {this.props.batch.isConfirmed ? "Y" : "N"}
           <br />
           AT {this.props.batch.associates.length} */}
-        </td>
-
-        <td>
-          <i>Confirmed</i>
-          <br />
-          <i>ProgramType</i>
-          <br />
-          <i>Curriculum</i>
-          <br />
-          <i>Associates</i>
-          <br />
-        </td>
-        <td>
-          {this.props.batch.isConfirmed ? "Yes" : "No"}
-          <br />
-          {this.props.batch.programType}
-          <br />
-          {this.props.batch.curriculum?this.props.batch.curriculum.name:"no-curriculum"}
-          <br />
-          {this.props.batch.associates?this.props.batch.associates.length:"none"}
-          <br />
-        </td>
-        <td>
-          <Container>
-            <Row>
-              <Col>
-                <i>Started</i>
-              </Col>
-              <Col>{this.state.dateStartText}</Col>
-            </Row>
-            <Row>
-              <Col>
-                <i>Ends </i>
-              </Col>
-              <Col>{this.state.dateEndText}</Col>
-            </Row>
-            <Row>
-              <Col>
-                <i>Week current</i>
-              </Col>
-              <Col>{this.state.jsxWeekCurrent}</Col>
-            </Row>
-            <Row>
-              <Col>
-                <i>Weeks left</i>
-              </Col>
-              <Col>{this.state.jsxWeekRemaining}</Col>
-            </Row>
-          </Container>
-        </td>
-
-        <td>
-          <i>Location</i> {locationGetName(this.props.batch.location)}
-          <br />
-          <i>Skillset</i>{" "}
-          {this.props.batch.curriculum.curriculumSkillset.skillSetName}
-          <br />
-          <i>Teachers</i>
-          {this.props.batch.trainers.length == 0 ? (
-            <> nobody</>
-          ) : (
-            this.props.batch.trainers.map((trainer: any) => {
-              return <>, {trainer.firstName}</>;
-            })
-          )}
         </td>
       </>
     );

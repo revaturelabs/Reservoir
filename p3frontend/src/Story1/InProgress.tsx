@@ -64,28 +64,14 @@ export class InProgress extends React.Component<any, any> {
         />
 
         <Row>
-          <Col>
-            <b>view type:</b>
-            <EasyDropdown
-              onSelected={(item: string) => {
-                this.setState({ viewType: item });
-              }}
-              hoverText="Please enjoy viewing the batches in a table or calendar format."
-              items={["Calendar","Table"]}
-            />
-          </Col>
-          <Col>
-            <b>Program Type Filter:</b>
-            <p>{this.state.programType}</p>
-          </Col>
-          <Col>
-            <b>Client Filter:</b>
-            <p>{this.state.client}</p>
-          </Col>
-          <Col>
-            <b>Curriculum Filter:</b>
-            <p>{this.state.curriculum}</p>
-          </Col>
+          <b className="dropDownSelector">View Type: </b>{" "}
+          <EasyDropdown
+            onSelected={(item: string) => {
+              this.setState({ viewType: item });
+            }}
+            hoverText="Please enjoy viewing the batches in a table or calendar format."
+            items={["Table", "Calendar"]}
+          />
           <Col>
             {/* first shows up as a button, when clicked a modal appears. Requires functions that change filter values on the state, as well as filter selections. See FilterForm. */}
             <FilterForm
@@ -97,6 +83,42 @@ export class InProgress extends React.Component<any, any> {
               curriculumSelection={this.state.curriculaArray}
             />
           </Col>
+          <Col>
+            {(() => {
+              if (this.state.programType !== "(none)") {
+                return (
+                  <div>
+                    <b>Program Type Filter:</b>
+                    <p>{this.state.programType}</p>
+                  </div>
+                );
+              }
+            })()}
+          </Col>
+          <Col>
+            {(() => {
+              if (this.state.client !== "(none)") {
+                return (
+                  <div>
+                    <b>Client Filter:</b>
+                    <p>{this.state.client}</p>
+                  </div>
+                );
+              }
+            })()}
+          </Col>
+          <Col>
+            {(() => {
+              if (this.state.curriculum !== "(none)") {
+                return (
+                  <div>
+                    <b>Curriculum Filter:</b>
+                    <p>{this.state.curriculum}</p>
+                  </div>
+                );
+              }
+            })()}
+          </Col>
         </Row>
         <br />
         <br />
@@ -107,24 +129,33 @@ export class InProgress extends React.Component<any, any> {
         <br />
         <br />
         {this.state.viewType === "Table" ? (
-          <div style={{overflowY:"scroll",maxHeight:"55vh",borderStyle:"solid",borderWidth:"1px"}}>
-          <Table bordered>
-            <tbody>
-              {this.state.filteredBatches.map((batch: Batch, index: number) => {
-                console.log(
-                  "filter is " +
-                    this.state.programType +
-                    ", rendering batch " +
-                    batch.batchId
-                );
-                return (
-                  <tr key={index}>
-                    <BatchForDisplay batch={batch} parentTop={this} />
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          <div
+            style={{
+              overflowY: "scroll",
+              maxHeight: "55vh",
+              borderStyle: "solid",
+              borderWidth: "1px",
+            }}
+          >
+            <Table bordered>
+              <tbody>
+                {this.state.filteredBatches.map(
+                  (batch: Batch, index: number) => {
+                    console.log(
+                      "filter is " +
+                        this.state.programType +
+                        ", rendering batch " +
+                        batch.batchId
+                    );
+                    return (
+                      <tr key={index}>
+                        <BatchForDisplay batch={batch} parentTop={this} />
+                      </tr>
+                    );
+                  }
+                )}
+              </tbody>
+            </Table>
           </div>
         ) : (
           <TimelineRedux
