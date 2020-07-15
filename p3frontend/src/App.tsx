@@ -168,12 +168,12 @@ export class App extends React.Component<any, any> {
           */
           this.createRoutesAndNavbar([
             {
-              end: "/home",
+              end: "/dead-page",
               name: "Reservoir",
               comp: <HomePage />,
             },
             {
-              end: "/batch/in-progress",
+              end: "/home",
               name: "Batches in Progress",
               comp: <ReduxInProgress />,
             },
