@@ -9,7 +9,7 @@ import {
   Link,
 } from "react-router-dom";
 
-import { ReduxInProgress } from "./Story1/InProgress";
+import { ReduxInProgress } from "./Components/Batches-in-progress/BatchesInProgressView";
 import {
   Navbar,
   Nav,
@@ -19,13 +19,13 @@ import {
   DropdownToggle,
   DropdownMenu,
 } from "reactstrap";
-import { OverviewClientDemand } from "./Story2/OverviewClientDemand";
-import { OverviewTraining } from "./Story3/OverviewTraining";
+import { OverviewClientDemand } from "./Components/Supply-demand/OverviewClientDemand";
+import { OverviewTraining } from "./Components/Generate-batches/OverviewTraining";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import { ViewConsentRequests } from "./GeneralPurposeComponents/ViewConsentRequests";
-import { HomePage } from "./Homepage";
-import { PageFooter } from "./Footer";
+import { ViewConsentRequests } from "./Components/Currently-unused/ViewConsentRequests";
+import { HomePage } from "./Components/Currently-unused/homepage";
+import { PageFooter } from "./Components/Common/Footer/footer";
 
 export class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -167,11 +167,12 @@ export class App extends React.Component<any, any> {
             comp: is the component to display within the route
           */
           this.createRoutesAndNavbar([
-            {
-              end: "/dead-page",
-              name: "Reservoir",
-              comp: <HomePage />,
-            },
+                  // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
+                  // {
+                  //   end: "/dead-page",
+                  //   name: "Reservoir",
+                  //   comp: <HomePage />,
+                  // },
             {
               end: "/home",
               name: "Batches in Progress",
@@ -192,11 +193,12 @@ export class App extends React.Component<any, any> {
             //   name: "Trainer assignment",
             //   comp: <TrainerAssignmentComponent />,
             // },
-            {
-              end: "/trainers/consent-requests",
-              name: "Consent requests",
-              comp: <ViewConsentRequests />,
-            },
+                  // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
+                  // {
+                  //   end: "/trainers/consent-requests",
+                  //   name: "Consent requests",
+                  //   comp: <ViewConsentRequests />,
+                  // },
             // {
             //   end: "/test-convert",
             //   name: "TCO",

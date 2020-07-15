@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { Spinner } from "../src/GeneralPurposeComponents/spinner/spinner";
+import { Spinner } from "./Components/Common/spinner";
 
 
 
