@@ -13,7 +13,7 @@ import { BatchAssocTableRedux } from "../Batch-info/BatchAssocTable";
 import { connect } from "react-redux";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
-import { Batch } from "../../../Models/Batch";
+import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
 //import { BatchTrainersTableRedux } from "./BatchTrainersTable";
 import { axiosClient } from "../../Common/API/axios";

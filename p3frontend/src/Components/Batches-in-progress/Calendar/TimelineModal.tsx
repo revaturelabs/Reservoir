@@ -1,9 +1,9 @@
 import React from "react";
 import { Modal, Container, ModalBody } from "reactstrap";
-import { Batch } from "../../../Models/Batch";
+import { Batch } from "../../../models/Batch";
 import { dateDifferenceWeeks } from "../../../Helpers/dateDifferenceWeeks";
-import { associatesGetActiveTotal } from "../../../Models/Associate";
-import { Trainer } from "../../../Models/Trainer";
+import { associatesGetActiveTotal } from "../../../models/Associate";
+import { Trainer } from "../../../models/Trainer";
 import { convertDateToUTC } from "../../../Helpers/convertDateToUTC";
 
 interface TimelineModalProps {

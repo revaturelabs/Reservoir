@@ -1,5 +1,5 @@
 import { axiosClient } from './axios';
-import { ClientDemands } from '../../../Models/ClientDemands';
+import { ClientDemands } from '../../../models/ClientDemands';
 import moment from 'moment';
 
 const buildCliDem = (res: any): ClientDemands => {

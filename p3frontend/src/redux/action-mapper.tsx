@@ -1,5 +1,5 @@
-import { Batch } from "../Models/Batch";
-import { Trainer } from "../Models/Trainer";
+import { Batch } from "../models/Batch";
+import { Trainer } from "../models/Trainer";
 
 export const clickTypes = {
   BATCH_CLICK: "BATCH_CLICK",

@@ -1,4 +1,4 @@
-import { Batch } from "../../../Models/Batch";
+import { Batch } from "../../../models/Batch";
 import { axiosClient } from "./axios";
 
 // Helper function to construct batch from response

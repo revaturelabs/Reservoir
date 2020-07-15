@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Associate } from "../../../Models/Associate";
+import { Associate } from "../../../models/Associate";
 // import { AssociateList } from '../Components/GenerateBatch/associateList';
 export const axiosClient = axios.create({
   baseURL: "http://3.235.74.191:8212/reports",

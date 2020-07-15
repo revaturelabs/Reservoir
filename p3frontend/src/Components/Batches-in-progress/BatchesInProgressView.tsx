@@ -6,7 +6,7 @@ import { EasyDropdown } from "../Common/EasyDropdown";
 import { prnt } from "../../Helpers/Prnt";
 import { TimelineRedux } from "./Calendar/Calendar";
 import { ErrorAlert } from "../../Helpers/ErrorAlert";
-import { Batch } from "../../Models/Batch";
+import { Batch } from "../../models/Batch";
 import { connect } from "react-redux";
 import { allTheActionMappers } from "../../redux/action-mapper";
 import { allTheMapStateToProps } from "../../redux/reducers";

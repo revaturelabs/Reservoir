@@ -1,6 +1,6 @@
 import React from "react";
-import { Trainer } from "../../../Models/Trainer";
-import { Batch } from "../../../Models/Batch";
+import { Trainer } from "../../../models/Trainer";
+import { Batch } from "../../../models/Batch";
 import { getBatchById } from "../../Common/API/batch";
 
 import { allTheMapStateToProps } from "../../../redux/reducers";

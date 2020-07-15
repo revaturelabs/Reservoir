@@ -1,12 +1,12 @@
 import React from "react";
 import { Container, Spinner } from "reactstrap";
-import { Batch } from "../../../Models/Batch";
+import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
 import { prnt } from "../../../Helpers/Prnt";
 import { axiosClient } from "../../Common/API/axios";
 import { DualTables } from "./DualTables";
 import { connect } from "react-redux";
-import { Trainer } from "../../../Models/Trainer";
+import { Trainer } from "../../../models/Trainer";
 import { getAllTrainers } from "../../Common/API/consent";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";

@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Spinner } from "reactstrap";
-import { Associate } from "../../../Models/Associate";
-import { Batch } from "../../../Models/Batch";
+import { Associate } from "../../../models/Associate";
+import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
 import { prnt } from "../../../Helpers/Prnt";
 import { axiosClient } from "../../Common/API/axios";

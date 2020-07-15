@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "reactstrap";
-import { Batch } from "../../Models/Batch";
+import { Batch } from "../../models/Batch";
 import { updateBatch } from "../Common/API/batch";
 import { allTheMapStateToProps } from "../../redux/reducers";
 import { batchUpdateActionMapper } from "../../redux/action-mapper";

@@ -2,7 +2,7 @@ import React from "react";
 import Timeline from "react-calendar-timeline";
 import moment from "moment";
 import "../../../stylesheets/batches-in-progress/Timeline.css";
-import { Batch } from "../../../Models/Batch";
+import { Batch } from "../../../models/Batch";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
 import { connect } from "react-redux";

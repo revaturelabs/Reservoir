@@ -1,4 +1,4 @@
-import { Associate } from "../Models/Associate";
+import { Associate } from "../models/Associate";
 import React from "react";
 import { Container } from "reactstrap";
 import { PageTitleBar } from "../Components/Common/PageTitleBar";
