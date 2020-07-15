@@ -1,6 +1,6 @@
-import { Skill } from "../models/Skill";
-import { ClientDemands } from "../models/ClientDemands";
-import { Curricula } from "../models/Curricula";
+import { Skill } from "./Skill";
+import { ClientDemands } from "./ClientDemands";
+import { Curricula } from "./Curricula";
 
 export class TrainerSkills {
   skillSetId: number;

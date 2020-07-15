@@ -1,8 +1,8 @@
 import { AnyAction, combineReducers } from "redux";
 import { clickTypes } from "./action-mapper";
-import { Batch } from "../models/Batch";
-import { Trainer } from "../models/Trainer";
-import { Associate } from "../models/Associate";
+import { Batch } from "../Models/Batch";
+import { Trainer } from "../Models/Trainer";
+import { Associate } from "../Models/Associate";
 
 interface IBatchState {
   batch: Batch | null;
