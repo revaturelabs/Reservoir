@@ -1,4 +1,4 @@
-import { Associate } from '../../../Models/Associate';
+import { Associate } from '../../../models/Associate';
 import { FailedRequestException } from '../Exceptions/FailedRequestException';
 import { FailedUpdateException } from '../Exceptions/FailedUpdateException';
 import { axiosClient } from './axios';

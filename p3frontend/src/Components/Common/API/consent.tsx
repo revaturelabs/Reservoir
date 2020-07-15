@@ -1,5 +1,5 @@
-import { Consent } from "../../../Models/Consent";
-import { Trainer } from "../../../Models/Trainer";
+import { Consent } from "../../../models/Consent";
+import { Trainer } from "../../../models/Trainer";
 import { axiosClient } from "./axios";
 
 export async function getAllEligibleTrainers(

@@ -5,10 +5,10 @@ import {
   getConsentByTrainerId,
   createTrainerBatch,
 } from "../Common/API/consent";
-import { Consent } from "../../Models/Consent";
+import { Consent } from "../../models/Consent";
 import { ListGroup, ListGroupItem, Button, Container } from "reactstrap";
 import { PageTitleBar } from "../Common/PageTitleBar";
-import { trainerGetName } from "../../Models/Trainer";
+import { trainerGetName } from "../../models/Trainer";
 import { trackPromise } from 'react-promise-tracker';
 import {Spinner} from "../Common/spinner"
 

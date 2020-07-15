@@ -16,8 +16,8 @@ import {
 } from "reactstrap";
 
 import { getAllBatches, updateBatch } from "../Common/API/batch";
-import { Batch } from "../../Models/Batch";
-import { Associate } from "../../Models/Associate";
+import { Batch } from "../../models/Batch";
+import { Associate } from "../../models/Associate";
 import { getgeneratedBatch } from "../Common/API/generateBatch";
 import {
   getAllAssociates,

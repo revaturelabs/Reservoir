@@ -1,9 +1,9 @@
-import { associatesGetActiveTotal } from "../../../Models/Associate";
-import { locationGetName } from "../../../Models/Location";
+import { associatesGetActiveTotal } from "../../../models/Associate";
+import { locationGetName } from "../../../models/Location";
 import { convertDateToUTC } from "../../../Helpers/convertDateToUTC";
 import { dateDifferenceWeeks } from "../../../Helpers/dateDifferenceWeeks";
 import React from "react";
-import { Batch } from "../../../Models/Batch";
+import { Batch } from "../../../models/Batch";
 import { Col, Container, Row } from "reactstrap";
 import { BatchViewModalRedux } from "./BatchViewModal";
 
