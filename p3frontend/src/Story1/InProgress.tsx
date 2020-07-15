@@ -71,7 +71,7 @@ export class InProgress extends React.Component<any, any> {
                 this.setState({ viewType: item });
               }}
               hoverText="Please enjoy viewing the batches in a table or calendar format."
-              items={["Table", "Calendar"]}
+              items={["Calendar","Table"]}
             />
           </Col>
           <Col>
