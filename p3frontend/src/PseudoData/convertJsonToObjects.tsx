@@ -1,6 +1,7 @@
 /*
 	don't ask me why I have to convert this to json and then back to an object again.
 	I do not know why.
+	lol
 */
 
 import jsonWithQuotes from "./DataBatches.json";
