@@ -42,10 +42,10 @@ code {
 .page-title-bar {
   height: 30px;
   color: white;
-  background-color: #474C55;
+  background-color: #474c55;
   margin-bottom: 6px;
   line-height: 1.53rem;
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 .middle-text {
@@ -53,7 +53,7 @@ code {
 }
 
 #gen-batch-options-menu {
-  background-color: #474C55;
+  background-color: #474c55;
 }
 
 #options-div {
@@ -64,4 +64,30 @@ code {
 
 .form-control {
   border-radius: 0px !important;
+}
+
+.viewOrangeBtn {
+  background-color: rgba(242, 105, 38);
+}
+
+.batchTable {
+  text-align: center;
+}
+
+.dropDownSelector {
+  padding-right: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 0px;
+  border: 1px transparent #555;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
