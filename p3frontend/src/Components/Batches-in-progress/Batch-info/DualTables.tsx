@@ -104,7 +104,7 @@ export class DualTables extends React.Component<IPDualTables, any> {
                     {obj.firstName}, {obj.lastName}, {obj.interviewScore}
                   </td>
                   <td>
-                    <Button className="btn btn-danger" onClick={() => itemClick(obj, index)}>
+                    <Button onClick={() => itemClick(obj, index)}>
                       {displayText}
                     </Button>
                   </td>
