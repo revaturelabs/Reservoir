@@ -32,7 +32,8 @@ export function OverviewTraining()
 
   //Get todays date in html formated way
   let today = new Date();
-  let formatedDate= today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()).padStart(2, '0');
+  //THe backend requires us to add 1 to the day
+  let formatedDate= today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()+1).padStart(2, '0');
   useEffect(()=>
   {
       //Load in data Locations and skillSet
@@ -47,7 +48,7 @@ export function OverviewTraining()
       setStartDate(formatedDate);
       
   },[])
-
+  console.log(startDate);
   
   return(
     
@@ -79,6 +80,7 @@ export function OverviewTraining()
   function dateHandler(e:any)
   {
     setStartDate(e.target.value);
+    console.log(startDate);
   }
 
   function buttonHandler(e:any)
@@ -97,7 +99,7 @@ export function OverviewTraining()
         "locationId": loc,
         "curiculum_id": skill
     };
-
+    console.log(saveObject)
 
     //save our batch
     axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
