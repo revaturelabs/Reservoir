@@ -23,13 +23,16 @@ export function OverviewTraining()
 {
   //Data pulled from database
   const [locations, setLocations] = useState([]);
-  const [skillSet, setSkillSet] = useState({});
+  const [skillSet, setSkillSet] = useState([]);
 
   //For storing currentState as well as currentSkillSet and start date
   const [loc,setLoc]=useState("");
   const [skill,setSkill]=useState("");
   const [startDate,setStartDate]= useState("")
 
+  //Get todays date in html formated way
+  let today = new Date();
+  let formatedDate= today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()).padStart(2, '0');
   useEffect(()=>
   {
       //Load in data Locations and skillSet
@@ -37,35 +40,47 @@ export function OverviewTraining()
         setLocations(data)
       })
 
-      /* CORS ISSUE
       axiosWrapper("/skillsets","GET").then((data)=>{
         setSkillSet(data)
       })
-      */
+
+      setStartDate(formatedDate);
+      
   },[])
+console.log(formatedDate);
   
-  console.log(loc);
-
-
-
-
   return(
     
     <div>
       <PageTitleBar pageTitle={"Generate New Batchs"}/>
-      
       {/* Create the drop down menus as well as date input */}
       <div>
-        <CreateDropDown records={locations} handler={locEventListener} keyValue={["locationId","locationName"]} defaultMessage="Select Location"/>
+        <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location"/>
+        <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill"/>
+        {/* <input type="date" id="start" name="da"value={formatedDate} min={formatedDate} max="3000-12-31" /> */}
+        <input type="date" name="party" min={formatedDate} max="2050-04-30" defaultValue={formatedDate}/>
+
       </div>
-    
+
+
+
     </div>
   )
 
   //event listeners to change state
-  function locEventListener(e:any)
+  function locHandler(e:any)
   {
-    setLoc(e.target.value)
+    setLoc(e.target.value);
+  }
+
+  function skillHandler(e:any)
+  {
+    setSkill(e.target.value);
+  }
+  
+  function dateHandler(e:any)
+  {
+    setStartDate(e.target.value);
   }
 
 }
