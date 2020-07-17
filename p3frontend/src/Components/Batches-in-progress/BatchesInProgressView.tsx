@@ -138,6 +138,18 @@ export class InProgress extends React.Component<any, any> {
             }}
           >
             <Table bordered>
+              <thead className="text-white">
+                <th>
+                  Batch
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Details
+                </th>
+                <th></th>
+              </thead>
               <tbody>
                 {this.state.filteredBatches.map(
                   (batch: Batch, index: number) => {
