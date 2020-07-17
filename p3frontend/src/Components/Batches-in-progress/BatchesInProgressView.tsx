@@ -405,3 +405,5 @@ export const ReduxInProgress = connect(
   allTheMapStateToProps,
   allTheActionMappers
 )(InProgress);
+
+//Comment to ping git
