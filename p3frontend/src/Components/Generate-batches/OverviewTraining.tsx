@@ -47,7 +47,7 @@ export function OverviewTraining()
       setStartDate(formatedDate);
       
   },[])
-console.log(formatedDate);
+
   
   return(
     
@@ -57,13 +57,11 @@ console.log(formatedDate);
       <div>
         <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location"/>
         <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill"/>
-        {/* <input type="date" id="start" name="da"value={formatedDate} min={formatedDate} max="3000-12-31" /> */}
-        <input type="date" name="party" min={formatedDate} max="2050-04-30" defaultValue={formatedDate}/>
-
+        <input type="date" name="party" min={formatedDate} max="2050-04-30" defaultValue={formatedDate} onChange={dateHandler}/>
+        <br/>
+        
       </div>
-
-
-
+      <input type="submit" onClick={buttonHandler}/>
     </div>
   )
 
@@ -83,5 +81,28 @@ console.log(formatedDate);
     setStartDate(e.target.value);
   }
 
+  function buttonHandler(e:any)
+  {
+    e.preventDefault();
+
+    //Create our batch object
+    let saveObject:any=
+      {
+        "batchId": 0,
+        "startDate": startDate,
+        "endDate": null,
+        "isConfirmed": false,
+        "interviewScoreLower": null,
+        "programType": null,
+        "locationId": loc,
+        "curiculum_id": skill
+    };
+
+
+    //save our batch
+    axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
+      
+    })
+  }
 }
 
