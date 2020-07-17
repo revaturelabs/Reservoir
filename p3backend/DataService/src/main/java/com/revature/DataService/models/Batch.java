@@ -97,6 +97,14 @@ public class Batch implements Serializable {
 		this.programType = programType;
 	}
 
+	public BatchState getState() {
+		return state;
+	}
+
+	public void setState(BatchState state) {
+		this.state = state;
+	}
+
 	public Integer getBatchId() {
 		return batchId;
 	}
