@@ -123,7 +123,21 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
   displayAsTableRow = () => {
     return (
       <>
-        <td className="batchTable">
+        <td>
+          <strong>Curriculum: </strong>
+          {this.props.batch.curriculum.curriculumSkillset.skillSetName}
+          <br />
+          <strong>Trainer(s): </strong>
+          {this.props.batch.trainers.length == 0 ? (
+            <> nobody</>
+          ) : (
+            this.props.batch.trainers.map((trainer: any) => {
+              let firstLetter: string = trainer.firstName.slice(0, 1);
+              firstLetter = firstLetter.toUpperCase();
+              return <>{firstLetter + trainer.firstName.slice(1)}, </>;
+            })
+          )}
+          <br />
           <strong>ID: </strong>
           {this.props.batch.batchId}
         </td>
@@ -141,20 +155,8 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
           <strong>Location: </strong>
           {locationGetName(this.props.batch.location)}
           <br />
-          <strong>Curriculum: </strong>
-          {this.props.batch.curriculum.curriculumSkillset.skillSetName}
-          <br />
-          <strong>Trainer(s): </strong>
-          {this.props.batch.trainers.length == 0 ? (
-            <> nobody</>
-          ) : (
-            this.props.batch.trainers.map((trainer: any) => {
-              let firstLetter: string = trainer.firstName.slice(0, 1);
-              firstLetter = firstLetter.toUpperCase();
-              return <>{firstLetter + trainer.firstName.slice(1)}, </>;
-            })
-          )}
-          <br />
+          
+          
           <strong>Associates: </strong>
           {this.props.batch.associates
             ? this.props.batch.associates.length
