@@ -48,7 +48,6 @@ export function OverviewTraining()
       setStartDate(formatedDate);
       
   },[])
-  console.log(startDate);
   
   return(
     
@@ -99,7 +98,7 @@ export function OverviewTraining()
         "locationId": loc,
         "curiculum_id": skill
     };
-    console.log(saveObject)
+ 
 
     //save our batch
     axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
