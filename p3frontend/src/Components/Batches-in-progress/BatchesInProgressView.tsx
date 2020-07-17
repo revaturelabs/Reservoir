@@ -70,7 +70,7 @@ export class InProgress extends React.Component<any, any> {
               this.setState({ viewType: item });
             }}
             hoverText="Please enjoy viewing the batches in a table or calendar format."
-            items={["Table", "Calendar"]}
+            items={["Calendar", "Table"]}
           />
           <Col>
             {/* first shows up as a button, when clicked a modal appears. Requires functions that change filter values on the state, as well as filter selections. See FilterForm. */}
@@ -405,3 +405,5 @@ export const ReduxInProgress = connect(
   allTheMapStateToProps,
   allTheActionMappers
 )(InProgress);
+
+//Comment to ping git

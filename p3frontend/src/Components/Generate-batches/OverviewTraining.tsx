@@ -1,463 +1,109 @@
-import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Spinner,
-  InputGroup,
-  Label,
-  Input,
-  Button,
-  NavItem,
-  Nav,
-  NavLink,
-  Table,
-  Alert,
-} from "reactstrap";
 
-import { getAllBatches, updateBatch } from "../Common/API/batch";
+import { Button } from "reactstrap";
 import { Batch } from "../../models/Batch";
-import { Associate } from "../../models/Associate";
-import { getgeneratedBatch } from "../Common/API/generateBatch";
-import {
-  getAllAssociates,
-  updateAssociate,
-  getActiveAssociates,
-} from "../Common/API/Associate";
-import { ErrorAlert } from "../../Helpers/ErrorAlert";
+import { updateBatch } from "../Common/API/batch";
+import { allTheMapStateToProps } from "../../redux/reducers";
+import { batchUpdateActionMapper } from "../../redux/action-mapper";
+import { connect } from "react-redux";
+import { Interface } from "readline";
+////////////////////////////////NEW LIST OF IMPORTS
+import {CreateDropDown} from "./CreateDropDown";
 import { PageTitleBar } from "../Common/PageTitleBar";
-import "../../stylesheets/generate-batches/overviewtraining.css";
-import { axiosClient } from "../Common/API/axios";
-interface IBatchPageState {
-  // currentBatch: Batch,
-  batches: Batch[];
-  notConfirmedBatches: Batch[];
-  batchFlag: boolean;
-  associatesList: Associate[];
-  quantity: number;
-  interview: number;
-  flaeeg: boolean;
-  assoiates: boolean;
-  // batches: [],
-  currentBatch1: Batch;
-  data: boolean;
-}
+import React, { useState, useEffect } from "react";
+import axiosWrapper from "./functions/axiosWrapper";
+////////////////////////////////////
 
-export class OverviewTraining extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      // batches: [],
-      notConfirmedBatches: [],
-      isDisabled: false,
-      batchFlag: false,
-      quantity: 0,
-      interview: 70,
-      associatesList: [],
-      flaeeg: false,
-      assoiates: false,
-      currentBatch1: null,
-      data: false,
-      associates: [],
-      eligibleAssociates: [],
-      associatesInBatch: [],
-      associatesLoaded: false,
-      errorObject: null,
-      errorMessage: "",
-      currentBatchIndex: undefined,
-      allEligibleAssociates: [],
-      success: false,
-    };
-  }
-  componentDidMount = async () => {
-    const associateArray: any[] = await getActiveAssociates();
-    const batches = await getAllBatches();
-    const eligibleAssociateArray = associateArray.filter(function (assoc) {
-      return assoc.interviewScore >= 70 && assoc.batch == null;
-    });
-    const tempBatchses = [];
-    for (const batch of batches) {
-      if (!batch.isConfirmed) {
-        tempBatchses.push(batch);
-      }
-    }
-    this.setState({
-      batchFlag: true,
-      associates: associateArray,
-      allEligibleAssociates: eligibleAssociateArray,
-      eligibleAssociates: eligibleAssociateArray,
-      associatesLoaded: true,
-      notConfirmedBatches: tempBatchses,
-    });
-  };
 
-  bindInputChangeToState = (changeEvent: any) => {
-    //@ts-ignore
-    this.setState({
-      [changeEvent.currentTarget.name]: changeEvent.currentTarget.value,
-    });
-  };
 
-  getgeneratedBatch = async (e: any) => {
-    e.preventDefault();
-    this.setState({
-      associatesList: await getgeneratedBatch(
-        this.state.interview,
-        this.state.quantity
 
-      ),
-      interview:70,
-      quantity:0,
-      eligibleAssociates: this.state.allEligibleAssociates,
-      flaeeg: true,
-    });
 
-    const newArray = this.state.eligibleAssociates.filter((item: any) => {
-      return (
-        this.state.associatesList.filter(function (item2: any) {
-          return item.associateId == item2.associateId;
-        }).length == 0
-      );
-    });
-    this.setState({
-      eligibleAssociates: newArray,
-    });
-  };
 
-  batchData = (e: any, i: number) => {
-    // e.preventDefault();
-    this.setState({
-      associatesList: [],
-      associatesInBatch: e.associates,
-      quantity: 0,
-      interview: 70,
-      currentBatch1: e,
-      data: true,
-      currentBatchIndex: i,
-      eligibleAssociates: this.state.allEligibleAssociates,
-    });
-  };
 
-  displayTable = (
-    array: Associate[],
-    message: String,
-    displayText: String,
-    itemClick: any
-  ) => {
-    if (array.length === 0) return <>{message}</>;
+export function OverviewTraining()
+{
+  //Data pulled from database
+  const [locations, setLocations] = useState([]);
+  const [skillSet, setSkillSet] = useState([]);
 
-    return (
-      <div className="overview-table">
-        <Table striped>
-          <tbody>
-            {array.map((obj: any, index: number) => {
-              return (
-                <tr key={index}>
-                  <td>
-                    {obj.firstName}, {obj.lastName}, {obj.interviewScore}
-                  </td>
-                  <td>
-                    <Button
-                      onClick={() => itemClick(obj, index)}
-                      // disabled={isDisabled}
-                    >
-                      {displayText}
-                    </Button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+  //For storing currentState as well as currentSkillSet and start date
+  const [loc,setLoc]=useState("");
+  const [skill,setSkill]=useState("");
+  const [startDate,setStartDate]= useState("")
+
+  //Get todays date in html formated way
+  let today = new Date();
+  //THe backend requires us to add 1 to the day
+  let formatedDate= today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()+1).padStart(2, '0');
+  useEffect(()=>
+  {
+      //Load in data Locations and skillSet
+      axiosWrapper("/location","GET").then((data)=>{
+        setLocations(data)
+      })
+
+      axiosWrapper("/skillsets","GET").then((data)=>{
+        setSkillSet(data)
+      })
+
+      setStartDate(formatedDate);
+      
+  },[])
+  
+  return(
+    
+    <div>
+      <PageTitleBar pageTitle={"Generate New Batchs"}/>
+      {/* Create the drop down menus as well as date input */}
+      <div>
+        <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location"/>
+        <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill"/>
+        <input type="date" name="party" min={formatedDate} max="2050-04-30" defaultValue={formatedDate} onChange={dateHandler}/>
+        <br/>
+        
       </div>
-    );
-  };
+      <input type="submit" onClick={buttonHandler}/>
+    </div>
+  )
 
-  associateRemove = async (assoc: any, i: number) => {
-    this.state.associatesInBatch.splice(i, 1);
-    this.state.eligibleAssociates.push(assoc);
-    const nonCircularAssocPatch = {
-      associateId: assoc.associateId, //copy over all fields. typescript prevents easier copying
-      firstName: assoc.firstName,
-      lastName: assoc.lastName,
-      email: assoc.email,
-      active: assoc.active, //set active to true or false
-      interviewScore: assoc.interviewScore,
-      batch: null, //assign to a batch.
-      //we have to watch out because this batch has an array of
-      //associates and associates have batches and we get circular json errors when sending
-    };
-    await axiosClient.patch("/associates", nonCircularAssocPatch);
-    assoc.batch = this.state.eligibleAssociates[0].batch;
-    this.setState({});
-  };
+  //event listeners to change state
+  function locHandler(e:any)
+  {
+    setLoc(e.target.value);
+  }
 
-  associateAdd2 = async (assoc: any, i: number) => {
-    this.state.associatesInBatch.push(assoc);
-    this.state.associatesList.splice(i, 1);
-    assoc.batch = this.props.currentBatch;
-    this.setState({});
-  };
+  function skillHandler(e:any)
+  {
+    setSkill(e.target.value);
+  }
+  
+  function dateHandler(e:any)
+  {
+    setStartDate(e.target.value);
+    console.log(startDate);
+  }
 
-  associateAdd = async (assoc: any, i: number) => {
-    this.state.associatesInBatch.push(assoc);
-    this.state.eligibleAssociates.splice(i, 1);
-    assoc.batch = this.props.currentBatch;
-    this.setState({});
-  };
-
-  confirmBatch = async (e: any) => {
+  function buttonHandler(e:any)
+  {
     e.preventDefault();
 
-    try {
-      for (const i of this.state.associatesInBatch) {
-        i.batchId = this.state.currentBatch1.batchId;
-        // await updateAssociate(i);
-        const nonCircularAssocPatch = {
-          associateId: i.associateId, //copy over all fields. typescript prevents easier copying
-          firstName: i.firstName,
-          lastName: i.lastName,
-          email: i.email,
-          active: i.active, //set active to true or false
-          interviewScore: i.interviewScore,
-          batch: true ? this.state.currentBatch1 : null, //assign to a batch.
-          //we have to watch out because this batch has an array of
-          //associates and associates have batches and we get circular json errors when sending
-        };
-        await axiosClient.patch("/associates", nonCircularAssocPatch);
+    //Create our batch object
+    let saveObject:any=
+      {
+        "batchId": 0,
+        "startDate": startDate,
+        "endDate": null,
+        "isConfirmed": false,
+        "interviewScoreLower": null,
+        "programType": null,
+        "locationId": loc,
+        "curiculum_id": skill
+    };
+ 
 
-        // prnt(doPrnt, `nonCircularAssocPatch=`, nonCircularAssocPatch);
-      }
-
-      const newBatch = await updateBatch(
-        this.state.currentBatch1.batchId,
-        true
-      );
-      this.state.notConfirmedBatches.splice(this.state.currentBatchIndex, 1);
-      this.setState({
-        success: true,
-        data: false,
-      });
-
-      // this.props.batchUpdateActionMapper(newBatch);
-    } catch (e) {
-      this.setState({
-        errorObject: e,
-        errorMessage: "Could not patch associate",
-      });
-    }
-  };
-
-  render() {
-    return (
-      <>
-        <Container>
-          <PageTitleBar pageTitle={"Training Overview"} />
-
-          <Row>
-            <Col md={3}>
-              <Container className="overview-option">
-                <br />
-                <h4>Select Associates</h4>
-                <br />
-                <InputGroup>
-                  <Label>No. of Associates: </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={this.state.quantity}
-                    onChange={this.bindInputChangeToState}
-                    name="quantity"
-                  ></Input>
-                </InputGroup>
-                <br />
-                <InputGroup>
-                  <Label>Lower Interview Score: </Label>
-                  <Input
-                    type="number"
-                    min="70"
-                    max="100"
-                    value={this.state.interview}
-                    onChange={this.bindInputChangeToState}
-                    name="interview"
-                  ></Input>
-                </InputGroup>
-                <br />
-                <Button
-                  onClick={this.getgeneratedBatch}
-                  disabled={!this.state.data}
-                >
-                  {" "}
-                  Generate Batch
-                </Button>
-                <br />
-              </Container>
-            </Col>
-            <Col md={8}>
-              {this.state.batchFlag ? (
-                <Container>
-                  {this.state.success ? (
-                    <Alert color="success">Batch Successfully Confirmed</Alert>
-                  ) : (
-                    <></>
-                  )}
-                  {this.state.notConfirmedBatches.length != 0 ? (
-                    <Row className="overview-nav">
-                      <Col>
-                        <h4>Possible Batches</h4>
-                        <Nav pills>
-                          {this.state.notConfirmedBatches.map(
-                            (obj: any, index: number) => {
-                              return (
-                                <NavItem key={index}>
-                                  <NavLink
-                                    style={{ color: "#fff" }}
-                                    href="#"
-                                    onClick={(e) => {
-                                      this.batchData(obj, index);
-                                    }}
-                                  >
-                                    Batch {obj.batchId}
-                                  </NavLink>
-                                </NavItem>
-                              );
-                            }
-                          )}
-                        </Nav>
-                      </Col>
-                    </Row>
-                  ) : (
-                    <h3>No batch available</h3>
-                  )}
-                  <Row>
-                    <Col>
-                      {this.state.data ? (
-                        <Container className="overview-table">
-                          <Row>
-                            <Col>
-                              <Row>
-                                <Col>
-                                  <b>Batch Id:</b>{" "}
-                                  {this.state.currentBatch1.batchId}
-                                  <br />
-                                  <b>Program Type:</b>{" "}
-                                  {this.state.currentBatch1.programType}
-                                </Col>
-                                <Col>
-                                  <b>Batch Location:</b>{" "}
-                                  {
-                                    this.state.currentBatch1.location
-                                      .locationName
-                                  }
-                                  <br />
-                                  <b>Technologies:</b>{" "}
-                                  {
-                                    this.state.currentBatch1.curriculum
-                                      .curriculumSkillset.skillSetName
-                                  }
-                                </Col>
-                              </Row>
-
-                              <hr />
-                              <h6>Associates:</h6>
-                              <Button
-                                onClick={(e: any) => {
-                                  e.preventDefault();
-                                  this.setState({
-                                    associatesInBatch: this.state.associatesInBatch.concat(
-                                      this.state.associatesList
-                                    ),
-                                    associatesList: [],
-                                  });
-                                }}
-                              >
-                                Add All
-                              </Button>
-                              <Table
-                                style={{ width: "00px" }}
-                                className="overview-table"
-                              >
-                                {this.state.associatesList.map(
-                                  (obj: any, index: number) => {
-                                    return (
-                                      <tr key={obj.associateId}>
-                                        <td>
-                                          {obj.firstName}, {obj.lastName},{" "}
-                                          {obj.interviewScore}
-                                        </td>
-                                        <td>
-                                          <Button
-                                            onClick={() =>
-                                              this.associateAdd2(obj, index)
-                                            }
-                                          >
-                                            add
-                                          </Button>
-                                        </td>
-                                      </tr>
-                                    );
-                                  }
-                                )}
-                              </Table>
-                            </Col>
-                          </Row>
-                        </Container>
-                      ) : (
-                        <></>
-                      )}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      {this.state.data ? (
-                        <Container style={{ height: "300px" }}>
-                          <ErrorAlert
-                            error={this.state.errorObject}
-                            message={this.state.errorMessage}
-                          />
-                          <Row>
-                            <Col>
-                              <h6>All Available Associates</h6>
-                              {this.displayTable(
-                                this.state.eligibleAssociates,
-                                "No eligible associates left.",
-                                "Add",
-                                this.associateAdd
-                              )}
-                            </Col>
-                            <Col>
-                              <h6>Batch Associates</h6>
-                              {this.displayTable(
-                                this.state.associatesInBatch,
-                                "No associates currently assigned to this batch.",
-                                "Remove",
-                                this.associateRemove
-                              )}
-                            </Col>
-                          </Row>
-                        </Container>
-                      ) : (
-                        <></>
-                      )}
-                    </Col>
-                  </Row>
-                </Container>
-              ) : (
-                <Spinner></Spinner>
-              )}{" "}
-            </Col>{" "}
-            {/* <Row style={{float:"right"}}>
-         
-          </Row> */}
-            <Col md={1}>
-              <Button onClick={this.confirmBatch} disabled={!this.state.data}>
-                Confirm
-              </Button>
-            </Col>
-          </Row>
-          {/* <footer></footer> */}
-        </Container>
-      </>
-    );
+    //save our batch
+    axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
+      
+    })
   }
 }
+
