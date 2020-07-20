@@ -1,4 +1,4 @@
-import {CreateDropDown} from "./CreateDropDown";
+import {CreateDropDown} from "./Components/CreateDropDown";
 import { PageTitleBar } from "../Common/PageTitleBar";
 import React, { useState, useEffect } from "react";
 import axiosWrapper from "./functions/axiosWrapper";
@@ -45,7 +45,7 @@ export function GenerateNewBatch()
       <div>
         <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location"/>
         <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill"/>
-        <input type="date" name="party" min={formatedDate} max="2050-04-30" defaultValue={formatedDate} onChange={dateHandler}/>
+        <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={formatedDate} onChange={dateHandler}/>
         <br/>
         
       </div>
@@ -67,28 +67,38 @@ export function GenerateNewBatch()
   function dateHandler(e:any)
   {
     setStartDate(e.target.value);
-    console.log(startDate);
+
   }
 
   function buttonHandler(e:any)
   {
     e.preventDefault();
+    //Add 1 to the day value of date
+    let a:any=startDate.split("-");
+    a[2]=parseInt(a[2])+1;
+    
+    //make sure its in proper format
+    if(a[2]<10)
+    {
+      a[2]="0"+a[2]
+    }
+    let dataBaseDate=(a[0]+"-"+a[1]+"-"+a[2]);
+    
 
     //Create our batch object
     let saveObject:any=
       {
         "batchId": 0,
-        "startDate": startDate,
+        "startDate": dataBaseDate,
         "endDate": null,
-        "isConfirmed": false,
+        "state": 3,
         "interviewScoreLower": null,
         "programType": null,
         "locationId": loc,
         "curiculum_id": skill
     };
- 
 
-    //save our batch
+    //save our batch/
     axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
       
     })

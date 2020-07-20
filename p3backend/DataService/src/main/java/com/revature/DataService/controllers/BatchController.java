@@ -40,7 +40,11 @@ public class BatchController {
 		return batchService.getAll();
 	}
 	
-	
+	@GetMapping("/batches/uncommited")
+	public List<Batch> getUncommitedBatches()
+	{
+		return batchService.getUncommitedBatchs();
+	}
 
 	@GetMapping("/batches/{id}")
 	public Batch getBatchById(@PathVariable Integer id) {
