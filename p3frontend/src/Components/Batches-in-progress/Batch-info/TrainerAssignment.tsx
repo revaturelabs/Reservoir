@@ -6,18 +6,16 @@ import { getBatchById } from "../../Common/API/batch";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
 import { batch, connect } from "react-redux";
-import {Alert} from "reactstrap"
-import { trackPromise } from 'react-promise-tracker';
-import {Spinner} from "../../Common/spinner"
-
+import { Alert } from "reactstrap";
+import { trackPromise } from "react-promise-tracker";
+import { Spinner } from "../../Common/spinner";
 
 import {
   getAllTrainers,
   createConsentRequest,
-
   getAllEligibleTrainers,
-  createTrainerBatch
-} from '../../Common/API/consent';
+  createTrainerBatch,
+} from "../../Common/API/consent";
 
 import {
   Col,
@@ -35,7 +33,6 @@ interface ITrainerProps {
   currentBatch: Batch; //we must give this component a batch for it to work
   parentTop: any;
 }
-
 
 interface IAssignmentComponentState {
   trainers: Trainer[];
@@ -60,11 +57,9 @@ export class TrainerAssignmentComponent extends React.Component<
       buttonArray: [],
       batch: null,
       assignIsOpen: false,
-      requestIsOpen: false
+      requestIsOpen: false,
     };
   }
-
-
 
   // componentDidMount() {
   //   this.getAllTrainers();
@@ -74,10 +69,8 @@ export class TrainerAssignmentComponent extends React.Component<
 
     let allTrainers: Trainer[] = await getAllTrainers();
 
-    
+    let batch = await getBatchById(this.props.currentBatch.batchId);
 
-    let batch = await  getBatchById(this.props.currentBatch.batchId);
-    
     // this.setState({
     //   trainers:allTrainers
     // })
@@ -85,7 +78,9 @@ export class TrainerAssignmentComponent extends React.Component<
     //   this.getAllEligibleTrainers(2);
     //  });
 
-    let eligibleTrainers : Trainer[] = await getAllEligibleTrainers(this.props.currentBatch.batchId);
+    let eligibleTrainers: Trainer[] = await getAllEligibleTrainers(
+      this.props.currentBatch.batchId
+    );
     // this.setState({
     //   trainers:allTrainers,
     //   eligibleTrainers:trainers
@@ -142,51 +137,47 @@ export class TrainerAssignmentComponent extends React.Component<
   // assign = async (trainer: Trainer, batchId: number) => {
   //   await assignTrainer(trainer.trainerId, batchId);
   // };
-  assign = async(trainerId:number, batchId:number) =>{
-
+  assign = async (trainerId: number, batchId: number) => {
     trackPromise(
-      createTrainerBatch(trainerId,batchId)
-        .then((consentRequests) =>{
-          this.setState({
-              assignIsOpen:true
-          })
-        }), "loading-area"
+      createTrainerBatch(trainerId, batchId).then((consentRequests) => {
+        this.setState({
+          assignIsOpen: true,
+        });
+      }),
+      "loading-area"
     );
-      //await assignTrainer(trainerId, batchId);
-      //let success: boolean|undefined = await createTrainerBatch(trainerId, batchId);
+    //await assignTrainer(trainerId, batchId);
+    //let success: boolean|undefined = await createTrainerBatch(trainerId, batchId);
 
-      // if(success){
-      //   this.setState({
-      //     assignIsOpen:true
-      //   })
-      // }
-      
-      
-  }
+    // if(success){
+    //   this.setState({
+    //     assignIsOpen:true
+    //   })
+    // }
+  };
   // request = async (trainer: Trainer, batchId: number) => {
   //   await createConsentRequest(trainer.trainerId, null, batchId);
   // };
-  request = async(trainer:Trainer, batchId:number)=>{
-
+  request = async (trainer: Trainer, batchId: number) => {
     trackPromise(
-      createConsentRequest(trainer.trainerId, null, batchId)
-        .then((consentRequests) =>{
+      createConsentRequest(trainer.trainerId, null, batchId).then(
+        (consentRequests) => {
           this.setState({
-            requestIsOpen:true
-          })
-        }),"loading-area"
+            requestIsOpen: true,
+          });
+        }
+      ),
+      "loading-area"
     );
-      
-      //let success:boolean|undefined = await createConsentRequest(trainer.trainerId, null, batchId);
 
-      // if(success){
-      //   this.setState({
-      //     requestIsOpen:true
-      //   })
-      // }
-      
-  }
+    //let success:boolean|undefined = await createConsentRequest(trainer.trainerId, null, batchId);
 
+    // if(success){
+    //   this.setState({
+    //     requestIsOpen:true
+    //   })
+    // }
+  };
 
   // getButton = (trainer: Trainer, i: number) => {
   //   let jsxElement = (
@@ -219,13 +210,36 @@ export class TrainerAssignmentComponent extends React.Component<
 
   //   return jsxElement;
   // };
-  getButton = (trainer:Trainer, i:number, trainerId:number)  =>{
-    
-    let jsxElement =(<><h4>test</h4></>);
-    if(trainer.isEligible){
-      return <Button color="primary" style={smallBtnStyles} id={i.toString()} onClick={()=>this.assign(trainerId, this.props.currentBatch.batchId) }>Assign</Button>
-    }else{
-      return <Button color="primary" style={smallBtnStyles} id={i.toString()} onClick={()=>this.request(trainer, this.props.currentBatch.batchId)}>Request Consent</Button>
+  getButton = (trainer: Trainer, i: number, trainerId: number) => {
+    let jsxElement = (
+      <>
+        <h4>test</h4>
+      </>
+    );
+    if (trainer.isEligible) {
+      return (
+        <Button
+          color="primary"
+          style={smallBtnStyles}
+          id={i.toString()}
+          onClick={() =>
+            this.assign(trainerId, this.props.currentBatch.batchId)
+          }
+        >
+          Assign
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          color="primary"
+          style={smallBtnStyles}
+          id={i.toString()}
+          onClick={() => this.request(trainer, this.props.currentBatch.batchId)}
+        >
+          Request Consent
+        </Button>
+      );
     }
   };
 
@@ -301,16 +315,16 @@ export class TrainerAssignmentComponent extends React.Component<
   //     trainers: allTrainers,
   //   });
   // };
-  toggleAssign(){
+  toggleAssign() {
     this.setState({
-      assignIsOpen: !this.state.assignIsOpen
-    })
+      assignIsOpen: !this.state.assignIsOpen,
+    });
   }
 
-  toggleRequest(){
+  toggleRequest() {
     this.setState({
-      requestIsOpen: !this.state.requestIsOpen
-    })
+      requestIsOpen: !this.state.requestIsOpen,
+    });
   }
 
   render() {
@@ -325,36 +339,52 @@ export class TrainerAssignmentComponent extends React.Component<
     return (
       <>
         <div>
-        <Spinner area="loading-area" />
+          <Spinner area="loading-area" />
         </div>
-        <Alert color="primary" isOpen={this.state.assignIsOpen} toggle={this.toggleAssign.bind(this)}>Trainer Assigned!</Alert>
-        <Alert color="primary" isOpen={this.state.requestIsOpen} toggle={this.toggleRequest.bind(this)}>Trainer Requested!</Alert>
+        <Alert
+          color="primary"
+          isOpen={this.state.assignIsOpen}
+          toggle={this.toggleAssign.bind(this)}
+        >
+          Trainer Assigned!
+        </Alert>
+        <Alert
+          color="primary"
+          isOpen={this.state.requestIsOpen}
+          toggle={this.toggleRequest.bind(this)}
+        >
+          Trainer Requested!
+        </Alert>
         {/* <Container><PageTitleBar pageTitle={"Trainer Assignment"}/></Container> */}
         <ListGroup>
-          {
-              this.state.trainers.length==0?
-                <>There are no trainers</>
-              :
-                this.state.trainers.map((trainer: Trainer, i) => 
-                {
-                    //trying to use the same item display everywhere
-                    return (
-                      <ListGroupItem key={i}>
+          {this.state.trainers.length == 0 ? (
+            <>There are no trainers</>
+          ) : (
+            this.state.trainers.map((trainer: Trainer, i) => {
+              //trying to use the same item display everywhere
+              if (!trainer.isEligible) {
+                return (
+                  <ListGroupItem key={i}>
+                    <Row>
+                      <Col>
                         <Row>
                           <Col>
-                            <Row>
-                              <Col>{trainer.firstName + ' ' + trainer.lastName}</Col>
-                            </Row>
-                            <Row>
-                              <Col>{buttonArray[i]}</Col>
-                            </Row>
-                            <Row>{/* <Col>{this.getButton(trainer, i)}</Col> */}</Row>
+                            {trainer.firstName + " " + trainer.lastName}
                           </Col>
                         </Row>
-                      </ListGroupItem>
-                    )
-                  })
-          }
+                        <Row>
+                          <Col>{buttonArray[i]}</Col>
+                        </Row>
+                        <Row>
+                          {/* <Col>{this.getButton(trainer, i)}</Col> */}
+                        </Row>
+                      </Col>
+                    </Row>
+                  </ListGroupItem>
+                );
+              }
+            })
+          )}
         </ListGroup>
       </>
     );
