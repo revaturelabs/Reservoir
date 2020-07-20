@@ -1258,16 +1258,21 @@ insert into project3.curriculum values
     (default, 'curriculum11', 11),
     (default, 'curriculum11', 12);
 
+    INSERT INTO project3.batchstate VALUES
+    (DEFAULT,'committed'),
+    (DEFAULT,'confirmed'),
+    (DEFAULT,'unconfirmed');
+    
 INSERT INTO project3.batch VALUES
-   (default, '2020-05-04','2020-07-10',true,80,'Standard',1,1),
-	(default,'2020-05-13','2020-07-22',true,80,'Standard',2,2),
-	(default,'2020-05-27','2020-08-05',true,70,'Spark',3,3),
-	(default,'2020-06-17','2020-08-26',false,70,'Standard',4,4),
-	(default,'2020-04-29','2020-07-08',true,90,'ROCP',5,1),
-	(default,'2020-04-02','2020-07-02',true,70,'ROCP',5,1),
-	(default,'2020-06-01','2020-09-01',true,70,'Standard',5,1),
-	(default,'2020-01-20','2020-03-05',true,70,'Spark',5,1),
-	(default,'2020-06-10','2020-08-19',false,80,'CF',1,4);
+   (default, '2020-05-04','2020-07-10',80,'Standard',2,1,1),
+	(default,'2020-05-13','2020-07-22',80,'Standard',2,2,2),
+	(default,'2020-05-27','2020-08-05',70,'Spark',2,3,2),
+	(default,'2020-06-17','2020-08-26',70,'Standard',2,4,4),
+	(default,'2020-04-29','2020-07-08',90,'ROCP',2,1,4),
+	(default,'2020-04-02','2020-07-02',70,'ROCP',2,1,5),
+	(default,'2020-06-01','2020-09-01',70,'Standard',2,1,5),
+	(default,'2020-01-20','2020-03-05',70,'Spark',1,1,5),
+	(default,'2020-06-10','2020-08-19',80,'CF',2,4,1);
 
 	
 
@@ -1295,6 +1300,8 @@ INSERT INTO project3.consent VALUES
 (DEFAULT,2,2,false),
 (DEFAULT,3,3,false),
 (DEFAULT,4,4,false);
+
+
 
 -- Associating associates with batch
 UPDATE project3.associate SET

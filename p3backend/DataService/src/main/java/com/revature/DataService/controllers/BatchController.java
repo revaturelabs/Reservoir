@@ -39,6 +39,8 @@ public class BatchController {
 	public List<Batch> getAllBatches() {
 		return batchService.getAll();
 	}
+	
+	
 
 	@GetMapping("/batches/{id}")
 	public Batch getBatchById(@PathVariable Integer id) {
@@ -48,6 +50,12 @@ public class BatchController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/batch-states/{id}")
+	public BatchState getBatchStateById(@PathVariable int id) {
+		return batchStateService.getById(id);
+	}
+
 
 	@PatchMapping("/batches/{id}")
 	public ResponseEntity<Batch> updateBatchWithId(@RequestBody UpdateBatchDto dto, @PathVariable Integer id) {
