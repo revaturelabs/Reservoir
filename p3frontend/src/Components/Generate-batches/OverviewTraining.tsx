@@ -7,7 +7,7 @@ import { batchUpdateActionMapper } from "../../redux/action-mapper";
 import { connect } from "react-redux";
 import { Interface } from "readline";
 ////////////////////////////////NEW LIST OF IMPORTS
-import {CreateDropDown} from "./CreateDropDown";
+import {CreateDropDown} from "./Components/CreateDropDown";
 import { PageTitleBar } from "../Common/PageTitleBar";
 import React, { useState, useEffect } from "react";
 import axiosWrapper from "./functions/axiosWrapper";
@@ -38,7 +38,7 @@ export function OverviewTraining()
       </div>
       {view ? <FinalizeBatch/>:<GenerateNewBatch/>}
 
-    </div>
+    </div>//
   )
 }
 

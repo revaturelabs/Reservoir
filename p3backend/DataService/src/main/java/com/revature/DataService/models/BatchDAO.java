@@ -32,10 +32,12 @@ public class BatchDAO {
 
 	  @Column(name = "end_date")
 	  private Date endDate;
+	  
+	  
+	  @Column(name = "state_id")
+	  private Integer state;
 
-	  @Column(name = "isconfirmed")
-	  private Boolean isConfirmed;
-
+	  
 	  @Column(name = "interview_score_lower")
 	  private Integer interviewScoreLower;
 	  
@@ -74,12 +76,12 @@ public class BatchDAO {
 		this.endDate = endDate;
 	}
 
-	public Boolean getIsConfirmed() {
-		return isConfirmed;
+	public Integer getState() {
+		return state;
 	}
 
-	public void setIsConfirmed(Boolean isConfirmed) {
-		this.isConfirmed = isConfirmed;
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 	public Integer getInterviewScoreLower() {

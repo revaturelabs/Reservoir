@@ -1264,7 +1264,7 @@ insert into project3.curriculum values
     (DEFAULT,'unconfirmed');
     
 INSERT INTO project3.batch VALUES
-   (default, '2020-05-04','2020-07-10',80,'Standard',2,1,1),
+   (default, '2020-05-04','2020-07-10',80,'Standard',3,1,1),
 	(default,'2020-05-13','2020-07-22',80,'Standard',2,2,2),
 	(default,'2020-05-27','2020-08-05',70,'Spark',2,3,2),
 	(default,'2020-06-17','2020-08-26',70,'Standard',2,4,4),

@@ -33,6 +33,7 @@ public class BatchDAOController {
 	 @PostMapping("/batchDAO")
 	  public BatchDAO dd(@RequestBody BatchDAO b)
 	  {
+		 System.out.println(b.getStartDate());
 		 return serv.saveBatch(b);
 	  }
 }

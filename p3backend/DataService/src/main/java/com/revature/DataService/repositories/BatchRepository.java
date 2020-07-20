@@ -23,5 +23,8 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
   @Query("select b from Batch b join "
       + "  b.curriculum.curriculumSkillset.clientDemands c where c.client.clientId=:id")
   public List<Batch> getBatchByClient(Integer id);
+  
+  @Query("select c from Batch c where c.state.id=:id")
+  public List<Batch> getBatchByState(Integer id);
 
 }
