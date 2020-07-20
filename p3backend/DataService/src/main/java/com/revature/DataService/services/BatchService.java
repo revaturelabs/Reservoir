@@ -86,4 +86,9 @@ public class BatchService {
     }
 
   }
+  
+  public List<Batch> getUncommitedBatchs()
+  {
+	  return batchRepository.getBatchByState(3);
+  }
 }

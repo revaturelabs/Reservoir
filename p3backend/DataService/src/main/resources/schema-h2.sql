@@ -1,13 +1,18 @@
 drop schema if exists project3 cascade;
 CREATE SCHEMA project3;
 
+create table project3.batchstate(
+	id serial primary key,
+	state varchar
+);
+
 CREATE TABLE project3.batch (
-batch_id  serial PRIMARY KEY,
+batch_id serial PRIMARY KEY,
 start_date date,
 end_date date,
-isconfirmed boolean,
 interview_score_lower integer,
-program_type varchar(150)
+program_type varchar(150),
+state_id int references project3.batchstate(id)
  );
 
 create table project3.location (
@@ -114,3 +119,7 @@ create table project3.trainerskills (
 	skillset_id integer references project3.skillset(skillset_id),
 	primary key (trainer_id, skillset_id)
 );
+
+
+
+
