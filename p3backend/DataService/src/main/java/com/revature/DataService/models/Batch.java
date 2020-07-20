@@ -76,6 +76,7 @@ public class Batch implements Serializable {
 
 	@JsonIgnoreProperties({ "batches" })
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="state_id")
 	private BatchState state;
 
 	public Batch() {
