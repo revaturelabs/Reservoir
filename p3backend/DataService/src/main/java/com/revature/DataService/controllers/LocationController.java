@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.revature.DataService.models.Location;
+import com.revature.DataService.models.UnmappedLocation;
+import com.revature.DataService.repositories.UnmappedLocationRepository;
 import com.revature.DataService.services.LocationService;
 
 @RestController
@@ -24,11 +25,13 @@ public class LocationController {
 
   @Autowired
   LocationService locationservice;
+  @Autowired
+  UnmappedLocationRepository locrepo;
 
   @GetMapping
-  public List<Location> getall() {
+  public List<UnmappedLocation> getall() {
 
-    return locationservice.getAll();
+    return locrepo.findAll();
 
   }
 
