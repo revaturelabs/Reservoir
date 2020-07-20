@@ -98,13 +98,21 @@ export class DualTables extends React.Component<IPDualTables, any> {
         <Table striped>
           <tbody>
             {array.map((obj: any, index: number) => {
+              console.log(obj);
               return (
                 <tr key={index}>
                   <td>
                     {obj.firstName}, {obj.lastName}, {obj.interviewScore}
                   </td>
                   <td>
-                    <Button className="btn btn-danger" onClick={() => itemClick(obj, index)}>
+                    <Button
+                      className={
+                        displayText === "Remove"
+                          ? "btn btn-danger"
+                          : "btn btn-success"
+                      }
+                      onClick={() => itemClick(obj, index)}
+                    >
                       {displayText}
                     </Button>
                   </td>
