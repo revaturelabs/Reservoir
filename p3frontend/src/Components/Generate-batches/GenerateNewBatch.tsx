@@ -98,7 +98,7 @@ export function GenerateNewBatch()
         "curiculum_id": skill
     };
 
-    //save our batch
+    //save our batch/
     axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
       
     })
