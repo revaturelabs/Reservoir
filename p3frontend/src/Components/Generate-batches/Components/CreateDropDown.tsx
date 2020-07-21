@@ -18,7 +18,7 @@ export function CreateDropDown(props :any)
     if(props.records.length!=0)
     {
     return(
-            <select key={props.keyValue[0]} onChange={props.handler} defaultValue="none">
+            <select key={props.keyValue[0]} onChange={props.handler} defaultValue={props.defaultVal? props.defaultVal:"none"}>
                 <option value="none" disabled hidden key={props.keyValue[1]}>{props.defaultMessage}</option>
                 {keyVal.map((data:any, id)=>
                     {
@@ -32,3 +32,5 @@ export function CreateDropDown(props :any)
     }
     return <div/>
 }
+
+//
