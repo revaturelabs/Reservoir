@@ -7,7 +7,7 @@ import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
 import { connect } from "react-redux";
 import { Toast } from "reactstrap";
-import { TimelineModal } from "./TimelineModal";
+// import { TimelineModal } from "./TimelineModal";
 import { store } from "../../../redux/store";
 import {
   ReduxTimelineBatchModal,
@@ -209,7 +209,7 @@ export class TimelineComponent extends React.Component<
             defaultTimeStart={moment().add(-4, "months")}
             defaultTimeEnd={moment().add(2, "months")}
           ></Timeline>
-          {this.state.isOpen ? (
+          {/* {this.state.isOpen ? (
             <TimelineModal
               isOpen={this.state.isOpen}
               toggle={this.setIsOpen}
@@ -217,7 +217,7 @@ export class TimelineComponent extends React.Component<
             />
           ) : (
             <></>
-          )}
+          )} */}
           {this.state.batchIsOpen ? (
             <ReduxTimelineBatchModal
               currentBatch={store.getState().batch.batch}
