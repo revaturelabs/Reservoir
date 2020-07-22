@@ -20,6 +20,9 @@ public class SkillsService {
   @Autowired
   SkillsRepository skillsRepository;
 
+  
+  
+
 
 
   public List<Skills> getAll() {
