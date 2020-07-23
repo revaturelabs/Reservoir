@@ -9,15 +9,15 @@ import {
   ButtonGroup,
 } from "reactstrap";
 import "../../../index.css";
-import { BatchAssocTableRedux } from "../Batch-info/BatchAssocTable";
 import { connect } from "react-redux";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
 import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
-//import { BatchTrainersTableRedux } from "./BatchTrainersTable";
 import { axiosClient } from "../../Common/API/axios";
 import { BatchTrainersTableRedux } from "../Batch-info/BatchTrainersTable";
+import { store } from "../../../redux/store";
+import { BatchAssocTableRedux } from "../Batch-info/BatchAssocTable";
 import { TrainerAssignmentRedux } from "../Batch-info/TrainerAssignment";
 
 interface IPBatchViewModal {
