@@ -14,7 +14,7 @@ const buildCliDem = (res: any): ClientDemands => {
     clientDemandId,
     quantity,
     deadline,
-    client.clientId,
+    client.name,
     clientDemandSkillset.skillSetName
   );
 };

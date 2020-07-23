@@ -22,9 +22,10 @@ export class ColumnChartTest extends React.Component<any, any> {
       shouldRunInit: false,
       clientDemand: new Map(),
       supply: new Map(),
-      dropdownOptions: ["Total"],
+      dropdownOptions: ["All Skillsets"],
       dropdownOpen: false,
       currentSelected: undefined,
+      clientOptions: ["All Clients"],
     };
   }
 
@@ -61,6 +62,15 @@ export class ColumnChartTest extends React.Component<any, any> {
     // Create client demand data that has skillsetname : #
     let clientDemandData = new Map();
     // map through array of demands to add skillset & quantity to obj
+    let names: any = [];
+    demandArr.forEach((cl: any) =>{
+      const name = cl.clientId;
+      if (!names.includes(name))
+      names.push(name);
+    })
+    this.setState({
+      clientOptions: ["All Clients", ...names]
+    })
     demandArr.map((cl: any) => {
       let skillset = cl.skillsetName;
       let quantity = cl.quantity;
@@ -189,7 +199,7 @@ export class ColumnChartTest extends React.Component<any, any> {
     let totalsObj = this.createTotal(demand, supply);
     let demKey = demand.keys();
     this.setState({
-      dropdownOptions: ["Total", ...Array.from(demand.keys())],
+      dropdownOptions: ["All Skillsets", ...Array.from(demand.keys())],
     });
     let data: any[] = [];
     let view: any[] = [];
@@ -299,6 +309,12 @@ export class ColumnChartTest extends React.Component<any, any> {
     });
   };
 
+  clientToggle = (e: any) => {
+    this.setState({
+      clientDropdownOpen: !this.state.clientDropdownOpen,
+    });
+  };
+
   setSelected = (e: any) => {
     this.setState({
       currentSelected: e.currentTarget.innerText,
@@ -307,6 +323,14 @@ export class ColumnChartTest extends React.Component<any, any> {
       shouldUpdate: true,
     });
   };
+
+  setClientSelected = (e: any) => {
+    this.setState({
+      clientSelected: e.currentTarget.innerText,
+      shouldRunInit: true,
+      shouldUpdate: true,
+    });
+  }
   render() {
     return (
       <>
@@ -324,6 +348,25 @@ export class ColumnChartTest extends React.Component<any, any> {
                     this.state.dropdownOptions.map((s: any) => {
                       return (
                         <DropdownItem key={s} onClick={this.setSelected}>
+                          {s}
+                        </DropdownItem>
+                      );
+                    })}
+                </DropdownMenu>
+              </Dropdown>
+            </Col>
+            <Col>
+              <Dropdown isOpen={this.state.clientDropdownOpen} toggle={this.clientToggle}>
+                <DropdownToggle caret>
+                  {this.state.clientSelected
+                    ? this.state.clientSelected
+                    : "Select Client"}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {this.state.clientOptions &&
+                    this.state.clientOptions.map((s: any) => {
+                      return (
+                        <DropdownItem key={s} onClick={this.setClientSelected}>
                           {s}
                         </DropdownItem>
                       );
