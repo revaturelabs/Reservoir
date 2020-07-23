@@ -78,6 +78,9 @@ public class Batch implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="state_id")
 	private BatchState state;
+	
+	@Column(name = "batch_capacity")
+	private int BatchCapacity;
 
 	public Batch() {
 		super();
@@ -96,6 +99,15 @@ public class Batch implements Serializable {
 		this.curriculum = curriculum;
 		this.associates = associates;
 		this.programType = programType;
+	}
+
+	
+	public int getBatchCapacity() {
+		return BatchCapacity;
+	}
+
+	public void setBatchCapacity(int batchCapacity) {
+		BatchCapacity = batchCapacity;
 	}
 
 	public BatchState getState() {

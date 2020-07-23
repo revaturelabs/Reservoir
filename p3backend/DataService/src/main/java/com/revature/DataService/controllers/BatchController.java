@@ -5,48 +5,75 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.revature.DataService.dtos.BatchDTO;
 import com.revature.DataService.dtos.BatchTrainerJoin;
+import com.revature.DataService.dtos.DetailedBatchDTO;
 import com.revature.DataService.dtos.UpdateBatchDto;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.BatchState;
 import com.revature.DataService.services.BatchService;
 import com.revature.DataService.services.BatchStateService;
 
-import javassist.expr.NewArray;
-
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/batches")
 public class BatchController {
 	@Autowired
 	BatchService batchService;
 
 	@Autowired
 	BatchStateService batchStateService;
-
-	@GetMapping("/batches")
+	
+	@GetMapping("/detailed-batch-dto")
+	public DetailedBatchDTO getDetailedBatchDTO() {
+		return new DetailedBatchDTO();
+	}
+	
+	@PostMapping
+	public DetailedBatchDTO postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {
+		
+		
+		System.out.println(errors.getErrorCount());
+		
+		
+		
+		return null;
+	}
+	
+	@GetMapping("/unconfirmed")
+	public List<BatchDTO> getUnconfirmedBatches(){
+		List<BatchDTO> unconfirmedBatches = batchService.getUnconfirmedBatches();	
+		return unconfirmedBatches;	
+	}
+	
+	@GetMapping
 	public List<Batch> getAllBatches() {
 		return batchService.getAll();
 	}
 	
-	@GetMapping("/batches/uncommited")
+	@GetMapping("/uncommited")
 	public List<Batch> getUncommitedBatches()
 	{
 		return batchService.getUncommitedBatchs();
 	}
 
-	@GetMapping("/batches/{id}")
+	@GetMapping("/{id}")
 	public Batch getBatchById(@PathVariable Integer id) {
 		try {
 			return batchService.getById(id);
@@ -61,7 +88,7 @@ public class BatchController {
 	}
 
 
-	@PatchMapping("/batches/{id}")
+	@PatchMapping("{id}")
 	public ResponseEntity<Batch> updateBatchWithId(@RequestBody UpdateBatchDto dto, @PathVariable Integer id) {
 		Batch newBatch = null;
 		try {
@@ -82,7 +109,7 @@ public class BatchController {
 		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 	}
 
-	@GetMapping("/batches/date/{date}")
+	@GetMapping("/date/{date}")
 	public List<Batch> getInProgressBatches(@PathVariable String date) {
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -93,7 +120,7 @@ public class BatchController {
 		}
 	}
 
-	@GetMapping("/batches/curricula/{id}") // get batches by curricula id
+	@GetMapping("/curricula/{id}") // get batches by curricula id
 	public List<Batch> getBatchesByCurricula(@PathVariable Integer id) {
 
 		try {
@@ -105,7 +132,7 @@ public class BatchController {
 
 	}
 
-	@GetMapping("/batches/clients/{id}")
+	@GetMapping("/clients/{id}")
 	public List<Batch> getBatchesByClients(@PathVariable Integer id) {
 		try {
 			return batchService.getBatchByClientId(id);
@@ -116,7 +143,7 @@ public class BatchController {
 
 	}
 
-	@PostMapping("/batches/trainer")
+	@PostMapping("/trainer")
 	public Batch updatebatchtrainer(@RequestBody BatchTrainerJoin batch) {
 
 		try {
