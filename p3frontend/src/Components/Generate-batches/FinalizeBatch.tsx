@@ -22,7 +22,7 @@ export function FinalizeBatch()
   
   return(
     <div>
-        {view? <FinalizeSpecificBatch setView={setView} batchId={batchId}/>:<DisplayBatchs setBatch={setBatchId} setView={setView}/>}
+        {view? <FinalizeSpecificBatch setView={setView} batchId={batchId}/>:<DisplayBatchs setBatch={setBatchId} batch={batchId} setView={setView}/>}
     </div>
   )
 }

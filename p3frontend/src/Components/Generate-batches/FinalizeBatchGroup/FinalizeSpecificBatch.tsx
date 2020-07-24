@@ -62,7 +62,7 @@ export function FinalizeSpecificBatch(props:any)
   return(
     <div>
           <label>curriculum</label>
-          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curiculum_id}/>
+          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","name"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curiculum_id}/>
 
           <label>Start Date:</label>
           <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.startDate} onChange={startDateHandler}/>
