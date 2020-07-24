@@ -41,19 +41,7 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
   }
 
   render() {
-    const toggle = () => {
-      this.setState({ showThis: !this.state.showThis });
-      if (
-        store.getState().batch.batch &&
-        store.getState().batch.batch.batchId === this.props.currentBatch.batchId
-      ) {
-        //  this.props.batchClickActionMapper(store.getState().batch.batch)
-        return;
-      } else {
-        this.props.batchClickActionMapper(this.props.currentBatch);
-      }
-    };
-
+    
     return (
       <>
         <Modal
@@ -196,11 +184,7 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
                 </ul>
               </Col>
               <Col>
-                <Button
-                  onClick={toggle}
-                  color="success"
-                  //style={{ float: "right" }}
-                >
+                <Button onClick={this.props.toggle} color="success">
                   OK
                 </Button>
               </Col>
