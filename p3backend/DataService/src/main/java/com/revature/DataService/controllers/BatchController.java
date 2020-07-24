@@ -58,6 +58,16 @@ public class BatchController {
 		return new DetailedBatchDTO();
 	}
 	
+	@GetMapping("/{id}/confirm")
+	public ResponseEntity<HttpStatus> BatchStateUnconfirmedToConfirmed(@PathVariable int id) {
+		Batch batch = batchService.batchStateUnconfirmedToConfirmed(id);
+		
+		if(batch != null) 
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else
+			return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+	}
+	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void deleteBatchById(@PathVariable int id){

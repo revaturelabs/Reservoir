@@ -22,6 +22,7 @@ import com.revature.DataService.repositories.TrainerRepository;
 @Service
 public class BatchService {
 	private final String UNCONFIRMED_STATE = "unconfirmed";
+	private final String CONFIRMED_STATE = "confirmed";
 
 	@Autowired
 	BatchRepository batchRepository;
@@ -38,6 +39,18 @@ public class BatchService {
 	@Autowired
 	TrainerRepository trainerRepo;
 
+	
+	public Batch batchStateUnconfirmedToConfirmed(int id) {
+		BatchState state = batchStateRepo.findByState(CONFIRMED_STATE);
+		Optional<Batch> batch = batchRepository.findById(id);		
+		if(batch.isPresent()) {
+			batch.get().setState(state);
+			return batchRepository.save(batch.get());
+		}
+		else
+			return null;	
+	}
+	
 	public void deleteBatchById(int id) {
 		batchRepository.deleteById(id);
 	}
