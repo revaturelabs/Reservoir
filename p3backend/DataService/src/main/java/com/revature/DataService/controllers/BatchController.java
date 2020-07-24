@@ -12,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,8 +29,12 @@ import com.revature.DataService.dtos.DetailedBatchDTO;
 import com.revature.DataService.dtos.UpdateBatchDto;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.BatchState;
+import com.revature.DataService.models.Curriculum;
+import com.revature.DataService.models.Location;
 import com.revature.DataService.services.BatchService;
 import com.revature.DataService.services.BatchStateService;
+import com.revature.DataService.services.CurriculumService;
+import com.revature.DataService.services.LocationService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -40,20 +46,47 @@ public class BatchController {
 	@Autowired
 	BatchStateService batchStateService;
 	
+	@Autowired
+	LocationService locationService;
+	
+	@Autowired
+	CurriculumService curriculumService;
+	
+	
 	@GetMapping("/detailed-batch-dto")
 	public DetailedBatchDTO getDetailedBatchDTO() {
 		return new DetailedBatchDTO();
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping("/{id}")
+	public void deleteBatchById(@PathVariable int id){
+		batchService.deleteBatchById(id);
+	}
+	
+	
+	// currently handles save and update
 	@PostMapping
-	public DetailedBatchDTO postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {
+	public ResponseEntity<DetailedBatchDTO> postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {		
+		Curriculum curriculum = curriculumService.getById(detailedBatchDTO.getCurriculum_id());
+		Location location = locationService.getById(detailedBatchDTO.getLocation_id());
 		
+		if(errors.hasErrors() | curriculum == null | location == null ){
+			return new ResponseEntity<DetailedBatchDTO>(detailedBatchDTO, HttpStatus.BAD_REQUEST);
+		}
 		
-		System.out.println(errors.getErrorCount());
+		Batch batch = new Batch(detailedBatchDTO.getBatch_id(),
+				detailedBatchDTO.getStart_date(),
+				detailedBatchDTO.getEnd_date(), 
+				detailedBatchDTO.getRequired_score(), 
+				location,
+				curriculum,
+				detailedBatchDTO.getBatch_capacity()
+		);
 		
-		
-		
-		return null;
+		batch = batchService.saveUnconfirmedBatch(batch, detailedBatchDTO);
+		detailedBatchDTO.setBatch_id(batch.getBatchId());
+		return new ResponseEntity<DetailedBatchDTO>(detailedBatchDTO,HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/unconfirmed")

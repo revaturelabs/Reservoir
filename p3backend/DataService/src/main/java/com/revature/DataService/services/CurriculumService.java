@@ -18,14 +18,15 @@ public class CurriculumService {
   public List<Curriculum> getAll() {
     return curriculumRepository.findAll();
   }
+  
 
-  public Curriculum getById(Integer id) {
+
+  public Curriculum getById(Integer id){
     Optional<Curriculum> curriculum = curriculumRepository.findById(id);
     if (curriculum.isPresent()) {
       return curriculum.get();
     } else {
-      // throw new CurriculumNotFoundException; // Maybe add in later?
-      throw new RuntimeException();
+    	return null;
     }
   }
 

@@ -21,4 +21,6 @@ public interface AssociateRepository extends JpaRepository<Associate, Integer> {
   
   List<Associate> findByBatchEndDateBetweenAndBatchStateId(Date start, Date end, int id);
   
+  List<Associate> findByBatchBatchId(int id);
+  
 }
