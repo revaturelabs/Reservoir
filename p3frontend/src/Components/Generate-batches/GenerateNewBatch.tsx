@@ -85,7 +85,7 @@ export function GenerateNewBatch(props: any)
         <label hidden={trainerArray.length?false:true}>Added Trainers</label>
         {trainerArray.map((data:any,index:any)=>{
           let findName=staticTrainerList.filter((ele:any)=>ele.trainer_id==data);
-          findName=findName[0]
+          findName=findName[0];
           return(
           <h5>{"Trainer "+(parseInt(index)+1)+":"+findName.firstName+" "+findName.lastName}</h5>
           )

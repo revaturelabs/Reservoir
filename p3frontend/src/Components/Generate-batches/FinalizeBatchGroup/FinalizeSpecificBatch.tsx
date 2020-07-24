@@ -78,7 +78,10 @@ export function FinalizeSpecificBatch(props:any)
   console.log(modifiedBatch)
   return(
     <div>
-          <label>curriculum</label>
+          <label>Location</label>
+          <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.location_id}/>
+
+          <label>Skill</label>
           <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","name"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curriculum_id}/>
 
           <label>Start Date:</label>
@@ -87,9 +90,9 @@ export function FinalizeSpecificBatch(props:any)
           <label>End Date:</label>
           <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.end_date?modifiedBatch.end_date:modifiedBatch.start_date} onChange={endDateHandler}/>
 
-          <label>Location</label>
-          <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.location_id}/>
-
+          <label>Batch Capacity</label>
+          <input type="number" name="score" min={0} max="100" defaultValue={capacity} onChange={capacityHandler}/>
+          
           <label>Required Interview Score:</label>
           <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.required_score} onChange={interviewScoreHandler}/>
 
