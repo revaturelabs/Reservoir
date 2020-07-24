@@ -57,10 +57,14 @@ public class BatchService {
 		
 	// currently handles save and update.
 	public Batch saveUnconfirmedBatch(Batch batch, DetailedBatchDTO detailedBatchDTO) {
+		Optional<Batch> existingBatch = batchRepository.findById(batch.getBatchId());
 		BatchState state = batchStateRepo.findByState(UNCONFIRMED_STATE);
 		batch.setState(state);
-
-		if(batch.getBatchId() > 0) {
+		if(existingBatch.isPresent()) {
+			Optional<BatchState> bState = batchStateRepo.findById(existingBatch.get().getState().getId());
+			if(bState.isPresent()) {
+				batch.setState(bState.get());
+			}
 			List<Associate> associates = associateRepo.findByBatchBatchId(batch.getBatchId());
 			for(int x = 0; x < associates.size(); x++) {
 				if(!detailedBatchDTO.getAssociate_ids().contains(associates.get(x).getAssociateId())) {
@@ -68,10 +72,15 @@ public class BatchService {
 					a.setBatch(null);
 				}
 			}
-		}
+			
+			for(int x = associates.size(); x > batch.getBatchCapacity();x-- ) {
+				Associate a = associates.get(x-1);
+				a.setBatch(null);
+			}
+		} 
 		
 		if (detailedBatchDTO.getAssociate_ids().size() > 0) {
-			for (int x = 0; x < batch.getBatchCapacity(); x++) {
+			for (int x = 0; x < batch.getBatchCapacity() && x < detailedBatchDTO.getAssociate_ids().size(); x++) {
 				Optional<Associate> a = associateRepo.findById(detailedBatchDTO.getAssociate_ids().get(x));
 				if (a.isPresent()) {
 					Associate as = a.get();

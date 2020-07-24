@@ -1,7 +1,12 @@
 package com.revature.DataService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
+import com.revature.DataService.dtos.SimpleCurriculaDTO;
 import com.revature.DataService.models.Curriculum;
 import com.revature.DataService.repositories.CurriculumRepository;
 import com.revature.DataService.services.CurriculumService;
@@ -38,7 +41,7 @@ class CurriculumServiceTest {
 		
 		when(CurriculumRepository.findById(Mockito.anyInt())).thenReturn(curriculums);
 		
-		Curriculum curriculumInstance = CurriculumService.getById(1);
+		SimpleCurriculaDTO curriculumInstance = CurriculumService.getSimpleById(1);
 		
 		assertNotNull(curriculumInstance);
 		assertEquals("React", curriculumInstance.getName());
@@ -55,7 +58,7 @@ class CurriculumServiceTest {
 		
 		when(CurriculumRepository.findAll()).thenReturn(Curriculums);
 		
-		ArrayList<Curriculum> CurriculumsTest = (ArrayList<Curriculum>) CurriculumService.getAll();
+		ArrayList<SimpleCurriculaDTO> CurriculumsTest = (ArrayList<SimpleCurriculaDTO>) CurriculumService.getAll();
 		
 		assertNotNull(CurriculumsTest.get(0));
 		assertNotNull(CurriculumsTest.get(1));
