@@ -12,6 +12,7 @@ start_date date,
 end_date date,
 interview_score_lower integer,
 program_type varchar(150),
+batch_capacity int,
 state_id int references project3.batchstate(id)
  );
 

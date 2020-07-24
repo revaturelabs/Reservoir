@@ -1,10 +1,14 @@
 package com.revature.DataService.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.revature.DataService.dtos.BatchDTO;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.Trainer;
 import com.revature.DataService.repositories.BatchRepository;
@@ -19,6 +23,23 @@ public class BatchService {
   @Autowired
   TrainerRepository trainerRepository;
 
+  public List<BatchDTO> getUnconfirmedBatches(){
+	  List<Batch> batches = batchRepository.findByStateId(3);
+	  List<BatchDTO> unconfirmedBatches = new ArrayList<>();
+	   
+	  for(Batch batch : batches) {
+		  unconfirmedBatches.add(new BatchDTO(
+				  batch.getBatchId(),
+				  batch.getLocation().getLocationName(),
+				  batch.getStartDate(),
+				  batch.getCurriculum().getName(),
+				  batch.getBatchCapacity())
+			);  
+	  }
+	  return unconfirmedBatches; 
+  }
+  
+  
   public List<Batch> getAll() {
     try {
       return batchRepository.findAll();
