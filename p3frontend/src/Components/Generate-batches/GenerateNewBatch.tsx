@@ -7,7 +7,7 @@ import axiosWrapper from "./functions/axiosWrapper";
 
 
 
-export function GenerateNewBatch()
+export function GenerateNewBatch(props: any)
 {
   //Data pulled from database
   const [locations, setLocations] = useState([]);
@@ -17,7 +17,7 @@ export function GenerateNewBatch()
   const [loc,setLoc]=useState("");
   const [skill,setSkill]=useState("");
   const [startDate,setStartDate]= useState("")
-
+  const [ammountOfWeeks,setAmmountOfWeeks]:any= useState(0)
   //Get todays date in html formated way
   let today = new Date();
   //THe backend requires us to add 1 to the day
@@ -46,13 +46,23 @@ export function GenerateNewBatch()
         <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location"/>
         <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill"/>
         <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={formatedDate} onChange={dateHandler}/>
+        <input type="number" name="date" min="1" onChange={weekHandler}  placeholder="#Weeks Duration Ints" step="1"/>
+
         <br/>
         
       </div>
-      <input type="submit" onClick={buttonHandler}/>
+      <input type="submit" onClick={buttonHandler} disabled={testReturn()}/>
     </div>
   )
 
+  function testReturn()
+    {
+      if (loc&&skill&&startDate&&ammountOfWeeks &&parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks)%1===0)
+      {
+        return false;
+      }
+      return true;
+    }
   //event listeners to change state
   function locHandler(e:any)
   {
@@ -69,6 +79,11 @@ export function GenerateNewBatch()
     setStartDate(e.target.value);
 
   }
+  function weekHandler(e:any)
+  {
+    setAmmountOfWeeks(e.target.value);
+
+  }
 
   function buttonHandler(e:any)
   {
@@ -82,15 +97,24 @@ export function GenerateNewBatch()
     {
       a[2]="0"+a[2]
     }
-    let dataBaseDate=(a[0]+"-"+a[1]+"-"+a[2]);
-    
 
+    
+    let dataBaseDate=(a[0]+"-"+a[1]+"-"+a[2]);
+    let b:any=[...a];
+    b[2]=parseInt(b[2])+7*ammountOfWeeks;
+
+    if(b[2]<10)
+    {
+      b[2]="0"+b[2]
+    }
+    let endDate=(b[0]+"-"+b[1]+"-"+b[2]);
+    console.log(b)
     //Create our batch object
     let saveObject:any=
       {
         "batchId": 0,
         "startDate": dataBaseDate,
-        "endDate": null,
+        "endDate": endDate,
         "state": 3,
         "interviewScoreLower": null,
         "programType": null,
@@ -99,8 +123,9 @@ export function GenerateNewBatch()
     };
 
     //save our batch/
+   
     axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
-      
+      props.setView(1);
     })
   }
 }
