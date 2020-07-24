@@ -5,25 +5,34 @@ import lombok.Data;
 @Data
 public class UpdateBatchDto {
 
-  private Boolean isConfirmed;
+	private int batchId;
 
-  public UpdateBatchDto() {
-    super();
-  }
+	private int batchStateId;
 
-  public UpdateBatchDto(Integer batchId, Boolean isConfirmed) {
-    super();
-    this.isConfirmed = isConfirmed;
-  }
+	public UpdateBatchDto() {
+		super();
+	}
 
-  public Boolean getIsConfirmed() {
-    return isConfirmed;
-  }
+	public UpdateBatchDto(Integer batchId, Integer batchStateId) {
+		super();
+		this.batchId = batchId;
+		this.batchStateId = batchStateId;
+	}
 
-  public void setIsConfirmed(Boolean isConfirmed) {
-    this.isConfirmed = isConfirmed;
-  }
+	public int getBatchId() {
+		return batchId;
+	}
 
+	public void setBatchId(int batchId) {
+		this.batchId = batchId;
+	}
 
+	public int getBatchStateId() {
+		return batchStateId;
+	}
+
+	public void setBatchStateId(int batchStateId) {
+		this.batchStateId = batchStateId;
+	}
 
 }

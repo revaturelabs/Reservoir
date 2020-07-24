@@ -34,7 +34,6 @@ class BatchServiceTest {
 	void testGetById() throws Exception {
 		Optional<Batch> batches = Optional.of(new Batch());
 		batches.get().setInterviewScoreLower(75);
-		batches.get().setIsConfirmed(false);
 		batches.get().setBatchId(5);
 		
 
@@ -44,7 +43,6 @@ class BatchServiceTest {
 
 		assertNotNull(batchInstance);
 		assertEquals(75, batchInstance.getInterviewScoreLower());
-		assertEquals(false, batchInstance.getIsConfirmed());
 		assertEquals(5, batchInstance.getBatchId());
 		
 

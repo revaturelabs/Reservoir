@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 import com.revature.DataService.models.Location;
 
 @Repository
-public interface LocationRepository extends JpaRepository<Location, Integer> {
+public interface LocationRepository extends JpaRepository<Location, Integer> 
+{
 
 
 

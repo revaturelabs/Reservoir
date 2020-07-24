@@ -41,7 +41,7 @@ public class Location {
 
 
   // Location to Batches
-  @JsonIgnoreProperties({"location", "trainers", "curriculum", "associates", "consent"})
+  @JsonIgnoreProperties({"location", "trainers", "curriculum", "associates", "consent","batches","state"})
   @OneToMany(mappedBy = "location")
   private List<Batch> batches;
 

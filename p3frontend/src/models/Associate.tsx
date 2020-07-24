@@ -1,5 +1,5 @@
-import { axiosClient } from "../api/axios";
-import { FailedRequestException } from "../exceptions/FailedRequestException";
+import { axiosClient } from "../Components/Common/API/axios";
+import { FailedRequestException } from "../Components/Common/Exceptions/FailedRequestException";
 
 export class Associate {
   associateId: number;

@@ -1,6 +1,6 @@
-import { TrainerSkills } from "../models/TrainerSkills";
-import { ConsentTrainerClassHelper } from "../models/ConsentTrainerClassHelper";
-import { Batch } from "../models/Batch";
+import { TrainerSkills } from "./TrainerSkills";
+import { ConsentTrainerClassHelper } from "./ConsentTrainerClassHelper";
+import { Batch } from "./Batch";
 
 export class Trainer {
   trainerId: number;

@@ -1,0 +1,17 @@
+/* th {
+  color: #f26925;
+} */
+thead{
+  background-color: rgba(242, 105, 38);
+}
+
+.shadow {
+  box-shadow: 2px 5px 5px black;
+}
+
+.associate-table {
+  border: 1px solid #eeccee;
+  max-height: 350px;
+  overflow-y: scroll;
+  width: 100%;
+}

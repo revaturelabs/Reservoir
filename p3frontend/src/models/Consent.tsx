@@ -1,5 +1,5 @@
-import { Trainer } from "../models/Trainer";
-import { Batch } from "../models/Batch";
+import { Trainer } from "./Trainer";
+import { Batch } from "./Batch";
 
 export class Consent {
   consentId: number;
