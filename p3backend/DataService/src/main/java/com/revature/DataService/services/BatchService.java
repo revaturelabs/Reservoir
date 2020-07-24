@@ -52,6 +52,14 @@ public class BatchService {
 	}
 	
 	public void deleteBatchById(int id) {
+		Optional<Batch> batchWrap = batchRepository.findById(id);
+		if(batchWrap.isPresent())
+		{
+			Batch batch = batchWrap.get();
+			for(Associate a : batch.getAssociates()) {
+				a.setBatch(null);
+			}
+		}		
 		batchRepository.deleteById(id);
 	}
 		
