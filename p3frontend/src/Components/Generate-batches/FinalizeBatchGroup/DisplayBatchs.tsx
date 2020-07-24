@@ -91,7 +91,7 @@ export function DisplayBatchs(props:any)
         let removeSingleBatch=[...batch];
 
         console.log(props.batch);
-        axiosWrapper(`/batchDAO/${props.batch}`,"DELETE").then(()=>
+        axiosWrapper(`/batches/${props.batch}`,"DELETE").then(()=>
         {
             //update the local state
             setBatch(removeSingleBatch.filter((value,index)=>{return value.batchId!=props.batch}));
