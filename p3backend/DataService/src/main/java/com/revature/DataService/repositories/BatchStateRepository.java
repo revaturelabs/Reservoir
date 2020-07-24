@@ -7,5 +7,6 @@ import com.revature.DataService.models.BatchState;
 
 @Repository
 public interface BatchStateRepository extends JpaRepository<BatchState, Integer> {
+	BatchState findByState(String state);
 
 }
