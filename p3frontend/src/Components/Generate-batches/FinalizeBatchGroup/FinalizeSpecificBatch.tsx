@@ -28,18 +28,35 @@ export function FinalizeSpecificBatch(props:any)
   useEffect(()=>{
     
     axiosWrapper("/batches/"+props.batchId,"GET").then((data)=>{
+      let trainerIds=[];
+      for(let i=0;i<data.trainers.length;i++)
+      {
+        trainerIds.push(data.trainers[i].trainerId)
+      }
+
+      let assosiateIds=[];
+      for(let i=0;i<data.associates.length;i++)
+      {
+        assosiateIds.push(data.associates[i].associateId);
+      }
+
       setModifiedBatch(
         {
-          "batchId": data.batchId,
-          "startDate": data.startDate,
-          "endDate": data.endDate,
-          "state": 3, //Dont modify this as 3 is unconfirmed
-          "interviewScoreLower": data.interviewScoreLower,
-          "programType": data.programType,
-          "locationId": data.location.locationId,
-          "curiculum_id": data.curriculum.curriculumId
-        });
+          "batch_id": data.batchId,
+          "curriculum_id": data.curriculum.curriculumId,
+          "location_id": data.location.locationId,
+          "start_date": data.startDate,
+          "end_date": data.endDate,
+          "batch_duration": 1,
+          "batch_capacity": data.batchCapacity,
+          "required_score": data.interviewScoreLower,
+          "associate_ids": assosiateIds,
+          "trainer_ids": trainerIds
+      });
+        /*
         
+
+        */
 
 
         //Load other data in second to setup default values
@@ -61,54 +78,58 @@ export function FinalizeSpecificBatch(props:any)
   console.log(modifiedBatch)
   return(
     <div>
-          <label>curriculum</label>
-          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curiculum_id}/>
+          <label>Location</label>
+          <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.location_id}/>
+
+          <label>Skill</label>
+          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","name"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curriculum_id}/>
 
           <label>Start Date:</label>
-          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.startDate} onChange={startDateHandler}/>
+          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.start_date} onChange={startDateHandler}/>
 
           <label>End Date:</label>
-          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.endDate?modifiedBatch.endDate:modifiedBatch.startDate} onChange={endDateHandler}/>
+          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.end_date?modifiedBatch.end_date:modifiedBatch.start_date} onChange={endDateHandler}/>
 
-          <label>Location</label>
-          <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.locationId}/>
-
+          <label>Batch Capacity</label>
+          <input></input>
+          
           <label>Required Interview Score:</label>
-          <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.interviewScoreLower} onChange={interviewScoreHandler}/>
+          <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.required_score} onChange={interviewScoreHandler}/>
 
 
-          <input type="submit" onClick={buttonHandler}/>
+          <input type="submit" onClick={buttonHandler}/> 
 
     </div>
   )
-    console.log(modifiedBatch.location);
+    
     
 
 
 //Event handlers
   function locHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "locationId":e.target.value})
+    setModifiedBatch({...modifiedBatch, "location_id":e.target.value})
+  
   }
   function skillHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "curiculum_id":e.target.value})
+    setModifiedBatch({...modifiedBatch, "curriculum_id":e.target.value})
 
   }
 
   function startDateHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "startDate":e.target.value})
+    setModifiedBatch({...modifiedBatch, "start_date":e.target.value})
   }
 
   function endDateHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "endDate":e.target.value})
+    setModifiedBatch({...modifiedBatch, "end_date":e.target.value})
   }
 
   function interviewScoreHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "interviewScoreLower":e.target.value})
+    setModifiedBatch({...modifiedBatch, "required_score":e.target.value})
   }
 
 
@@ -116,11 +137,11 @@ export function FinalizeSpecificBatch(props:any)
   {
     e.preventDefault();
     //add 1 to both start and end date because back end subtracts one
-    let saveObject={...modifiedBatch, startDate:modifyDay(modifiedBatch.startDate) , endDate:modifyDay(modifiedBatch.endDate)}
+    let saveObject={...modifiedBatch, start_date:modifyDay(modifiedBatch.start_date) , end_date:modifyDay(modifiedBatch.end_date)}
     //save our data
-    axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
+    axiosWrapper("/batches","POST",saveObject).then((data)=>{
       //Redirect to batchs
-
+      console.log(modifiedBatch);
       props.setView(0);
     })
 

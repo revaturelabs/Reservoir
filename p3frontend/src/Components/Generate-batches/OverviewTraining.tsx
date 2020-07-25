@@ -36,7 +36,7 @@ export function OverviewTraining()
         <h5 onClick={()=>setView(0)} className="float-right">--Initialize A Batch--</h5>:
         <h5 onClick={()=>setView(1)} className="float-right">--Finalize A Batch--</h5>}
       </div>
-      {view ? <FinalizeBatch/>:<GenerateNewBatch/>}
+      {view ? <FinalizeBatch/>:<GenerateNewBatch setView={setView}/>}
 
     </div>//
   )
