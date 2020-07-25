@@ -15,6 +15,7 @@ import com.revature.DataService.dtos.SimpleSkillSetDTO;
 import com.revature.DataService.dtos.SkillSetMatrixDTO;
 import com.revature.DataService.dtos.TotalSupplyGraphDTO;
 import com.revature.DataService.models.Skillset;
+import com.revature.DataService.repositories.SkillSetRepository;
 import com.revature.DataService.services.SkillSetService;
 //ONLY MODIFY THIS FILE ON GEN_BRANCH FOR NOW
 @CrossOrigin(origins = "*")
@@ -24,7 +25,7 @@ public class SkillSetController {
 
   @Autowired
   SkillSetService skillSetService;
-
+  
   @GetMapping
   public ResponseEntity<List<SimpleSkillSetDTO>> getAllSkillSets() {
 	  List<SimpleSkillSetDTO> dto = skillSetService.getAll(); 
@@ -47,7 +48,7 @@ public class SkillSetController {
   }
   
   @GetMapping("/matrix/{id}")
-  public SkillSetMatrixDTO getSkillMatrix(@PathVariable int id) {
+  public SkillSetMatrixDTO getSkillMatrix(@PathVariable int id) {  
 	  return null;
   }
 }
