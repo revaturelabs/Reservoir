@@ -91,7 +91,7 @@ export function FinalizeSpecificBatch(props:any)
           <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.end_date?modifiedBatch.end_date:modifiedBatch.start_date} onChange={endDateHandler}/>
 
           <label>Batch Capacity</label>
-          <input type="number" name="score" min={0} max="100" defaultValue={capacity} onChange={capacityHandler}/>
+          <input></input>
           
           <label>Required Interview Score:</label>
           <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.required_score} onChange={interviewScoreHandler}/>
