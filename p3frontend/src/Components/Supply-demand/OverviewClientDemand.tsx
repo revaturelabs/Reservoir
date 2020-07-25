@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
-import { ColumnChartTest } from "./colGraphComponent";
+import ColumnChartTest from "./colGraphComponent";
 import "../../stylesheets/supply-demand/supply-demand.css";
 import { PageTitleBar } from "../Common/PageTitleBar";
 
