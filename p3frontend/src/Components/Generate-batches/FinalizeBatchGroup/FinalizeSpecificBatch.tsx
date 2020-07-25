@@ -97,7 +97,7 @@ export function FinalizeSpecificBatch(props:any)
           <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.required_score} onChange={interviewScoreHandler}/>
 
 
-          <input type="submit" onClick={buttonHandler}/>
+          <input type="submit" onClick={buttonHandler}/> 
 
     </div>
   )
