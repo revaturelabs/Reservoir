@@ -13,6 +13,7 @@ import com.revature.DataService.dtos.DetailedBatchDTO;
 import com.revature.DataService.models.Associate;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.BatchState;
+import com.revature.DataService.models.Consent;
 import com.revature.DataService.models.Trainer;
 import com.revature.DataService.repositories.AssociateRepository;
 import com.revature.DataService.repositories.BatchRepository;
@@ -59,7 +60,14 @@ public class BatchService {
 			for(Associate a : batch.getAssociates()) {
 				a.setBatch(null);
 			}
+			
+			if(batch.getConsent().size() > 0) {
+				for(Consent c : batch.getConsent()) {
+					c.setBatch(null);
+				}
+			}
 		}		
+		
 		batchRepository.deleteById(id);
 	}
 		
