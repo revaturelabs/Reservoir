@@ -1,8 +1,8 @@
 package com.revature.DataService.controllers;
 
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.revature.DataService.dtos.BatchDTO;
 import com.revature.DataService.dtos.BatchTrainerJoin;
 import com.revature.DataService.dtos.DetailedBatchDTO;
+import com.revature.DataService.dtos.SupplyMetricsDTO;
 import com.revature.DataService.dtos.UpdateBatchDto;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.BatchState;
@@ -73,9 +75,7 @@ public class BatchController {
 	public void deleteBatchById(@PathVariable int id){
 		batchService.deleteBatchById(id);
 	}
-	
-	
-	// currently handles save and update
+
 	@PostMapping
 	public ResponseEntity<DetailedBatchDTO> postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {		
 		Curriculum curriculum = curriculumService.getById(detailedBatchDTO.getCurriculum_id());
@@ -100,9 +100,21 @@ public class BatchController {
 	}
 	
 	@GetMapping("/unconfirmed")
-	public List<BatchDTO> getUnconfirmedBatches(){
-		List<BatchDTO> unconfirmedBatches = batchService.getUnconfirmedBatches();	
-		return unconfirmedBatches;	
+	public List<BatchDTO> getUnconfirmedBatches(@RequestParam(required = false) Integer skillsetid){
+		
+		if(skillsetid == null) 
+			return batchService.getUnconfirmedBatches();
+		 else if (skillsetid != null) 
+			return batchService.getUnconfirmedBatchesBySkillsetId(skillsetid);
+		return null;
+	}
+	
+	@GetMapping("/{id}/unconfirmed")
+	public ResponseEntity<SupplyMetricsDTO> getBatchSupplyMetricsById(@PathVariable int id) {
+		SupplyMetricsDTO dto = batchService.getBatchSupplyMetricsById(id);
+		if(dto != null)
+			return new ResponseEntity<SupplyMetricsDTO>(dto, HttpStatus.OK);
+		return new ResponseEntity<SupplyMetricsDTO>(dto, HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping
@@ -154,9 +166,9 @@ public class BatchController {
 
 	@GetMapping("/date/{date}")
 	public List<Batch> getInProgressBatches(@PathVariable String date) {
-		try {
+		try {	
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			Date d = df.parse(date);
+			Date d = (Date) df.parse(date);
 			return batchService.getByInProgress(d);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
