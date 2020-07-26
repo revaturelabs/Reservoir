@@ -167,15 +167,15 @@ export class App extends React.Component<any, any> {
             comp: is the component to display within the route
           */
           this.createRoutesAndNavbar([
-                  // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
-                  // {
-                  //   end: "/dead-page",
-                  //   name: "Reservoir",
-                  //   comp: <HomePage />,
-                  // },
+            // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
+            // {
+            //   end: "/dead-page",
+            //   name: "Reservoir",
+            //   comp: <HomePage />,
+            // },
             {
               end: "/home",
-              name: "Batches in Progress",
+              name: "Reservoir",
               comp: <ReduxInProgress />,
             },
             {
@@ -188,17 +188,22 @@ export class App extends React.Component<any, any> {
               name: "Generate Batches",
               comp: <OverviewTraining />,
             },
+            {
+              end: "/batch/batches-in-progress",
+              name: "Batches in Progress",
+              comp: <ReduxInProgress />,
+            },
             // {
             //   end: "/trainer-assign",
             //   name: "Trainer assignment",
             //   comp: <TrainerAssignmentComponent />,
             // },
-                  // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
-                  // {
-                  //   end: "/trainers/consent-requests",
-                  //   name: "Consent requests",
-                  //   comp: <ViewConsentRequests />,
-                  // },
+            // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
+            // {
+            //   end: "/trainers/consent-requests",
+            //   name: "Consent requests",
+            //   comp: <ViewConsentRequests />,
+            // },
             // {
             //   end: "/test-convert",
             //   name: "TCO",
