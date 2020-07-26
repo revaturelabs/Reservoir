@@ -18,7 +18,7 @@ export function DisplayBatchs(props:any)
             setBatch(data);
         });
     },[]);
-    const tableTittle=["Location","Curriculum", "Start-Date"];
+    const tableTittle=["Location","Curriculum", "Start-Date","Batch Capacity"];
 
     //the button names and their given onclicks
     const allButtons:any[any]=[["Update",handleUpdate],["Confirm Batch",handleConfirm],["Delete",handleDelete]];
@@ -59,6 +59,7 @@ export function DisplayBatchs(props:any)
                                 <td key={1}>{data.location.locationName}</td>
                                 <td key={2}>{data.curriculum.curriculumSkillset.skillSetName}</td>
                                 <td key={3}>{data.startDate}</td>
+                                <td key={4}>{data.batchCapacity}</td>
                             </tr>
                         )
                     })}
@@ -90,7 +91,7 @@ export function DisplayBatchs(props:any)
         let removeSingleBatch=[...batch];
 
         console.log(props.batch);
-        axiosWrapper(`/batchDAO/${props.batch}`,"DELETE").then(()=>
+        axiosWrapper(`/batches/${props.batch}`,"DELETE").then(()=>
         {
             //update the local state
             setBatch(removeSingleBatch.filter((value,index)=>{return value.batchId!=props.batch}));

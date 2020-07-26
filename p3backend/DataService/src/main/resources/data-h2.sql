@@ -1264,15 +1264,15 @@ insert into project3.curriculum values
     (DEFAULT,'unconfirmed');
     
 INSERT INTO project3.batch VALUES
-   (default, '2020-05-04','2020-07-10',80,'Standard',3,1,1),
-	(default,'2020-05-13','2020-07-22',80,'Standard',2,2,2),
-	(default,'2020-05-27','2020-08-05',70,'Spark',2,3,2),
-	(default,'2020-06-17','2020-08-26',70,'Standard',2,4,4),
-	(default,'2020-04-29','2020-07-08',90,'ROCP',2,1,4),
-	(default,'2020-04-02','2020-07-02',70,'ROCP',2,1,5),
-	(default,'2020-06-01','2020-09-01',70,'Standard',2,1,5),
-	(default,'2020-01-20','2020-03-05',70,'Spark',1,1,5),
-	(default,'2020-06-10','2020-08-19',80,'CF',2,4,1);
+   (default, '2020-05-04','2020-07-10',80,'Standard',25,3,1,1),
+	(default,'2020-05-13','2020-07-22',80,'Standard',25,3,2,2),
+	(default,'2020-05-27','2020-08-05',70,'Spark',25,1,3,2),
+	(default,'2020-06-17','2020-08-26',70,'Standard',25,2,4,4),
+	(default,'2020-04-29','2020-07-08',90,'ROCP',25,2,1,4),
+	(default,'2020-04-02','2020-07-02',70,'ROCP',25,2,1,5),
+	(default,'2020-06-01','2020-09-01',70,'Standard',25,2,1,5),
+	(default,'2020-01-20','2020-03-05',70,'Spark',25,1,1,5),
+	(default,'2020-06-10','2020-08-19',80,'CF',25,2,4,1);
 
 	
 
@@ -1283,10 +1283,21 @@ INSERT INTO project3.trainer values(DEFAULT,'andrew','crenladge','andrew@revatur
 (DEFAULT,'john','james','john@revature.com', false),
 (DEFAULT,'lisa','jose','lisa@revature.com', false)
 ;
-INSERT INTO project3.trainerskills VALUES  (1,2),
-(2,3),
-(3,5),
+INSERT INTO project3.trainerskills VALUES  (1,1),
+(1,2),
+(1,3),
+(4,1),
+(4,2),
+(4,3),
+(4,4),
+(4,5),
 (4,6),
+(4,7),
+(4,8),
+(4,9),
+(4,10),
+(2,2),
+(3,3),
 (5,7);
 
 --INSERT INTO project3.trainerbatch VALUES (2,1),

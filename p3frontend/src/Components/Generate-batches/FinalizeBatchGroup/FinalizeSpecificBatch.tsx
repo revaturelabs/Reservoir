@@ -3,6 +3,7 @@ import { PageTitleBar } from "../../Common/PageTitleBar";
 import React, { useState, useEffect } from "react";
 import axiosWrapper from "../functions/axiosWrapper";
 import { GenerateNewBatch } from "../GenerateNewBatch";
+import { isCompositeComponent } from "react-dom/test-utils";
 
 ////////////////////////////////////
 
@@ -20,6 +21,9 @@ export function FinalizeSpecificBatch(props:any)
   const [skillSet, setSkillSet] = useState([]);
   const [modifiedBatch, setModifiedBatch]:any=useState({});
 
+  const [staticTrainers, setStaticTrainers]=useState([]);
+  const [currentTrainerList,setCurrentTrainerList]=useState([]);
+  const [selectedTrainer, setSelectedTrainer]:any=useState();
 
   let today = new Date();
   //THe backend requires us to add 1 to the day before we submit it
@@ -27,20 +31,33 @@ export function FinalizeSpecificBatch(props:any)
   
   useEffect(()=>{
     
-    axiosWrapper("/batches/"+props.batchId,"GET").then((data)=>{
+    axiosWrapper("/batches/"+props.batchId,"GET").then((data)=>
+    {
+      let trainerIds:any=[];
+      for(let i=0;i<data.trainers.length;i++)
+      {
+        trainerIds.push(data.trainers[i].trainerId)
+      }
+
+      let assosiateIds=[];
+      for(let i=0;i<data.associates.length;i++)
+      {
+        assosiateIds.push(data.associates[i].associateId);
+      }
+
       setModifiedBatch(
         {
-          "batchId": data.batchId,
-          "startDate": data.startDate,
-          "endDate": data.endDate,
-          "state": 3, //Dont modify this as 3 is unconfirmed
-          "interviewScoreLower": data.interviewScoreLower,
-          "programType": data.programType,
-          "locationId": data.location.locationId,
-          "curiculum_id": data.curriculum.curriculumId
-        });
-        
-
+          "batch_id": data.batchId,
+          "curriculum_id": data.curriculum.curriculumId,
+          "location_id": data.location.locationId,
+          "start_date": data.startDate,
+          "end_date": data.endDate,
+          "batch_duration": 1,
+          "batch_capacity": data.batchCapacity,
+          "required_score": data.interviewScoreLower,
+          "associate_ids": assosiateIds,
+          "trainer_ids": trainerIds
+      });
 
         //Load other data in second to setup default values
         axiosWrapper("/location","GET").then((data)=>{
@@ -49,81 +66,186 @@ export function FinalizeSpecificBatch(props:any)
         axiosWrapper("/skillsets","GET").then((data)=>{
           setSkillSet(data)
         })
+
+        axiosWrapper("trainer/curriculum/"+data.curriculum.curriculumId,"GET").then((data:any)=>{
+          setStaticTrainers(data);
+
+           //setup current trainer list
+    
+           let a=data.filter((element:any)=>
+           {
+             for (let i=0;i<trainerIds.length;i++)
+             {
+               if (trainerIds[i]==element.trainer_ids)
+                {
+                  return false;
+                }
+             }
+             return true; 
+           })
+           let initialDropDown:any=[];
+           for(let i=0;i<a.length;i++)
+           {
+             initialDropDown.push(
+               {
+                 "trainer_id":a[i].trainer_id,
+                 "name":a[i].firstName+" "+a[i].lastName
+               }
+             )
+           }
+    
+           setCurrentTrainerList(initialDropDown)
+        })
     })
-
-
-
- 
-
- 
   },[])
 
-  console.log(modifiedBatch)
   return(
     <div>
-          <label>curriculum</label>
-          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","skillSetName"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curiculum_id}/>
+          <label>Location</label>
+          <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.location_id}/>
+
+          <label>Skill</label>
+          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","name"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curriculum_id}/>
 
           <label>Start Date:</label>
-          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.startDate} onChange={startDateHandler}/>
+          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.start_date} onChange={startDateHandler}/>
 
           <label>End Date:</label>
-          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.endDate?modifiedBatch.endDate:modifiedBatch.startDate} onChange={endDateHandler}/>
+          <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.end_date?modifiedBatch.end_date:modifiedBatch.start_date} onChange={endDateHandler}/>
 
-          <label>Location</label>
-          <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.locationId}/>
-
+          <label>Batch Capacity</label>
+          <input type="number" name="capacity" min={0} max="100" defaultValue={modifiedBatch.batch_capacity} onChange={capacityHandler}/>
+          
           <label>Required Interview Score:</label>
-          <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.interviewScoreLower} onChange={interviewScoreHandler}/>
+          <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.required_score} onChange={interviewScoreHandler}/>
+
+          <label>{ currentTrainerList.length && modifiedBatch && modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length<2?"Trainers": (modifiedBatch && modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length<2?"No Available Trainers":"Trainer Limit Reached")}</label>
+          <CreateDropDown records={currentTrainerList} handler={selectedTrainerHandler} keyValue={["trainer_id","name"]} defaultMessage="Select Trainer" myId="changeValues1"/>
+          <input type="submit" onClick={addTrainerHandler} disabled={(selectedTrainer &&  modifiedBatch && modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length<2)?false:true} value="Add Trainer"/>
 
 
-          <input type="submit" onClick={buttonHandler}/>
+          <label hidden={modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length?false:true}>Added Trainers</label>
+          {(()=>{
+            if(modifiedBatch.trainer_ids && staticTrainers.length)
+            {
+            
+              return(
+              modifiedBatch.trainer_ids.map((data:any,index:any)=>
+              {
+                let findName:any=staticTrainers.filter((ele:any)=>ele.trainer_id==data);
+                findName=findName[0];
+         
+                return(
+                  <h5 key={index}>{"Trainer "+(parseInt(index)+1)+":"+findName.firstName+" "+findName.lastName}</h5>
+                )
+              })
+              )
+            }
+            })()}
+
+          <input type="submit" onClick={buttonHandler} value="Save"/> 
+          <input type="submit" onClick={viewChanger} value="Back"/> 
 
     </div>
   )
-    console.log(modifiedBatch.location);
     
+  function addTrainerHandler()
+  {
+    setModifiedBatch({...modifiedBatch, "trainer_ids":[...modifiedBatch.trainer_ids,parseInt(selectedTrainer)]});
+    
+    
+
+    let trainerIds=[...modifiedBatch.trainer_ids,parseInt(selectedTrainer)];
+    let removedIndex;
+    let a:any=staticTrainers.filter((element:any,index:number)=>
+    {
+      for (let i=0;i<trainerIds.length;i++)
+      {
+        if (trainerIds[i]==element.trainer_id)
+        {
+          removedIndex=index;
+          return false;
+        }
+      }
+      return true; 
+    })
+    console.log(removedIndex)
+    console.log(a)
+    let initialDropDown:any=[];
+
+    for(let i=0;i<a.length;i++)
+    {
+      initialDropDown.push(
+        {
+          "trainer_id":a[i].trainer_id,
+          "name":a[i].firstName+" "+a[i].lastName
+        }
+      )
+    }
+    if(initialDropDown.length)
+    {
+      let element:any=document.getElementById("changeValues1")
+      element.value="none"
+    }
+    setSelectedTrainer();
+    setCurrentTrainerList(initialDropDown)
+  }
 
 
 //Event handlers
   function locHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "locationId":e.target.value})
+    setModifiedBatch({...modifiedBatch, "location_id":e.target.value})
+  
   }
   function skillHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "curiculum_id":e.target.value})
+    setModifiedBatch({...modifiedBatch, "curriculum_id":e.target.value})
 
   }
 
   function startDateHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "startDate":e.target.value})
+    setModifiedBatch({...modifiedBatch, "start_date":e.target.value})
   }
 
   function endDateHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "endDate":e.target.value})
+    setModifiedBatch({...modifiedBatch, "end_date":e.target.value})
   }
 
   function interviewScoreHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "interviewScoreLower":e.target.value})
+    setModifiedBatch({...modifiedBatch, "required_score":e.target.value})
   }
 
+  function capacityHandler(e:any)
+  {
+    setModifiedBatch({...modifiedBatch, "batch_capacity":e.target.value})
+  }
 
   function buttonHandler(e:any)
   {
     e.preventDefault();
     //add 1 to both start and end date because back end subtracts one
-    let saveObject={...modifiedBatch, startDate:modifyDay(modifiedBatch.startDate) , endDate:modifyDay(modifiedBatch.endDate)}
+    let saveObject={...modifiedBatch, start_date:modifyDay(modifiedBatch.start_date) , end_date:modifyDay(modifiedBatch.end_date)}
     //save our data
-    axiosWrapper("/batchDAO","POST",saveObject).then((data)=>{
+    axiosWrapper("/batches","POST",saveObject).then((data)=>{
       //Redirect to batchs
-
+      console.log(modifiedBatch);
       props.setView(0);
     })
 
+  }
+
+  function viewChanger()
+  {
+    props.setView(0);
+  }
+
+  function selectedTrainerHandler(e:any)
+  {
+    setSelectedTrainer(e.target.value)
   }
 
   //ment to alter our date to add 1 to it in order to store to database

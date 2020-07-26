@@ -49,7 +49,80 @@ The front end of Reservoir is a single-page application which can display batch 
 * [Redux](https://redux.js.org/) - application state manager
 * [Reactstrap](https://reactstrap.github.io/) - pre-built, styled components for React using Bootstrap
 
+## Application Structure
+
+Our application is divided into 6 different directories. These are meant to hold files and other sub-directories that are organized functional roles on the frontend. 
+
+### /Components
+This is the directory are all the React components of our application. It has other sub-directories and files related to specific components of our applicaion.
+
+#### /Components/Batches-in-progress
+This directory contains all the componenets that deal with the batches in progress. 
+The filter form and batches in progress view files are presentational components. 
+
+It also contains the following sub-directories:
+
+- Batch-info: This directory contains the components that retrieve the batch data from the back-end server.
+
+- Calender: Contains the display components for the batches displayed as a timeline.
+
+- Table: Contains the components to display the batches in a table format. 
+
+#### /Components/Common
+These are reusable components used throughout the application. 
+
+The files not contained in a sub-directory are granular components that pertain to common use components whos usage spans across multiple files.
+
+It also contains the following sub-directories:
+- API: Contains components all of the object manipulation methods. 
+- Exeptions: Contains custom exceptions that we most frequently encounter throughout our application. 
+- Footer: Contains the file footer component that stays in the bottom of our application.
+
+#### /Components/Currently-unused
+These are misc components that are not used anywhere in the application.
+Have no idea what they were made for by the previous sprint.
+
+#### /Components/Generate-batches 
+This directory contains the presentational and functional components for generating batches.
+It allows for CRUD opertions for batch manipulation. 
+
+It contains the following sub-directories.
+
+- functions: Contains functions that contains a wrapper for an Axios client.
+
+#### /Components/Supply-demand
+Contains components that display the client demands and avaliable supply to that client based on their needs. 
+
+### /Helpers
+Components that convert javascript formatted data into a more human readable format. 
+
+### /models
+Contains the models that store and format the back-end entities. 
+
+### /Out-of-scope
+None of these are currently used or referenced anywhere in our application other than here.
+
+### /PsedoData(don't-delete)
+Contains mock data to use as a back up in case there is a need for it. 
+
+### /redux 
+All the Redux components are contained here as well as the store. Might restructure the structure the state later on. 
+
+### /stylesheets
+Contains CSS components to for styling purposes in our application.
+Files not listed in a sub-directory are common througout the application.
+
+The following sub-directories are:
+
+- batches-in-progress: Styling components for the batches in progress components.
+- generate-batches: Styling components for the generate batches components. 
+- supply-demand: Styling components for the supply and demand components.
+
+### /Tests
+This will contain all the tests for application once they are written. 
+
 ### Usage
+
 #### Navbar 
 The user can use the navigation bar at the top of the application to navigate to every view detailed below.
 ![navbar image](./screenshots/navbar.png)

@@ -23,9 +23,6 @@ public class BatchDAOController {
 	 @Autowired
 	 BatchDaoService serv;
 	 
-	 
-	 
-	 
 	 @GetMapping("/batchDAO")
 	  public List<BatchDAO> getAllReviews()
 	  {

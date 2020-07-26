@@ -39,7 +39,7 @@ public class LocationService {
     if (existing.isPresent()) {
       return locationRepository.save(location);
     } else {
-      throw new RuntimeException("the location doesnt exist");
+      return null;
     }
   }
 
@@ -49,10 +49,7 @@ public class LocationService {
     if (existing.isPresent()) {
       return existing.get();
     } else {
-      throw new RuntimeException("no id");
+      return null;
     }
   }
-
-
-
 }

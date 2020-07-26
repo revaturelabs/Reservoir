@@ -2,7 +2,9 @@ package com.revature.DataService.models;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +17,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.revature.DataService.models.Trainer;
 
 @Entity
 @Table(schema = "project3", name = "batch")
@@ -78,24 +79,40 @@ public class Batch implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="state_id")
 	private BatchState state;
+	
+	@Column(name = "batch_capacity")
+	private int batchCapacity;
 
 	public Batch() {
 		super();
-
+		initLists();
 	}
 
-	public Batch(Integer batchId, Date startDate, Date endDate, Integer interviewScoreLower, List<Trainer> trainers,
-			Location location, Curriculum curriculum, List<Associate> associates, String programType) {
+	public Batch(Integer batchId, Date startDate, Date endDate, Integer interviewScoreLower, Location location,
+			Curriculum curriculum, int batchCapacity) {
 		super();
 		this.batchId = batchId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.interviewScoreLower = interviewScoreLower;
-		this.trainers = trainers;
 		this.location = location;
 		this.curriculum = curriculum;
-		this.associates = associates;
-		this.programType = programType;
+		this.batchCapacity = batchCapacity;
+		initLists();
+	}
+
+	private void initLists() {
+		trainers = new ArrayList<>();
+		associates = new ArrayList<>();
+		consent = new ArrayList<>();		
+	}
+	
+	public int getBatchCapacity() {
+		return batchCapacity;
+	}
+
+	public void setBatchCapacity(int batchCapacity) {
+		this.batchCapacity = batchCapacity;
 	}
 
 	public BatchState getState() {

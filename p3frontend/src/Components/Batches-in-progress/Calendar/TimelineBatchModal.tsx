@@ -41,6 +41,7 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
   }
 
   render() {
+    
     return (
       <>
         <Modal
@@ -76,8 +77,19 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
             </Row>
             <Row>
               <Col>
+                <b>Program Type: </b>
+              </Col>
+              <Col>
+                {this.props.currentBatch.programType === "null"
+                  ? "N/A"
+                  : this.props.currentBatch.programType}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
                 <b>Confirmed</b>
                 <br />
+
                 <ButtonGroup>
                   <Button
                     color={
@@ -110,54 +122,75 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
             </Row>
             <br />
             <Row>
+              <Col xs={10}>
+                <ul className="nav nav-tabs">
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      style={{
+                        backgroundColor:
+                          this.state.displayType == "AA"
+                            ? "rgba(242, 105, 38)"
+                            : "white",
+                        color:
+                          this.state.displayType == "AA" ? "white" : "black",
+                        border: "1px solid black",
+                      }}
+                      onClick={() => {
+                        this.setState({ displayType: "AA" });
+                      }}
+                    >
+                      Assign Associates
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      style={{
+                        backgroundColor:
+                          this.state.displayType == "AT"
+                            ? "rgba(242, 105, 38)"
+                            : "white",
+                        color:
+                          this.state.displayType == "AT" ? "white" : "black",
+                        border: "1px solid black",
+                      }}
+                      onClick={() => {
+                        this.setState({ displayType: "AT" });
+                      }}
+                    >
+                      Assign Trainers
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      style={{
+                        backgroundColor:
+                          this.state.displayType == "RC"
+                            ? "rgba(242, 105, 38)"
+                            : "white",
+                        color:
+                          this.state.displayType == "RC" ? "white" : "black",
+                        border: "1px solid black",
+                      }}
+                      onClick={() => {
+                        this.setState({ displayType: "RC" });
+                      }}
+                    >
+                      Request Consent
+                    </a>
+                  </li>
+                </ul>
+              </Col>
               <Col>
                 <Button onClick={this.props.toggle} color="success">
                   OK
                 </Button>
               </Col>
-
-              <Col>
-                <Button
-                  color={
-                    this.state.displayType == "AA" ? "primary" : "secondary"
-                  }
-                  onClick={() => {
-                    this.setState({ displayType: "AA" });
-                  }}
-                >
-                  Assign Associates
-                </Button>
-              </Col>
-
-              <Col>
-                <Button
-                  color={
-                    this.state.displayType == "AT" ? "primary" : "secondary"
-                  }
-                  onClick={() => {
-                    this.setState({ displayType: "AT" });
-                  }}
-                >
-                  Assign Trainers
-                </Button>
-              </Col>
-
-              <Col>
-                <Button
-                  color={
-                    this.state.displayType == "RC" ? "primary" : "secondary"
-                  }
-                  onClick={() => {
-                    this.setState({ displayType: "RC" });
-                  }}
-                >
-                  Request Consent
-                </Button>
-              </Col>
             </Row>
             <hr />
           </ModalBody>
-
           <ModalBody>
             {
               this.state.displayType == "RC" ? ( //request consent for trainers

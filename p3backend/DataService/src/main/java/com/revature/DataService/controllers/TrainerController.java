@@ -1,17 +1,18 @@
 package com.revature.DataService.controllers;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.revature.DataService.dtos.SimpleTrainerDTO;
 import com.revature.DataService.exceptions.TrainerNotFoundException;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.Curriculum;
@@ -23,6 +24,7 @@ import com.revature.DataService.services.BatchService;
 import com.revature.DataService.services.CurriculumService;
 import com.revature.DataService.services.TrainerService;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class TrainerController {
 
@@ -33,6 +35,17 @@ public class TrainerController {
   @Autowired
   CurriculumService curriculumService;
 
+  
+  @GetMapping("/trainer/curriculum/{id}")
+  public ResponseEntity<List<SimpleTrainerDTO>> getTrainersByCurriculumId(@PathVariable int id) {
+	  List<SimpleTrainerDTO> trainers = trainerService.getTrainersByCurriculumId(id);
+	  if(trainers.size() > 0)
+		  return new ResponseEntity<List<SimpleTrainerDTO>>(trainers, HttpStatus.OK);
+	  else
+		  return new ResponseEntity<List<SimpleTrainerDTO>>(trainers, HttpStatus.NOT_FOUND);  
+  }
+  
+  
   @CrossOrigin(origins = "*")
   @GetMapping("/trainer")
   public List<Trainer> getAllTrainers() {
