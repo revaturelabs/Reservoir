@@ -14,8 +14,6 @@ public class BatchDTO {
 		super();
 	}
 	
-	
-	
 	public BatchDTO(int batch_id, String location, Date start_date, String curriculum_name, int batch_capacity) {
 		super();
 		this.batch_id = batch_id;
@@ -24,8 +22,6 @@ public class BatchDTO {
 		this.curriculum_name = curriculum_name;
 		this.batch_capacity = batch_capacity;
 	}
-
-
 
 	public BatchDTO(int batch_id) {
 		super();
