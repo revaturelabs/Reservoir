@@ -10,24 +10,32 @@ handler: The event listener in charge of changin the values
 defaultMessage: The default displayed value
 
 */
-export function CreateDropDown(props: any) {
-
+export function CreateDropDown(props :any)
+{
+    
     //Get NEEDED data from the props
-    let keyVal: Array<any> = props.records;
-    if (props.records.length != 0) {
-        return (
-            <select key={props.keyValue[0]} onChange={props.handler} defaultValue={props.defaultVal ? props.defaultVal : "none"} className={props.className} id={props.myId ? props.myId : "DropDown"}>
+    let keyVal:Array<any>=props.records;
+
+    if(keyVal.length && keyVal[0]==="empty")
+    {
+        keyVal=[];
+    }
+    if(props.records.length!=0)
+    {
+    return(
+            <select key={props.keyValue[0]} onChange={props.handler} defaultValue={props.defaultVal? props.defaultVal:"none"} id={props.myId?props.myId:"id_of_drop_down"}>
                 <option value="none" disabled hidden key={props.keyValue[1]}>{props.defaultMessage}</option>
-                {keyVal.map((data: any, id) => {
-                    return (
+                {keyVal.map((data:any, id)=>
+                    {
+                        return(
                         <option key={id} value={data[props.keyValue[0]]} >{data[props.keyValue[1]]}</option>
-                    )
-                })
+                        )
+                    })
                 }
             </select>
         )
     }
-    return <div />
+    return <div/>
 }
 
 //

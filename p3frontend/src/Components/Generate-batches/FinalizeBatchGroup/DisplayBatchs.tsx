@@ -53,7 +53,7 @@ export function DisplayBatchs(props: any) {
                                 style={colorBac ? { backgroundColor: "gray" } : { backgroundColor: "silver" }}
                             >
                                 <td key={1}>{data.location.locationName}</td>
-                                <td key={2}>{data.curriculum.curriculumSkillset.skillSetName}</td>
+                                <td key={2}>{data.curriculum.name}</td>
                                 <td key={3}>{data.startDate}</td>
                                 <td key={4}>{data.batchCapacity}</td>
                             </tr>
