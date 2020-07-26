@@ -77,7 +77,7 @@ export class TimelineComponent extends React.Component<
           canMove: false,
           canResize: false,
           canChangeGroup: false,
-          color: "rgb(0, 14, 206)",
+          color: "rgb(0,0,0)",
 
           itemProps: {
             onContextMenu: (event: any) => {
@@ -87,6 +87,15 @@ export class TimelineComponent extends React.Component<
             onDoubleClick: () => {
               this.showBatchModal(batch);
             },
+            style: batch.trainers.length
+              ? {
+                  background: "green",
+                  border: "1px solid black",
+                }
+              : {
+                  background: "rgb(185, 185, 186)",
+                  border: "1px solid white",
+                },
           },
         };
 
@@ -123,6 +132,7 @@ export class TimelineComponent extends React.Component<
           id: batch.batchId,
           title: ` ${batch.location.locationName}`,
         };
+
         let item = {
           id: batch.batchId,
           group: batch.batchId,
@@ -132,10 +142,10 @@ export class TimelineComponent extends React.Component<
           canMove: false,
           canResize: false,
           canChangeGroup: false,
-          color: "rgb(0, 14, 206)",
+          color: "rgb(0,0, 0)",
           // onItemClick:()=>{alert("sdf")},
           //    onClick:()=>{alert("sfds")},
-          // selectedBgColor: 'rgba(225, 166, 244, 1)',
+          //selectedBgColor: "rgba(225, 166, 244, 1)",
 
           itemProps: {
             onContextMenu: (event: any) => {
@@ -194,9 +204,16 @@ export class TimelineComponent extends React.Component<
           {/* <Button color="" onClick={this.toggle} id="info">
           <i className="fas fa-info-circle"></i>
           </Button> */}
-          <i className="fas fa-info-circle " onClick={this.toggle} id="info"></i>
+          <i
+            className="fas fa-info-circle "
+            onClick={this.toggle}
+            id="info"
+          ></i>
 
-          <EasyTooltip target={'info'} displayText='Double click batch to edit or right click to view information.' />
+          <EasyTooltip
+            target={"info"}
+            displayText="Double click batch to edit. Green Batches have trainers assigned, grey batches do not trainers."
+          />
 
           {/* <Toast isOpen={this.state.toggle}>
             Double click batch to edit or right click to view information.
