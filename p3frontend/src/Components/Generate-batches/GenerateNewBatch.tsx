@@ -2,6 +2,7 @@ import {CreateDropDown} from "./Components/CreateDropDown";
 import { PageTitleBar } from "../Common/PageTitleBar";
 import React, { useState, useEffect } from "react";
 import axiosWrapper from "./functions/axiosWrapper";
+import { Console } from "console";
 
 
 
@@ -78,7 +79,7 @@ export function GenerateNewBatch(props: any)
         <br/>
         
 
-        <label>{trainerList.length?"Trainers":"No Available Trainers"}</label>
+        <label>{trainerList.length && trainerArray.length<2?"Trainers": (trainerArray.length<2?"No Available Trainers":"Trainer Limit Reached")}</label>
         <CreateDropDown records={trainerList} handler={trainerListHandler} keyValue={["trainer_id","name"]} defaultMessage="Select Trainer"/>
         <input type="submit" onClick={addTrainerHandler} disabled={(trainerList.length && selectedTrainer && (trainerArray.length<2))?false:true} value="Add Trainer"/>
 
@@ -87,7 +88,7 @@ export function GenerateNewBatch(props: any)
           let findName=staticTrainerList.filter((ele:any)=>ele.trainer_id==data);
           findName=findName[0];
           return(
-          <h5>{"Trainer "+(parseInt(index)+1)+":"+findName.firstName+" "+findName.lastName}</h5>
+          <h5 key={index}>{"Trainer "+(parseInt(index)+1)+":"+findName.firstName+" "+findName.lastName}</h5>
           )
         })}
         
@@ -175,7 +176,7 @@ export function GenerateNewBatch(props: any)
     //Remove the trainer from the drop down list
     let tList=[...trainerList]
     const updatedTrainerList:any=[];    
-    
+    let removedIndex:any;
     for (let i=0; i<tList.length;i++)
     {
       let flag=true;
@@ -185,6 +186,8 @@ export function GenerateNewBatch(props: any)
           if(tList[i].trainer_id==currentTrainer[j])
           {
             flag=false;
+            removedIndex=i;
+            console.log(i)
           }
         }
         if(flag)
@@ -194,7 +197,15 @@ export function GenerateNewBatch(props: any)
     }
     if(updatedTrainerList.length)
     {
-      setSelectedTrainer(updatedTrainerList[0].trainer_id)    
+      if(updatedTrainerList[removedIndex])
+      {
+        setSelectedTrainer(updatedTrainerList[removedIndex].trainer_id)    
+      }
+      else
+      {
+        setSelectedTrainer(updatedTrainerList[0].trainer_id)    
+      }
+      
     }
   
     setTrainerList(updatedTrainerList)
