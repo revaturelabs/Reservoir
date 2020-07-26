@@ -120,7 +120,7 @@ export function FinalizeSpecificBatch(props:any)
           <input type="number" name="score" min={0} max="100" defaultValue={modifiedBatch.required_score} onChange={interviewScoreHandler}/>
 
           <label>{ currentTrainerList.length && modifiedBatch && modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length<2?"Trainers": (modifiedBatch && modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length<2?"No Available Trainers":"Trainer Limit Reached")}</label>
-          <CreateDropDown records={currentTrainerList} handler={selectedTrainerHandler} keyValue={["trainer_id","name"]} defaultMessage="Select Trainer"/>
+          <CreateDropDown records={currentTrainerList} handler={selectedTrainerHandler} keyValue={["trainer_id","name"]} defaultMessage="Select Trainer" myId="changeValues1"/>
           <input type="submit" onClick={addTrainerHandler} disabled={(selectedTrainer &&  modifiedBatch && modifiedBatch.trainer_ids && modifiedBatch.trainer_ids.length<2)?false:true} value="Add Trainer"/>
 
 
@@ -156,19 +156,20 @@ export function FinalizeSpecificBatch(props:any)
     
 
     let trainerIds=[...modifiedBatch.trainer_ids,parseInt(selectedTrainer)];
-    console.log(trainerIds);
+    let removedIndex;
     let a:any=staticTrainers.filter((element:any,index:number)=>
     {
       for (let i=0;i<trainerIds.length;i++)
       {
         if (trainerIds[i]==element.trainer_id)
         {
+          removedIndex=index;
           return false;
-          console.log(index)
         }
       }
       return true; 
     })
+    console.log(removedIndex)
     console.log(a)
     let initialDropDown:any=[];
 
@@ -181,7 +182,11 @@ export function FinalizeSpecificBatch(props:any)
         }
       )
     }
-
+    if(initialDropDown.length)
+    {
+      let element:any=document.getElementById("changeValues1")
+      element.value="none"
+    }
     setSelectedTrainer();
     setCurrentTrainerList(initialDropDown)
   }
