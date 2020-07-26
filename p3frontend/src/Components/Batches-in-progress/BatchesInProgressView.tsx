@@ -155,9 +155,9 @@ export class InProgress extends React.Component<any, any> {
                   (batch: Batch, index: number) => {
                     console.log(
                       "filter is " +
-                        this.state.programType +
-                        ", rendering batch " +
-                        batch.batchId
+                      this.state.programType +
+                      ", rendering batch " +
+                      batch.batchId
                     );
                     return (
                       <tr key={index}>
@@ -170,11 +170,11 @@ export class InProgress extends React.Component<any, any> {
             </Table>
           </div>
         ) : (
-          <TimelineRedux
-            batches={this.state.filteredBatches}
-            parentTop={this}
-          />
-        )}
+            <TimelineRedux
+              batches={this.state.filteredBatches}
+              parentTop={this}
+            />
+          )}
         {/* {this.state.viewType!=='Table'&&<TimelineComponent/>} */}
       </Container>
     );

@@ -16,3 +16,73 @@
   text-align: center;
 }
 
+
+
+/*///////////////////// GENERATE BATCH CONTAINER /////////////////////*/
+
+.generate-batch-container {
+  background-color:rgb(240, 240, 240);
+  padding: 15px;
+  box-shadow: 0px 0px 10px rgb(87, 87, 87);
+}
+
+/*///////////////////// GENERATE BATCH CONTAINER - NAV BAR /////////////////////*/
+
+/* When link is clicked will set element to active and take this color */
+#generate-new-batch-active {
+  color: rgb(247, 105, 62);
+}
+
+.generate-batch-nav-link {
+  margin-right: 20px;
+   transition: all 0.3s;
+}
+
+.generate-batch-nav-link:hover {
+ color: rgb(253, 130, 92);
+ cursor: pointer; 
+}
+
+
+
+/*///////////////////// GENERATE BATCH CONTAINER - LABELS AND INPUTS /////////////////////*/
+
+.generate-new-batch-label {
+  margin-bottom: 0;
+  font-weight: 600;  
+}
+
+.generate-new-batch-input {
+  margin-bottom: 10px;
+
+}
+
+.generate-new-batch-optional-container {
+  background-color: rgba(165, 165, 165, 0.267);
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.optional-title {
+  border-bottom: 2px solid rgb(146, 146, 146);
+  max-width: 90%;
+  margin: auto;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.btn-add-trainer {
+  margin-left: 5px;
+}
+
+.select-trainer-dropdown {
+  width: 79%;
+}
+
+.added-trainers-box {
+  background-color: #fff;
+  height: 150px;
+  border: solid 1px #000;
+  padding: 5px;
+  margin-top: 5px;
+}

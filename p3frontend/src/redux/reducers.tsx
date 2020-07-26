@@ -8,20 +8,32 @@ interface IBatchState {
   batch: Batch | null;
 }
 
-const initialBatchState: IBatchState = {
+const initialBatchState: IBatchState | any = {
   batch: null,
+  active: 0
 };
 
+
 export const batchReducer = (
-  state: IBatchState = initialBatchState,
+  state: IBatchState | any = initialBatchState,
   action: AnyAction
-): IBatchState => {
+): IBatchState | any => {
   switch (action.type) {
+
     case clickTypes.BATCH_CLICK: {
       let newBatch: Batch = action.payload.batchClicked;
 
       return {
         batch: newBatch,
+      };
+    }
+
+    //////// THIS ACTION IS TO SET "GENERATE NEW BATCH NAV BAR ITEM" TO ACTIVE AFTER SUBMITING A NEW BATCH \\\\\\\
+    case clickTypes.SET_ACTIVE: {
+      let setActive: any = action.payload.data;
+
+      return {
+        active: setActive
       };
     }
 
