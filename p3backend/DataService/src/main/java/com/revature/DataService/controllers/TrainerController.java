@@ -24,7 +24,7 @@ import com.revature.DataService.services.BatchService;
 import com.revature.DataService.services.CurriculumService;
 import com.revature.DataService.services.TrainerService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 public class TrainerController {
 
@@ -45,14 +45,11 @@ public class TrainerController {
 		  return new ResponseEntity<List<SimpleTrainerDTO>>(trainers, HttpStatus.NOT_FOUND);  
   }
   
-  
-  @CrossOrigin(origins = "*")
   @GetMapping("/trainer")
   public List<Trainer> getAllTrainers() {
     return trainerService.getAll();
   }
 
-  @CrossOrigin(origins = "*")
   @GetMapping("/trainer/{id}")
   public Trainer getTrainerById(@PathVariable Integer id) {
     try {
@@ -61,48 +58,7 @@ public class TrainerController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
   }
-  // Commented out until Trainer skillset is defined/implemented
 
-  // @CrossOrigin(origins = "*")
-  // @GetMapping("/trainer/eligible/{batchId}/trainerid/{trainerId}")
-  // public boolean getTrainersByEligibility( @PathVariable Integer batchId, @PathVariable Integer
-  // trainerId) {
-  //
-  // try {
-  // Batch selectedBatch;
-  //
-  //
-  //
-  // Trainer trainer =trainerService.getById(trainerId);
-  //// System.out.println(trainer);
-  // selectedBatch = batchService.getById(batchId);
-  //// System.out.println(selectedBatch);
-  // Curriculum currentCurriculum = selectedBatch.getCurriculum();
-  // Skillset curriculumSkillset = currentCurriculum.getCurriculumSkillset();
-  // List<Skills> curriculumSkills = curriculumSkillset.getSkills();
-  // List<Skillset> trainerSkillSet = trainer.getTrainerSkills();
-  //
-  //
-  // for(Skillset ss : trainerSkillSet) {
-  //
-  // List<Skills> trainerSkillsList = ss.getSkills();
-  // if(skillsComparison(trainerSkillsList, curriculumSkills)) {
-  //
-  // return true;
-  // }
-  // }
-  // System.out.println("Returning false");
-  // return false;
-  // } catch(Exception e) {
-  // System.out.println(e);
-  // throw new RuntimeException(e);
-  // }
-  //
-  //
-  //
-  //
-  // }
-  @CrossOrigin(origins = "*")
   @GetMapping("/trainer/eligible/{batchId}")
   public List<Trainer> getTrainersByEligibility(@PathVariable Integer batchId) {
 
@@ -155,14 +111,5 @@ public class TrainerController {
       return false;
   }
 
-
-  /*
-   * @PostMapping public Trainer createTrainer(@RequestBody Trainer trainer) { return
-   * trainerService.create(trainer); }
-   * 
-   * @PostMapping("/{id}") public Trainer updateTrainerWithId(@RequestBody Trainer
-   * trainer,@PathVariable Integer id) { trainer.setTrainerId(id); return
-   * trainerService.update(trainer); }
-   */
 
 }
