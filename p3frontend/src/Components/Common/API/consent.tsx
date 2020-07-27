@@ -56,6 +56,7 @@ export async function getAllTrainers(): Promise<Trainer[]> {
       );
     });
   } catch (e) {
+    console.log(e);
     throw e;
   }
 }
@@ -96,14 +97,18 @@ export async function createConsentRequest(
   batchId: number
 ) {
   try {
+    console.log(trainerId);
+    console.log(batchId);
     const response = await axiosClient.post("/consent", {
       trainerId: trainerId,
       batchId: batchId,
       isApprovedColumn: isApproved,
     });
+    console.log(response);
     let success : boolean = true;
     return success;
   } catch (e) {
+    console.log(e);
   }
 }
 
@@ -126,17 +131,23 @@ export async function createConsentRequest(
 
 export async function createTrainerBatch(trainerId: number, batchId: number) {
   try {
+
+    console.log(trainerId);
+    console.log(batchId);
     const response = await axiosClient.post("/trainerbatch", {
       trainerId: trainerId,
       batchId: batchId,
   });
+    console.log(response);
     let success:boolean = true;
     return success;
   } catch (e) {
+    console.log(e);
   }
 }
 
 export async function approveConsentRequest(consent: Consent) {
+  console.log(consent.isApproved);
   try {
     await axiosClient.patch(`/consent/${consent.consentId}`, {
       batchId: consent.batch.batchId,
@@ -146,6 +157,7 @@ export async function approveConsentRequest(consent: Consent) {
 
     //await createTrainerBatch(consent.trainer.trainerId, consent.batch.batchId);
   } catch (e) {
+    console.log(e);
   }
 }
 // export async function approveConsentRequest(consent: Consent) {
@@ -172,6 +184,7 @@ export async function denyConsentRequest(consent: Consent) {
       isApprovedColumn: consent.isApproved,
     });
   } catch (e) {
+    console.log(e);
   }
 }
 // export async function denyConsentRequest(consent: Consent) {
@@ -193,6 +206,7 @@ export async function denyConsentRequest(consent: Consent) {
 export async function getConsentByTrainerId(id: number): Promise<Consent[]> {
   try {
     const response = await axiosClient.get(`/consent/${id}`);
+    console.log(response);
 
     return response.data.map((itemObj: Consent) => {
       const { consentId, trainer, isApproved, batch } = itemObj;
@@ -200,6 +214,7 @@ export async function getConsentByTrainerId(id: number): Promise<Consent[]> {
     });
   } catch (e) {
     // Add more error functionality later
+    console.log(e.message);
     throw e;
   }
 }
@@ -224,5 +239,6 @@ export async function getBatchName(batchId: number) {
     const response = await axiosClient.get(`/batches/${batchId}`);
     return response;
   } catch (e) {
+    console.log(e);
   }
 }

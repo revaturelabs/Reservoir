@@ -25,6 +25,8 @@ export async function getgeneratedBatch(
       interviewScore,
       assignedBatchId,
     } = associatesObj;
+    // console.log('COMMENTOBJ ', commentObj);
+    // console.log("fjjftktt",response);
 
     return new Associate(
       associateId,

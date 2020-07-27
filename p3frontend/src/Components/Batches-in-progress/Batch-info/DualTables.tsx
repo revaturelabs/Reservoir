@@ -98,6 +98,7 @@ export class DualTables extends React.Component<IPDualTables, any> {
         <Table striped>
           <tbody>
             {array.map((obj: any, index: number) => {
+              console.log(obj);
               return (
                 <tr key={index}>
                   <td>

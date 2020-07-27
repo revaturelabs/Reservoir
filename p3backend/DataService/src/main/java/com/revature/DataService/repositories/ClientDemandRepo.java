@@ -17,8 +17,8 @@ public interface ClientDemandRepo extends JpaRepository<ClientDemand, Integer> {
 	
 	List<ClientDemand> findByDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(LocalDate date, int id);
 	
-	Optional<List<ClientDemand>> findByClientClientIdAndDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(int clientId, LocalDate date, int skillsetId);
+	Optional<ClientDemand> findByClientDemandIdAndDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(int clientId, LocalDate date, int skillsetId);
 	
-	Optional<List<ClientDemand>> findByClientClientIdAndDeadlineGreaterThanEqual(int id, LocalDate date);
+	Optional<ClientDemand> findByClientDemandIdAndDeadlineGreaterThanEqual(int id, LocalDate date);
 }
 

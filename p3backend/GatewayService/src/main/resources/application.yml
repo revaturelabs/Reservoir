@@ -20,8 +20,6 @@ eureka:
       defaultZone: http://ec2-3-235-74-191.compute-1.amazonaws.com:8762/eureka
 
 zuul:
-  host:
-    connect-timeout-millis: 10000
   routes:    
     eureka:
       path: /eureka/**

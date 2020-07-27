@@ -5,7 +5,7 @@ import { getBatchById } from "../../Common/API/batch";
 
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
-import { connect } from "react-redux";
+import { batch, connect } from "react-redux";
 import { Alert } from "reactstrap";
 import { trackPromise } from "react-promise-tracker";
 import { Spinner } from "../../Common/spinner";
@@ -17,7 +17,16 @@ import {
   createTrainerBatch,
 } from "../../Common/API/consent";
 
-import { Col, Button, ListGroupItem, ListGroup, Row } from "reactstrap";
+import {
+  Col,
+  Button,
+  ListGroupItem,
+  ListGroup,
+  Row,
+  Container,
+} from "reactstrap";
+import { assignTrainer } from "../../Common/API/batch";
+import { PageTitleBar } from "../../Common/PageTitleBar";
 import { smallBtnStyles } from "../../../stylesheets/generate-batches/generateBatchStlyes";
 
 interface ITrainerProps {
@@ -52,28 +61,57 @@ export class TrainerAssignmentComponent extends React.Component<
     };
   }
 
+  // componentDidMount() {
+  //   this.getAllTrainers();
+  // }
   async componentDidMount() {
+    //this.getAllTrainers();
+
     let allTrainers: Trainer[] = await getAllTrainers();
 
     let batch = await getBatchById(this.props.currentBatch.batchId);
 
+    // this.setState({
+    //   trainers:allTrainers
+    // })
+    // this.sleep(50).then(()=>{
+    //   this.getAllEligibleTrainers(2);
+    //  });
+
     let eligibleTrainers: Trainer[] = await getAllEligibleTrainers(
       this.props.currentBatch.batchId
     );
+    // this.setState({
+    //   trainers:allTrainers,
+    //   eligibleTrainers:trainers
+    // })
+    // this.sleep(50).then(()=>{
+    //   this.assignEligibility();
+    //  });
 
     let tempButtonArray: any[] = [];
     let eligibleTrainerIds = eligibleTrainers.map((trainer) => {
       return trainer.trainerId;
     });
+    // console.log("debugging");
+    // console.log(allTrainers);
+    // console.log(allEligible);
 
     let i = 0;
 
     allTrainers.forEach((trainer) => {
+      console.log(eligibleTrainerIds.includes(trainer.trainerId));
+      console.log(eligibleTrainerIds);
       if (eligibleTrainerIds.includes(trainer.trainerId)) {
         trainer.isEligible = true;
       } else {
         trainer.isEligible = false;
       }
+      // this.sleep(50).then(()=>{
+      //   let newButton = this.getButton(trainer, i , trainer.trainerId);
+      //   tempButtonArray.push(newButton);
+
+      // });
       i = i + 1;
     });
     this.setState({
@@ -86,6 +124,19 @@ export class TrainerAssignmentComponent extends React.Component<
   sleep = (milliseconds: any) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   };
+  // setUserid =(id: any) => {
+  //     this.setState({
+  //         userid: id.currentTarget.value,
+  //       })
+  //     this.sleep(50).then(() => {
+  //         this.updateReimbursements();
+  //       })
+
+  // }
+
+  // assign = async (trainer: Trainer, batchId: number) => {
+  //   await assignTrainer(trainer.trainerId, batchId);
+  // };
   assign = async (trainerId: number, batchId: number) => {
     trackPromise(
       createTrainerBatch(trainerId, batchId).then((consentRequests) => {
@@ -95,8 +146,18 @@ export class TrainerAssignmentComponent extends React.Component<
       }),
       "loading-area"
     );
-  };
+    //await assignTrainer(trainerId, batchId);
+    //let success: boolean|undefined = await createTrainerBatch(trainerId, batchId);
 
+    // if(success){
+    //   this.setState({
+    //     assignIsOpen:true
+    //   })
+    // }
+  };
+  // request = async (trainer: Trainer, batchId: number) => {
+  //   await createConsentRequest(trainer.trainerId, null, batchId);
+  // };
   request = async (trainer: Trainer, batchId: number) => {
     trackPromise(
       createConsentRequest(trainer.trainerId, null, batchId).then(
@@ -108,7 +169,47 @@ export class TrainerAssignmentComponent extends React.Component<
       ),
       "loading-area"
     );
+
+    //let success:boolean|undefined = await createConsentRequest(trainer.trainerId, null, batchId);
+
+    // if(success){
+    //   this.setState({
+    //     requestIsOpen:true
+    //   })
+    // }
   };
+
+  // getButton = (trainer: Trainer, i: number) => {
+  //   let jsxElement = (
+  //     <>
+  //       <h4>test</h4>
+  //     </>
+  //   );
+  //   if (trainer.isEligible) {
+  //     jsxElement = (
+  //       <Button
+  //         color='primary'
+  //         id={i.toString()}
+  //         onClick={() => this.assign(trainer.trainerId, 1)}
+  //       >
+  //         Assign
+  //       </Button>
+  //     );
+  //   } else {
+  //     jsxElement = (
+  //       <Button
+  //         color='primary'
+  //         id={i.toString()}
+  //         onClick={() => this.request(trainer.trainerId, 1)}
+  //       >
+  //         Request Consent
+  //       </Button>
+  //     );
+  //   }
+  //   console.log(jsxElement);
+
+  //   return jsxElement;
+  // };
   getButton = (trainer: Trainer, i: number, trainerId: number) => {
     let jsxElement = (
       <>
@@ -142,6 +243,78 @@ export class TrainerAssignmentComponent extends React.Component<
     }
   };
 
+  // let get_All_Trainers = async () => {
+
+  //   let allTrainers : Trainer[] = await getAllTrainers();
+  //   console.log(allTrainers);
+  //   this.setState({
+  //     trainers:allTrainers
+  //   })
+  //   this.sleep(50).then(()=>{
+  //     this.getAllEligibleTrainers(2);
+  //    });
+  // }
+
+  // let getAllEligibleTrainers = async(batchId:number) => {
+  //   let trainers : Trainer[] = await getAllEligibleTrainers(batchId);
+  //   this.setState({
+  //     eligibleTrainers:trainers
+  //   })
+  //   this.sleep(50).then(()=>{
+  //     this.assignEligibility();
+  //    });
+  // }
+
+  // let assignEligibility = () =>{
+  //   let allTrainers : Trainer[] = this.state.trainers;
+  //   let allEligible: Trainer[] = this.state.eligibleTrainers;
+  //   let tempButtonArray:any[] = [];
+  //   let eligibleTrainerIds = allEligible.map((trainer) =>{
+  //     return trainer.trainerId;
+  //   })
+  //   let updateArray:Trainer[] = [];
+  //   console.log("debugging");
+  //   console.log(allTrainers);
+  //   console.log(allEligible);
+
+  //   let i = 0;
+
+  //   allTrainers.forEach(trainer =>{
+  //     console.log(eligibleTrainerIds.includes(trainer.trainerId));
+  //     if(eligibleTrainerIds.includes(trainer.trainerId)){
+
+  //       trainer.isEligible = true;
+  //       updateArray.push(trainer);
+  //     } else{
+  //       trainer.isEligible = false;
+  //     }
+  //     this.sleep(50).then(()=>{
+  //       let newButton = this.getButton(trainer, i , trainer.trainerId);
+  //       tempButtonArray.push(newButton);
+  //       console.log(tempButtonArray);
+  //     });
+  //      i = i + 1;
+  //   })
+  //   this.setState({
+  //     trainers:allTrainers,
+  //     buttonArray:tempButtonArray
+  //   })
+  //   console.log(this.state.buttonArray);
+
+  // }
+
+  //   let allTrainers: Trainer[] = await getAllTrainers();
+  //   allTrainers.forEach(async (trainer) => {
+  //     let trainerId = trainer.trainerId;
+  //     let isEligible: boolean = await getEligibility(trainerId, 2);
+  //     trainer.isEligible = isEligible;
+  //   });
+
+  //   console.log(allTrainers);
+  //   this.setState({
+  //     trainers: allTrainers,
+  //   });
+  // };
   toggleAssign() {
     this.setState({
       assignIsOpen: !this.state.assignIsOpen,
@@ -155,6 +328,7 @@ export class TrainerAssignmentComponent extends React.Component<
   }
 
   render() {
+    console.log(this.state.trainers);
     let buttonArray: any[] = [];
     let trainers = this.state.trainers;
     let i = 0;
@@ -181,12 +355,13 @@ export class TrainerAssignmentComponent extends React.Component<
         >
           Trainer Requested!
         </Alert>
-
+        {/* <Container><PageTitleBar pageTitle={"Trainer Assignment"}/></Container> */}
         <ListGroup>
           {this.state.trainers.length == 0 ? (
             <>There are no trainers</>
           ) : (
             this.state.trainers.map((trainer: Trainer, i) => {
+              //trying to use the same item display everywhere
               if (!trainer.isEligible) {
                 return (
                   <ListGroupItem key={i}>
@@ -199,6 +374,9 @@ export class TrainerAssignmentComponent extends React.Component<
                         </Row>
                         <Row>
                           <Col>{buttonArray[i]}</Col>
+                        </Row>
+                        <Row>
+                          {/* <Col>{this.getButton(trainer, i)}</Col> */}
                         </Row>
                       </Col>
                     </Row>

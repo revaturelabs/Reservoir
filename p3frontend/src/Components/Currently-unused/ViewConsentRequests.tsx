@@ -8,6 +8,7 @@ import {
 import { Consent } from "../../models/Consent";
 import { ListGroup, ListGroupItem, Button, Container } from "reactstrap";
 import { PageTitleBar } from "../Common/PageTitleBar";
+import { trainerGetName } from "../../models/Trainer";
 import { trackPromise } from 'react-promise-tracker';
 import {Spinner} from "../Common/spinner"
 
@@ -85,6 +86,7 @@ export class ViewConsentRequests extends React.Component<
         }), "loading-area2"
     );
     let consentRequests : Consent[] = await getConsentByTrainerId(4);
+    console.log(consentRequests);
     this.setState({
       consentRequests: consentRequests,
     });
