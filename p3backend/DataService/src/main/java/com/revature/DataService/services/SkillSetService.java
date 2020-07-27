@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.DataService.dtos.SimpleSkillSetDTO;
-import com.revature.DataService.dtos.SupplyMetricsDTO;
 import com.revature.DataService.dtos.SupplyDemandGraphDTO;
+import com.revature.DataService.dtos.SupplyMetricsDTO;
+import com.revature.DataService.models.Associate;
 import com.revature.DataService.models.ClientDemand;
 import com.revature.DataService.models.Skillset;
 import com.revature.DataService.repositories.AssociateRepository;
+import com.revature.DataService.repositories.BatchStateRepository;
 import com.revature.DataService.repositories.ClientDemandRepo;
 import com.revature.DataService.repositories.SkillSetRepository;
+import com.revature.DataService.util.BatchStates;
+import com.revature.DataService.util.Dates;
 
 @Service
 public class SkillSetService {
@@ -28,49 +32,57 @@ public class SkillSetService {
 
 	@Autowired
 	ClientDemandRepo clientDemandRepo;
+	
+	@Autowired
+	BatchStateRepository batchStateRepo;
 
 	public SupplyDemandGraphDTO getGraphMetricsByClient(int clientId) {
-		Date today = new Date(System.currentTimeMillis());
 		SupplyDemandGraphDTO dto = new SupplyDemandGraphDTO();
-		Optional<ClientDemand> demand = clientDemandRepo.findByClientDemandIdAndDeadlineGreaterThanEqual(clientId,
-				today.toLocalDate());
-		
-		dto.setTotal_demand(demand.isPresent() ? demand.get().getQuantity() : 0);
-		dto.setCommitted(populateSkillMatrix(1, today));
-		dto.setConfirmed(populateSkillMatrix(2, today));
+		List<Integer> skillSetIds = new ArrayList<>();
+		Optional<List<ClientDemand>> demandOptional = clientDemandRepo
+				.findByClientClientIdAndDeadlineGreaterThanEqual(clientId, Dates.getToday().toLocalDate());
+		if (demandOptional.isPresent()) {
+			dto.setTotal_demand(calcTotalClientDemand(demandOptional.get()));
+			skillSetIds = populateSkillSetIds(demandOptional.get(), skillSetIds);
+		}
 
-		
+		dto.setCommitted(populateSkillMatrix(batchStateRepo.findByState(BatchStates.COMMITTED).getId(), skillSetIds, true ));
+		dto.setConfirmed(populateSkillMatrix(batchStateRepo.findByState(BatchStates.CONFIRMED).getId(), skillSetIds, false ));
 
 		return dto;
 	}
 
 	public SupplyDemandGraphDTO getGraphMetricsByClient(int clientId, int skillsetId) {
-		Date today = new Date(System.currentTimeMillis());
 		SupplyDemandGraphDTO dto = new SupplyDemandGraphDTO();
+		List<Integer> skillsetIds = new ArrayList<>();
+		skillsetIds.add(skillsetId);
 
-		Optional<ClientDemand> demand = clientDemandRepo.findByClientDemandIdAndDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(clientId,
-				today.toLocalDate(),skillsetId);
+		Optional<List<ClientDemand>> demandOptional = clientDemandRepo
+				.findByClientClientIdAndDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(clientId,
+						Dates.getToday().toLocalDate(), skillsetId);
 
-		
-		dto.setTotal_demand(demand.isPresent() ? demand.get().getQuantity() : 0);
-		dto.setCommitted(populateSkillMatrix(1, skillsetId, today));
-		dto.setConfirmed(populateSkillMatrix(2, skillsetId, today));
-		
+		if (demandOptional.isPresent()) {
+			dto.setTotal_demand(calcTotalClientDemand(demandOptional.get()));
+		}
+
+		dto.setCommitted(populateSkillMatrix(batchStateRepo.findByState(BatchStates.COMMITTED).getId(), skillsetIds, true));
+		dto.setConfirmed(populateSkillMatrix(batchStateRepo.findByState(BatchStates.CONFIRMED).getId(), skillsetIds, false));
+
 		return dto;
 	}
 
 	public SupplyDemandGraphDTO getGraphMetricsBySkillSet(int skillsetId) {
-		Date today = new Date(System.currentTimeMillis());
 		SupplyDemandGraphDTO dto = new SupplyDemandGraphDTO();
+		List<Integer> skillsetIds = new ArrayList<>();
+		skillsetIds.add(skillsetId);
 
-		List<ClientDemand> demands = clientDemandRepo.findByDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(today.toLocalDate(),skillsetId);
+		List<ClientDemand> demands = clientDemandRepo
+				.findByDeadlineGreaterThanEqualAndClientDemandSkillsetSkillSetId(Dates.getToday().toLocalDate(), skillsetId);
 
-		for (ClientDemand demand : demands) {
-			dto.setTotal_demand(dto.getTotal_demand() + demand.getQuantity());
-		}
-
-		dto.setCommitted(populateSkillMatrix(1, skillsetId, today));
-		dto.setConfirmed(populateSkillMatrix(2, skillsetId, today));
+		dto.setTotal_demand(calcTotalClientDemand(demands));
+	
+		dto.setCommitted(populateSkillMatrix(batchStateRepo.findByState(BatchStates.COMMITTED).getId(), skillsetIds, true));
+		dto.setConfirmed(populateSkillMatrix(batchStateRepo.findByState(BatchStates.CONFIRMED).getId(), skillsetIds, false));
 
 		return dto;
 	}
@@ -81,55 +93,13 @@ public class SkillSetService {
 
 		List<ClientDemand> demands = clientDemandRepo.findByDeadlineGreaterThanEqual(today.toLocalDate());
 
-		for (ClientDemand demand : demands) {
-			dto.setTotal_demand(dto.getTotal_demand() + demand.getQuantity());
-		}
+		dto.setTotal_demand(calcTotalClientDemand(demands));
 
-		dto.setCommitted(populateSkillMatrix(1, today));
-		dto.setConfirmed(populateSkillMatrix(2, today));
+		dto.setCommitted(populateSkillMatrix(batchStateRepo.findByState(BatchStates.COMMITTED).getId(), true));
+		dto.setConfirmed(populateSkillMatrix(batchStateRepo.findByState(BatchStates.CONFIRMED).getId(), false));
 
 		return dto;
 
-	}
-
-	private SupplyMetricsDTO populateSkillMatrix(int batchStateId, int skillsetId, Date today) {
-		SupplyMetricsDTO dto = new SupplyMetricsDTO();
-		Date tomorrow = new Date(today.getTime() + 86400000L);
-		Date oneMonthFromToday = new Date(today.getTime() + 2629800000L);
-		Date oneMonthOneDayFromToday = new Date(today.getTime() + 2716200000L);
-		Date threeMonthsFromToday = new Date(today.getTime() + 7889400000L);
-
-		dto.setTotal_currently_available(associateRepo
-				.findByBatchEndDateLessThanEqualAndBatchStateIdAndBatchCurriculumCurriculumSkillsetSkillSetId(today,
-						batchStateId, skillsetId)
-				.size());
-		dto.setTotal_1_month(
-				associateRepo.findByBatchEndDateBetweenAndBatchStateIdAndBatchCurriculumCurriculumSkillsetSkillSetId(
-						tomorrow, oneMonthFromToday, batchStateId, skillsetId).size());
-		dto.setTotal_3_months(
-				associateRepo.findByBatchEndDateBetweenAndBatchStateIdAndBatchCurriculumCurriculumSkillsetSkillSetId(
-						oneMonthOneDayFromToday, threeMonthsFromToday, batchStateId, skillsetId).size());
-		dto.setTotal_supply(dto.getTotal_1_month() + dto.getTotal_3_months() + dto.getTotal_currently_available());
-
-		return dto;
-	}
-
-	 private SupplyMetricsDTO populateSkillMatrix(int batchStateId, Date today) {
-		SupplyMetricsDTO dto = new SupplyMetricsDTO();
-		Date tomorrow = new Date(today.getTime() + 86400000L);
-		Date oneMonthFromToday = new Date(today.getTime() + 2629800000L);
-		Date oneMonthOneDayFromToday = new Date(today.getTime() + 2716200000L);
-		Date threeMonthsFromToday = new Date(today.getTime() + 7889400000L);
-
-		dto.setTotal_currently_available(
-				associateRepo.findByBatchEndDateLessThanEqualAndBatchStateId(today, batchStateId).size());
-		dto.setTotal_1_month(associateRepo
-				.findByBatchEndDateBetweenAndBatchStateId(tomorrow, oneMonthFromToday, batchStateId).size());
-		dto.setTotal_3_months(associateRepo
-				.findByBatchEndDateBetweenAndBatchStateId(oneMonthOneDayFromToday, threeMonthsFromToday, batchStateId)
-				.size());
-		dto.setTotal_supply(dto.getTotal_1_month() + dto.getTotal_3_months() + dto.getTotal_currently_available());
-		return dto;
 	}
 
 	public List<SimpleSkillSetDTO> getAll() {
@@ -149,5 +119,77 @@ public class SkillSetService {
 		} else {
 			return null;
 		}
+	}
+	
+	private SupplyMetricsDTO populateSkillMatrix(int batchStateId, boolean isCommittedBatch) {
+		SupplyMetricsDTO dto = new SupplyMetricsDTO();
+		List<Associate> current = associateRepo.findByBatchEndDateLessThanEqualAndBatchStateId(Dates.getToday(), batchStateId);
+		
+		List<Associate> oneMonth = associateRepo
+				.findByBatchEndDateBetweenAndBatchStateId(Dates.getTomorrow(), Dates.getOneMonthFromToday(), batchStateId);
+		
+		List<Associate> threeMonths = associateRepo
+				.findByBatchEndDateBetweenAndBatchStateId(Dates.getOneMonthAndOneDayFromToday(), Dates.getThreeMonthsFromToday(), batchStateId);
+		
+		if (isCommittedBatch) {
+			dto.setTotal_currently_available(calcCommittedSupply(current));
+			dto.setTotal_1_month(calcCommittedSupply(oneMonth));
+			dto.setTotal_3_months(calcCommittedSupply(threeMonths));
+		} else {
+			dto.setTotal_currently_available(current.size());
+			dto.setTotal_1_month(oneMonth.size());
+			dto.setTotal_3_months(threeMonths.size());
+		}
+		dto.setTotal_supply(dto.getTotal_1_month() + dto.getTotal_3_months() + dto.getTotal_currently_available());
+		return dto;
+	}
+	
+	private SupplyMetricsDTO populateSkillMatrix(int batchStateId, List<Integer> skillSetIds, boolean isCommittedBatch) {
+		SupplyMetricsDTO dto = new SupplyMetricsDTO();
+
+		List<Associate> current = associateRepo
+				.findByBatchEndDateLessThanEqualAndBatchStateIdAndBatchCurriculumCurriculumSkillsetSkillSetIdIn(
+						Dates.getToday(), batchStateId, skillSetIds);
+		List<Associate> oneMonth = associateRepo
+				.findByBatchEndDateBetweenAndBatchStateIdAndBatchCurriculumCurriculumSkillsetSkillSetIdIn(
+						Dates.getTomorrow(), Dates.getOneMonthFromToday(), batchStateId, skillSetIds);
+		List<Associate> threeMonths = associateRepo
+				.findByBatchEndDateBetweenAndBatchStateIdAndBatchCurriculumCurriculumSkillsetSkillSetIdIn(
+						Dates.getOneMonthAndOneDayFromToday(), Dates.getThreeMonthsFromToday(), batchStateId,
+						skillSetIds);
+
+		if (isCommittedBatch) {
+			dto.setTotal_currently_available(calcCommittedSupply(current));
+			dto.setTotal_1_month(calcCommittedSupply(oneMonth));
+			dto.setTotal_3_months(calcCommittedSupply(threeMonths));
+		} else {
+			dto.setTotal_currently_available(current.size());
+			dto.setTotal_1_month(oneMonth.size());
+			dto.setTotal_3_months(threeMonths.size());
+		}
+		dto.setTotal_supply(dto.getTotal_1_month() + dto.getTotal_3_months() + dto.getTotal_currently_available());
+		return dto;
+	}
+	
+	private int calcCommittedSupply(List<Associate> associates) {
+		int total = 0;
+		for(Associate a : associates)
+			if(a.isActive())
+				total++;
+		return total;
+	}
+
+	private int calcTotalClientDemand(List<ClientDemand> demands) {
+		int total = 0;
+		for (ClientDemand demand : demands)
+			total += demand.getQuantity();
+		return total;
+	}
+
+	private List<Integer> populateSkillSetIds(List<ClientDemand> demands, List<Integer> skillSetIds) {
+		for (ClientDemand demand : demands)
+			skillSetIds.add(demand.getClientDemandSkillset().getSkillSetId());
+		return skillSetIds;
+
 	}
 }
