@@ -18,6 +18,8 @@ export function FinalizeSpecificBatch(props:any)
   const [currentTrainerList,setCurrentTrainerList]:any=useState([]);
   const [selectedTrainer, setSelectedTrainer]:any=useState();
 
+  //For getting and displaying trainerNames
+  const [associateNames,setAssociateNames]:any=useState([])
   //For tracking a useEffect
   const [increment,setIncrement]:any=useState(0);
   let today = new Date();
@@ -40,6 +42,23 @@ export function FinalizeSpecificBatch(props:any)
         assosiateIds.push(data.associates[i].associateId);
       }
 
+      let associateId:any=[];
+      let associateInfo:any=[];
+
+      data.associates.forEach((ele:any)=>
+      {
+        associateId.push(ele.associateId)
+        associateInfo.push(
+          {
+            "associateId":ele.associateId,
+            "name":ele.firstName+" "+ele.lastName
+          }
+        )
+      })
+      
+
+      
+
       setModifiedBatch(
         {
           "batch_id": data.batchId,
@@ -50,10 +69,10 @@ export function FinalizeSpecificBatch(props:any)
           "batch_duration": 1,
           "batch_capacity": data.batchCapacity,
           "required_score": data.interviewScoreLower,
-          "associate_ids": assosiateIds,
+          "associate_ids": associateId,
           "trainer_ids": trainerIds
       });
-
+      setAssociateNames(associateInfo)
         //Load other data in second to setup default values
         axiosWrapper("/location","GET").then((data)=>{
           setLocations(data)
@@ -93,6 +112,18 @@ export function FinalizeSpecificBatch(props:any)
     })
   },[])
 
+  //change the id associated with main array
+  useEffect(()=>
+  {
+    const ids:any=[];
+    associateNames.forEach((ele:any)=>
+    {
+      ids.push(ele.associateId)
+    })
+    setModifiedBatch({...modifiedBatch,"associate_ids":ids})
+  },[associateNames])
+
+  //Track the increment changes
   useEffect(()=>{
     if(currentTrainerList==["empty"])
     {
@@ -100,7 +131,7 @@ export function FinalizeSpecificBatch(props:any)
       element.value="none"
     }
   },[increment])
-  
+
   return(
     <div>
           <label>Location</label>
@@ -144,6 +175,36 @@ export function FinalizeSpecificBatch(props:any)
             }
             })()}
 
+
+            <label>Assosiates</label>
+            <input type="submit" onClick={associateHandler} value="Generate Associates"/> 
+            {
+              (()=>
+              {
+                if(associateNames.length)
+                {
+                  let sortedList:any=[];
+                  associateNames.forEach((ele:any)=>
+                    {
+                      sortedList.push(ele.name)
+                    }
+                  )
+                  sortedList.sort();
+                  return(
+                    <div>
+                      {
+                        sortedList.map((ele:any, index:any)=>
+                        {
+                          return (<p key={index}>{ele}</p>)
+                        })
+                      }
+                    </div>
+                  )
+                }
+              })()
+            }
+          
+
           <input type="submit" onClick={buttonHandler} value="Save"/> 
           <input type="submit" onClick={viewChanger} value="Back"/> 
 
@@ -156,6 +217,22 @@ export function FinalizeSpecificBatch(props:any)
     {
       //if(modifiedBatch.required_score>=0 $$ modifiedBatch)
     }
+  }
+  function associateHandler()
+  {
+    axiosWrapper(`/associates/${modifiedBatch.required_score}/score/${modifiedBatch.batch_capacity}/capacity`, "GET").then((data) => {
+      const associateInfo:any=[];
+      data.forEach((ele:any)=>
+      {
+        associateInfo.push(
+          {
+            "associateId":ele.associateId,
+            "name":ele.firstName+" "+ ele.lastName
+          }
+        ) 
+      })
+      setAssociateNames(associateInfo)
+    })
   }
 
   function removeTrainerHandler(e:any,trainer_id:any):any
@@ -299,11 +376,13 @@ export function FinalizeSpecificBatch(props:any)
   function interviewScoreHandler(e:any)
   {
     setModifiedBatch({...modifiedBatch, "required_score":e.target.value})
+    setAssociateNames([])
   }
 
   function capacityHandler(e:any)
   {
     setModifiedBatch({...modifiedBatch, "batch_capacity":e.target.value})
+    setAssociateNames([])
   }
 
   function buttonHandler(e:any)
