@@ -46,7 +46,7 @@ class CurriculumServiceTest {
 	// 	assertNotNull(curriculumInstance);
 	// 	assertEquals("React", curriculumInstance.getName());
 		
-	}
+	// }
 	
 	// @Test
 	// void testGetAll() 
