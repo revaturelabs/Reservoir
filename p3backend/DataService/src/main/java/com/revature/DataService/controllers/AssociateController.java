@@ -17,9 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.revature.DataService.models.Associate;
 import com.revature.DataService.services.AssociateService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
-
 @RequestMapping(path = "/associates")
 public class AssociateController
 {
@@ -34,11 +33,9 @@ public class AssociateController
 	 return new ResponseEntity<List<Associate>>(associates, HttpStatus.NOT_FOUND);
   }
   
-  @CrossOrigin(origins = "*")
   @GetMapping
   public List<Associate> getAssociate()
   {
-
     return associateService.getAll();
   }
 

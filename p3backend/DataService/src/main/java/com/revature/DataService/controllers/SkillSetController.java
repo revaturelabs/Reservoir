@@ -19,7 +19,7 @@ import com.revature.DataService.models.Skillset;
 import com.revature.DataService.services.SkillSetService;
 
 //ONLY MODIFY THIS FILE ON GEN_BRANCH FOR NOW
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RequestMapping(path = "/skillsets")
 @RestController
 public class SkillSetController {
