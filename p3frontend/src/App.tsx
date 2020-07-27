@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "./stylesheets/generate-batches/overviewtraining.css"
 
 import {
   BrowserRouter as Router,
@@ -21,7 +22,6 @@ import {
 } from "reactstrap";
 import { OverviewClientDemand } from "./Components/Supply-demand/OverviewClientDemand";
 import { OverviewTraining } from "./Components/Generate-batches/OverviewTraining";
-import TestChart from "./Components/Supply-demand/StackedBarGraph";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { ViewConsentRequests } from "./Components/Currently-unused/ViewConsentRequests";
@@ -168,38 +168,43 @@ export class App extends React.Component<any, any> {
             comp: is the component to display within the route
           */
           this.createRoutesAndNavbar([
-                  // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
-                  // {
-                  //   end: "/dead-page",
-                  //   name: "Reservoir",
-                  //   comp: <HomePage />,
-                  // },
+            // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
+            // {
+            //   end: "/dead-page",
+            //   name: "Reservoir",
+            //   comp: <HomePage />,
+            // },
             {
               end: "/home",
-              name: "Batches in Progress",
+              name: "Reservoir",
               comp: <ReduxInProgress />,
             },
             {
               end: "/batch/demand-overview",
               name: "Supply & Demand",
-              comp: <TestChart />,
+              comp: <OverviewClientDemand />,
             },
             {
               end: "/batch/training-overview",
               name: "Generate Batches",
               comp: <OverviewTraining />,
             },
+            {
+              end: "/batch/batches-in-progress",
+              name: "Batches in Progress",
+              comp: <ReduxInProgress />,
+            },
             // {
             //   end: "/trainer-assign",
             //   name: "Trainer assignment",
             //   comp: <TrainerAssignmentComponent />,
             // },
-                  // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
-                  // {
-                  //   end: "/trainers/consent-requests",
-                  //   name: "Consent requests",
-                  //   comp: <ViewConsentRequests />,
-                  // },
+            // --------------------MOVED TO CURRENTLY-UNUSED BY TEAM C------------------------
+            // {
+            //   end: "/trainers/consent-requests",
+            //   name: "Consent requests",
+            //   comp: <ViewConsentRequests />,
+            // },
             // {
             //   end: "/test-convert",
             //   name: "TCO",

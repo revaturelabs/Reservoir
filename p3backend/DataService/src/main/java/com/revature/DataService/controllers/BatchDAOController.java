@@ -13,7 +13,7 @@ import com.revature.DataService.models.BatchDAO;
 import com.revature.DataService.services.BatchDaoService;
 
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 public class BatchDAOController {
 	 
@@ -25,12 +25,5 @@ public class BatchDAOController {
 	  public List<BatchDAO> getAllReviews()
 	  {
 		 return serv.getAllBatchs();
-	  }
-	 
-	 @PostMapping("/batchDAO")
-	  public BatchDAO dd(@RequestBody BatchDAO b)
-	  {
-		 System.out.println(b.getStartDate());
-		 return serv.saveBatch(b);
 	  }
 }

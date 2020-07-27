@@ -38,7 +38,6 @@ export async function getAllBatches(): Promise<Batch[]> {
     });
     return allBatches;
   } catch (e) {
-    console.log(`Failed to retrieve batches: ${e.message}`);
     throw e;
   }
 }
@@ -49,7 +48,6 @@ export async function getBatchById(bId: number): Promise<any> {
     const respData = response.data;
     return respData;
   } catch (e) {
-    console.log(`Failed to retrieve batch #${bId} : ${e.message}`);
     throw e;
   }
 }
@@ -66,7 +64,6 @@ export async function updateBatch(
     const theBatch: Batch = buildABatch(respData);
     return theBatch;
   } catch (e) {
-    console.log("Failed to update batch", e.message);
     throw e;
   }
 }
@@ -80,7 +77,6 @@ export async function getBatchesByDate(date: string): Promise<Batch[]> {
     });
     return theBatches;
   } catch (e) {
-    console.log(`Failed to retrieve batches with date ${date} : ${e.message}`);
     throw e;
   }
 }
@@ -96,9 +92,6 @@ export async function getBatchesByCurriculaId(
     });
     return theBatches;
   } catch (e) {
-    console.log(
-      `Failed to retrieve batches with curriculum id #${currId} : ${e.message}`
-    );
     throw e;
   }
 }
@@ -112,9 +105,6 @@ export async function getBatchesByClientId(clientId: number): Promise<Batch[]> {
     });
     return theBatches;
   } catch (e) {
-    console.log(
-      `Failed to retrieve batches with client id #${clientId} : ${e.message}`
-    );
     throw e;
   }
 }
@@ -131,7 +121,6 @@ export async function getBatchesByProgType(progType: string): Promise<Batch[]> {
     });
     return filteredBatches;
   } catch (e) {
-    console.log(`Failed to retrieve batches: ${e.message}`);
     throw e;
   }
 }
@@ -144,9 +133,7 @@ export async function assignTrainer(
   try {
     const dataTransfer = { batchId: bId, trainerId: trainId };
     const response = await axiosClient.post("/trainerbatch", dataTransfer);
-    console.log(`Trainer ${trainId} assigned to batch ${bId}`);
   } catch (e) {
-    console.log("failed to assign trainer to batch", e.message);
     throw e;
   }
 }
@@ -158,7 +145,6 @@ export async function getUnconfirmedBatches(): Promise<UnconfirmedBatch[]> {
     const unconfirmedBatches = response.data;
     return unconfirmedBatches;
   } catch (e) {
-    console.log(`Failed to retrieve batches: ${e.message}`);
     throw e;
   }
 }

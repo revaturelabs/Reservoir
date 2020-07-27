@@ -27,7 +27,7 @@ import com.revature.DataService.repositories.TrainerBatchRepository;
 import com.revature.DataService.repositories.TrainerRepository;
 import com.revature.DataService.services.TrainerBatchService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 public class TrainerBatchController {
 

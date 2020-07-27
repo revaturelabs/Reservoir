@@ -1,8 +1,8 @@
 package com.revature.DataService.controllers;
 
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,20 +27,22 @@ import org.springframework.web.server.ResponseStatusException;
 import com.revature.DataService.dtos.BatchDTO;
 import com.revature.DataService.dtos.BatchTrainerJoin;
 import com.revature.DataService.dtos.DetailedBatchDTO;
+import com.revature.DataService.dtos.SupplyMetricsDTO;
 import com.revature.DataService.dtos.UpdateBatchDto;
 import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.BatchState;
 import com.revature.DataService.models.Curriculum;
 import com.revature.DataService.models.Location;
+import com.revature.DataService.repositories.BatchStateRepository;
 import com.revature.DataService.services.BatchService;
 import com.revature.DataService.services.BatchStateService;
 import com.revature.DataService.services.CurriculumService;
 import com.revature.DataService.services.LocationService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/batches")
-public class BatchController {
+public class BatchController {	
 	@Autowired
 	BatchService batchService;
 
@@ -51,6 +54,9 @@ public class BatchController {
 	
 	@Autowired
 	CurriculumService curriculumService;
+	
+	@Autowired
+	BatchStateRepository batchStateRepo;
 	
 	
 	@GetMapping("/detailed-batch-dto")
@@ -73,11 +79,9 @@ public class BatchController {
 	public void deleteBatchById(@PathVariable int id){
 		batchService.deleteBatchById(id);
 	}
-	
-	
-	// currently handles save and update
+
 	@PostMapping
-	public ResponseEntity<DetailedBatchDTO> postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {		
+	public ResponseEntity<DetailedBatchDTO> postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {	
 		Curriculum curriculum = curriculumService.getById(detailedBatchDTO.getCurriculum_id());
 		Location location = locationService.getById(detailedBatchDTO.getLocation_id());
 		
@@ -95,14 +99,28 @@ public class BatchController {
 		);
 		
 		batch = batchService.saveUnconfirmedBatch(batch, detailedBatchDTO);
+		if(batch == null)
+			return new ResponseEntity<DetailedBatchDTO>(detailedBatchDTO, HttpStatus.FORBIDDEN);
 		detailedBatchDTO.setBatch_id(batch.getBatchId());
 		return new ResponseEntity<DetailedBatchDTO>(detailedBatchDTO,HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/unconfirmed")
-	public List<BatchDTO> getUnconfirmedBatches(){
-		List<BatchDTO> unconfirmedBatches = batchService.getUnconfirmedBatches();	
-		return unconfirmedBatches;	
+	public List<BatchDTO> getUnconfirmedBatches(@RequestParam(required = false) Integer skillsetid){
+		
+		if(skillsetid == null) 
+			return batchService.getUnconfirmedBatches();
+		 else if (skillsetid != null) 
+			return batchService.getUnconfirmedBatchesBySkillsetId(skillsetid);
+		return null;
+	}
+	
+	@GetMapping("/{id}/unconfirmed")
+	public ResponseEntity<SupplyMetricsDTO> getBatchSupplyMetricsById(@PathVariable int id) {
+		SupplyMetricsDTO dto = batchService.getBatchSupplyMetricsById(id);
+		if(dto != null)
+			return new ResponseEntity<SupplyMetricsDTO>(dto, HttpStatus.OK);
+		return new ResponseEntity<SupplyMetricsDTO>(dto, HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping
@@ -126,10 +144,12 @@ public class BatchController {
 	}
 	
 	@GetMapping("/batch-states/{id}")
-	public BatchState getBatchStateById(@PathVariable int id) {
-		return batchStateService.getById(id);
+	public ResponseEntity<BatchState> getBatchStateById(@PathVariable int id) {
+		BatchState state = batchStateService.getById(id);
+		if(state != null)
+			return new ResponseEntity<BatchState>(state, HttpStatus.OK);
+		return new ResponseEntity<BatchState>(state, HttpStatus.NOT_FOUND);
 	}
-
 
 	@PatchMapping("{id}")
 	public ResponseEntity<Batch> updateBatchWithId(@RequestBody UpdateBatchDto dto, @PathVariable Integer id) {
@@ -141,6 +161,8 @@ public class BatchController {
 				if (state != null) {
 					oldBatch.setState(state);
 					newBatch = batchService.updateBatch(oldBatch);
+					if(newBatch == null)
+						return new ResponseEntity<Batch>(new Batch(), HttpStatus.FORBIDDEN);
 					return new ResponseEntity<>(newBatch, HttpStatus.OK);
 				}
 			}
@@ -154,9 +176,9 @@ public class BatchController {
 
 	@GetMapping("/date/{date}")
 	public List<Batch> getInProgressBatches(@PathVariable String date) {
-		try {
+		try {	
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			Date d = df.parse(date);
+			Date d = (Date) df.parse(date);
 			return batchService.getByInProgress(d);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

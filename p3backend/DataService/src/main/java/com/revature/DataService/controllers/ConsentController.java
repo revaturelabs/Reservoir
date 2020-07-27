@@ -18,9 +18,8 @@ import com.revature.DataService.services.ConsentService;
 import com.revature.DataService.services.TrainerService;
 
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
-
 public class ConsentController {
 
 
@@ -33,14 +32,12 @@ public class ConsentController {
 
 
   // get all items
-  @CrossOrigin(origins = "*")
+ 
   @GetMapping("/consent")
   public List<Consent> getAllConsents() {
     return consentService.getAll();
   }
 
-
-  @CrossOrigin(origins = "*")
   @GetMapping("/consent/{trainerId}")
   public List<Consent> getAllReviews(@PathVariable Integer trainerId) throws Exception {
     List<Consent> consents = consentService.getConsentByTrainerId(trainerId);
@@ -48,8 +45,6 @@ public class ConsentController {
     return consents;
   }
 
-
-  @CrossOrigin(origins = "*")
   @PatchMapping("/consent/{consentId}")
   public Consent updateConsentApproval(@RequestBody ConsentPost consentPost,
       @PathVariable Integer consentId) throws Exception {
@@ -73,7 +68,6 @@ public class ConsentController {
 
   }
 
-  @CrossOrigin(origins = "*")
   @PostMapping("/consent")
   public Consent createConsent(@RequestBody ConsentPost consentPost) throws Exception {
     System.out.println(consentPost.getIsApprovedColumn());
