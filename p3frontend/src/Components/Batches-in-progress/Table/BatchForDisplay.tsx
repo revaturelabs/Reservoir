@@ -1,10 +1,8 @@
-import { associatesGetActiveTotal } from "../../../models/Associate";
 import { locationGetName } from "../../../models/Location";
 import { convertDateToUTC } from "../../../Helpers/convertDateToUTC";
 import { dateDifferenceWeeks } from "../../../Helpers/dateDifferenceWeeks";
 import React from "react";
 import { Batch } from "../../../models/Batch";
-import { Col, Container, Row } from "reactstrap";
 import { BatchViewModalRedux } from "./BatchViewModal";
 
 /*
@@ -155,8 +153,7 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
           <strong>Location: </strong>
           {locationGetName(this.props.batch.location)}
           <br />
-          
-          
+
           <strong>Associates: </strong>
           {this.props.batch.associates
             ? this.props.batch.associates.length
@@ -167,12 +164,6 @@ export class BatchForDisplay extends React.Component<IPBatchForDisplay, any> {
             currentBatch={this.props.batch}
             parentTop={this.props.parentTop}
           />
-          <br />
-
-          {/* <br />
-          C {this.props.batch.isConfirmed ? "Y" : "N"}
-          <br />
-          AT {this.props.batch.associates.length} */}
         </td>
       </>
     );
