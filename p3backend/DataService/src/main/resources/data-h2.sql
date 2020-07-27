@@ -1283,10 +1283,21 @@ INSERT INTO project3.trainer values(DEFAULT,'andrew','crenladge','andrew@revatur
 (DEFAULT,'john','james','john@revature.com', false),
 (DEFAULT,'lisa','jose','lisa@revature.com', false)
 ;
-INSERT INTO project3.trainerskills VALUES  (1,2),
-(2,3),
-(3,5),
+INSERT INTO project3.trainerskills VALUES  (1,1),
+(1,2),
+(1,3),
+(4,1),
+(4,2),
+(4,3),
+(4,4),
+(4,5),
 (4,6),
+(4,7),
+(4,8),
+(4,9),
+(4,10),
+(2,2),
+(3,3),
 (5,7);
 
 --INSERT INTO project3.trainerbatch VALUES (2,1),

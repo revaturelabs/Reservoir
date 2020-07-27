@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
-import { ColumnChartTest } from "./colGraphComponent";
 import "../../stylesheets/supply-demand/supply-demand.css";
 import { PageTitleBar } from "../Common/PageTitleBar";
+import TestChart from "./StackedBarGraph";
 
 export class OverviewClientDemand extends React.Component<any, any> {
   constructor(props: any) {
@@ -23,7 +23,7 @@ export class OverviewClientDemand extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <ColumnChartTest />
+          <TestChart />
         </Row>
         <Row>
           <Col className="center-items-div">

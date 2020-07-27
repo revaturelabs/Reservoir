@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.DataService.models.ClientDemand;
 import com.revature.DataService.repositories.ClientDemandRepo;
 
+@CrossOrigin
 @RestController
 public class ClientDemandController {
   // Cut out the middleman, go straight to the repo!
@@ -30,46 +31,8 @@ public class ClientDemandController {
   @GetMapping("/client-demand/{date}")
   public List<ClientDemand> findAllCurrent(@PathVariable String date) {
     LocalDate currTime = LocalDate.parse(date);
-    return clientDemandRepo.findCurrentClientDemands(currTime);
+    return clientDemandRepo.findByDeadlineGreaterThanEqual(currTime);
   }
-  
-  
-  // get all clientDemand by clientDemandId
-  // @CrossOrigin(origins = "*")
-  // @GetMapping("/clientDemand/{id}")
-  // public List<ClientDemand> endpointAll2(@PathVariable Integer id)
-  // {
-  // //return clientDemandRepo.findByClientDemandId(id);
-  // }
-
-  // //get all clientDemand by skillsetId
-  // @CrossOrigin(origins = "*")
-  // @GetMapping("/clientDemandSkillset/{id}")
-  // public List<ClientDemand> endpointAll3(@PathVariable Integer id)
-  // {
-  // // return clientDemandRepo.findBySkillsetId(id);
-  // }
-
-  // //post a new clientDemand. respond with what as posted. null on failure
-  // //the request json is converted to ClientDemand for us
-  // @CrossOrigin(origins = "*")
-  // @PostMapping("/clientDemand")
-  // public ClientDemand endpointPost1(@RequestBody ClientDemand post)
-  // {
-  // //may need more stuff in the future. just going to stub this in for now
-  //
-  // //create an ClientDemand and put it in the database
-  // ClientDemand newClientDemand=new ClientDemand(
-  // post.clientDemandId, //Integer clientDemandId,
-  // post.quantity, //Integer quantity,
-  // LocalDate.now(), //Date deadline,
-  // post.clientId //Integer clientId
-  // );
-  //
-  // newClientDemand=clientDemandRepo.save(newClientDemand);
-  //
-  // return newClientDemand;
-  // }
 }
 
 

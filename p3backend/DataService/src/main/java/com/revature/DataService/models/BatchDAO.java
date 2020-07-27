@@ -50,8 +50,19 @@ public class BatchDAO {
 	  @Column(name="curriculum_id")
 	  private Integer curiculum_id;
 	  
+		@Column(name = "batch_capacity")
+		private int batchCapacity;
 	  
-	  //Getters and setters
+	  
+	  public int getBatchCapacity() {
+			return batchCapacity;
+		}
+
+		public void setBatchCapacity(int batchCapacity) {
+			this.batchCapacity = batchCapacity;
+		}
+
+	//Getters and setters
 	public Integer getBatchId() {
 		return batchId;
 	}

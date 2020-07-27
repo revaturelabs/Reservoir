@@ -43,6 +43,7 @@
     "react-calendar-timeline": "^0.27.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.1",
+    "react-google-charts": "^3.0.15",
     "react-loader-spinner": "^3.1.14",
     "react-promise-tracker": "^2.1.0",
     "react-redux": "^7.2.0",
@@ -107,5 +108,8 @@
   },
   "devDependencies": {
     "nyc": "^15.1.0"
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "eslint-plugin-react": "^7.20.4"
   }
 }

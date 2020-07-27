@@ -1,12 +1,12 @@
 package com.revature.DataService.dtos;
 
-public class TotalSkillSetMatrixDTO {
+public class SupplyMetricsDTO {
 	
 	private int total_supply;
 	private int total_currently_available;
 	private int total_1_month;
 	private int total_3_months;
-	public TotalSkillSetMatrixDTO() {
+	public SupplyMetricsDTO() {
 		super();
 	}
 	
