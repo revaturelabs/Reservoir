@@ -1,11 +1,12 @@
 import React from "react";
 import { Input, Label, Button, InputGroup, InputGroupText } from "reactstrap";
+// import { BatchView } from "./BatchView";
 import {
   smallBtnStyles,
   sharpEdge,
   btnStyles,
 } from "../stylesheets/generate-batches/generateBatchStlyes";
-
+//new Date().toISOString().substring(0, 10),
 export class Options extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -25,6 +26,7 @@ export class Options extends React.Component<any, any> {
 
   getgeneratedBatch = async (e: any) => {
     e.preventDefault();
+    console.log(this.state.quantity, this.state.interview);
 
     this.setState({
       flaeeg: true,
@@ -88,6 +90,15 @@ export class Options extends React.Component<any, any> {
           {" "}
           Generate Batches
         </Button>
+        <br />
+        <div style={{ display: this.state.flaeeg ? "block" : "none" }}>
+          {" "}
+          <h4>fsengjn;a</h4>
+          {/* <BatchView
+            quantity={this.state.quantity}
+            interview={this.state.interview}
+          ></BatchView> */}
+        </div>
       </div>
     );
   }

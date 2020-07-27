@@ -51,6 +51,7 @@ export class FilterForm extends React.Component<
 
   // Setting values to filter for on programType, client, and curriculum
   setProgramType = (e: any) => {
+    console.log(e);
     this.setState({
       programType: e.target.value,
     });
@@ -78,7 +79,7 @@ export class FilterForm extends React.Component<
   // applies the filters using passed in functions. For the page to render appropriately, setCurriculum should also have a callback function in this.setState
   applyAllFilters = (e: any) => {
     e.preventDefault();
-
+    console.log("In applyAllFilters");
     this.props.setProgramType(this.state.programType);
     this.props.setClient(this.state.client);
     this.props.setCurriculum(this.state.curriculum);

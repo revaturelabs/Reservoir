@@ -3,6 +3,7 @@ import { Container, Spinner } from "reactstrap";
 import { Associate } from "../../../models/Associate";
 import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
+import { prnt } from "../../../Helpers/Prnt";
 import { axiosClient } from "../../Common/API/axios";
 import { DualTables } from "./DualTables";
 import { connect } from "react-redux";
@@ -11,6 +12,7 @@ import { store } from "../../../redux/store";
 import { getActiveAssociates } from "../../Common/API/Associate";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 
+const doPrnt = true; //prnt may be toggled
 /*
   <BatchAssocTable currentBatch={aBatchObject}/>
 
@@ -42,6 +44,8 @@ export default class BatchAssocTable extends React.Component<
   }
 
   componentDidMount = async () => {
+    console.log(`BatchAssocTable componentDidMount() has been reached`);
+
     try {
       const allAssociates: any[] = await getActiveAssociates();
 
@@ -63,6 +67,11 @@ export default class BatchAssocTable extends React.Component<
   };
 
   render() {
+    //prnt(doPrnt,`BatchAssocTable render() has been reached`)
+    //prnt(doPrnt,`this.state.associatesInBatch=`,this.state.associatesInBatch)
+    //prnt(doPrnt,`this.props.currentBatch.associates=`,this.props.currentBatch.associates)
+    //prnt(doPrnt,`this.props.currentBatch=`,this.props.currentBatch)
+
     if (this.props.currentBatch == null)
       return <>BatchAssocTable this.props.currentBatch is null</>;
 
@@ -80,6 +89,7 @@ export default class BatchAssocTable extends React.Component<
             onMoveToRight={(item) => this.patchTheAssoc(item, true)}
             messageLeft="None in the system"
             messageRight="None assigned to this batch"
+            // arrayRight={this.props.currentBatch.associates}
             arrayLeft={this.state.eligibleAssociates}
             arrayRight={this.props.currentBatch.associates}
             headerLeft={
@@ -111,6 +121,9 @@ export default class BatchAssocTable extends React.Component<
       false, the assoc is assigned to no batch at all. null
   */
   patchTheAssoc = async (assoc: any, moveToBatch: boolean) => {
+    prnt(doPrnt, `ASTableModel patchTheAssoc() has been reached`);
+    prnt(doPrnt, `assoc before=`, assoc);
+
     //associate is a model and not a react component
     //assoc.active = moveToBatch; //set this client side assoc to active or in-active
 
@@ -131,6 +144,10 @@ export default class BatchAssocTable extends React.Component<
       //we have to watch out because this batch has an array of
       //associates and associates have batches and we get circular json errors when sending
     };
+
+    prnt(doPrnt, `nonCircularAssocPatch=`, nonCircularAssocPatch);
+    //prnt(doPrnt, `assoc.batch=`, assoc.batch);
+    //prnt(doPrnt, `this.props.currentBatch=`, this.props.currentBatch);
 
     try {
       await axiosClient.patch("/associates", nonCircularAssocPatch);
@@ -155,6 +172,7 @@ export default class BatchAssocTable extends React.Component<
             undefined
           );
       if (moveToBatch) {
+        console.log(store.getState().batch.batch);
         this.props.addAssociateToBatchActionMapper(
           store.getState().batch.batch,
           nonCircularAssocPatch

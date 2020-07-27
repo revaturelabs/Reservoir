@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 //GATEWAY MASTER PORT IS 2331 - SWAP THIS IN WHEN PUSHING TO MASTER
 //GATEWAT DEVELOPMENT PORT IS 8212 - THIS SHOULD BE ACTIVE BY DEFAULT

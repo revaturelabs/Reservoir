@@ -7,6 +7,7 @@ import {
   Row,
   Col,
   ButtonGroup,
+  Label,
 } from "reactstrap";
 import "../../../index.css";
 import { connect } from "react-redux";
@@ -17,8 +18,11 @@ import { ErrorAlert } from "../../../Helpers/ErrorAlert";
 import { axiosClient } from "../../Common/API/axios";
 import { BatchTrainersTableRedux } from "../Batch-info/BatchTrainersTable";
 import { store } from "../../../redux/store";
-import { BatchAssocTableRedux } from "../Batch-info/BatchAssocTable";
+import BatchAssocTable, {
+  BatchAssocTableRedux,
+} from "../Batch-info/BatchAssocTable";
 import { TrainerAssignmentRedux } from "../Batch-info/TrainerAssignment";
+import { Link } from "react-router-dom";
 
 /*
   <BatchViewModel currentBatch={aSvererBatch} parentState={this.state}/>
@@ -56,6 +60,7 @@ export class BatchViewModal extends React.Component<IPBatchViewModal, any> {
         store.getState().batch.batch &&
         store.getState().batch.batch.batchId === this.props.currentBatch.batchId
       ) {
+        //  this.props.batchClickActionMapper(store.getState().batch.batch)
         return;
       } else {
         this.props.batchClickActionMapper(this.props.currentBatch);

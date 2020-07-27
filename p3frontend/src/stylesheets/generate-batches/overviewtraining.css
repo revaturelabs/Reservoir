@@ -30,7 +30,7 @@
 
 /* When link is clicked will set element to active and take this color */
 #generate-new-batch-active {
-  color: rgba(242, 105, 38);
+  color: rgb(247, 105, 62);
 }
 
 .generate-batch-nav-link {
@@ -39,12 +39,12 @@
 }
 
 .generate-batch-nav-link:hover {
- color: rgb(187, 187, 187);
+ color: rgb(253, 130, 92);
  cursor: pointer; 
 }
 
 
-/*/////// GENERATE NEW BATCH ////////*/
+
 /*///////////////////// GENERATE BATCH CONTAINER - LABELS AND INPUTS /////////////////////*/
 
 .generate-new-batch-label {
@@ -54,9 +54,9 @@
 
 .generate-new-batch-input {
   margin-bottom: 10px;
+
 }
 
-/*///////////////////// GENERATE BATCH CONTAINER - OPTIONAL /////////////////////*/
 .generate-new-batch-optional-container {
   background-color: rgba(165, 165, 165, 0.267);
   margin-top: 10px;
@@ -67,99 +67,22 @@
   border-bottom: 2px solid rgb(146, 146, 146);
   max-width: 90%;
   margin: auto;
-  margin-bottom: 15px;
   font-weight: 600;
   padding: 10px;
 }
 
-/*///////////////////// GENERATE BATCH CONTAINER - ADD TRAINERS /////////////////////*/
 .btn-add-trainer {
   margin-left: 5px;
+}
+
+.select-trainer-dropdown {
+  width: 79%;
 }
 
 .added-trainers-box {
   background-color: #fff;
   height: 150px;
   border: solid 1px #000;
-  padding: 10px;
+  padding: 5px;
   margin-top: 5px;
 }
-
-.added-trainers-box p {
-  line-height: 10px;
-}
-
-.added-trainers-box p:hover {
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/*///////////////////// GENERATE BATCH CONTAINER - ADD ASSOCIATES /////////////////////*/
-.added-associates-box {
-  background-color: #fff;
-  height: 150px;
-  border: solid 1px #000;
-  padding-left: 5px;
-  padding-top: 5px;
-  margin-top: 5px;
-  overflow: scroll;
-}
-
-.added-associates-box p {
-  line-height: 10px;
-}
-
-.associates-list {
-  margin-bottom: -10px;
-}
-
-/*////////////////// DROPDOWNS ///////////////*/
-#dropdown-skills{
-  width: 100%;
-}
-
-#dropdown-location{
-  width: 100%;
-}
-
-/* Trainers dropdown */
-#changeValues1{
-  width: 79%;
-}
-
-/*////////////// FINILIZE BATCH ////////////*/
-
-/*//////////////////// FINILIZE BATCH - BUTTONS //////////////////*/
-
-.finilize-batch-delete {
-  float: left;
-}
-
-.finilize-batch-update {
-  display: block;
-  margin: auto;
-}
-
-.finilize-batch-confirm {
-  float: right;
-}
-
-.finilize-batch-table-header th {
-  color: #fff;
-  font-weight: 300;
-}
-
-.finilize-batch-table-container {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  height: 300px;
-  padding-top: -5;
-}
-
-.finilize-batch-table.sticky th {
-position: sticky;
-top: 0;
-background-color: rgba(242, 105, 38);
-transform: scale(1.03);
-}
-

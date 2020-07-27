@@ -10,14 +10,16 @@ interface IBatchState {
 
 const initialBatchState: IBatchState | any = {
   batch: null,
-  active: 0,
+  active: 0
 };
+
 
 export const batchReducer = (
   state: IBatchState | any = initialBatchState,
   action: AnyAction
 ): IBatchState | any => {
   switch (action.type) {
+
     case clickTypes.BATCH_CLICK: {
       let newBatch: Batch = action.payload.batchClicked;
 
@@ -31,7 +33,7 @@ export const batchReducer = (
       let setActive: any = action.payload.data;
 
       return {
-        active: setActive,
+        active: setActive
       };
     }
 
@@ -55,7 +57,7 @@ export const batchReducer = (
       let trainer: Trainer = action.payload.trainer;
       let trainers: Trainer[] = batch.trainers;
       let exists: boolean = false;
-
+      console.log(batch);
       for (let t of trainers) {
         if (t.trainerId === trainer.trainerId) {
           exists = true;

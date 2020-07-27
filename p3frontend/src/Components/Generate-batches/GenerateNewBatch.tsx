@@ -6,6 +6,9 @@ import { Console } from "console";
 import { connect } from "react-redux";
 
 
+
+
+
 export function GenerateNewBatch(props: any) {
   //Data pulled from database
   const [locations, setLocations]: any = useState([]);
@@ -18,14 +21,13 @@ export function GenerateNewBatch(props: any) {
   const [loc, setLoc] = useState("");
   const [skill, setSkill] = useState("");
   const [startDate, setStartDate] = useState("")
-  const [ammountOfWeeks, setAmmountOfWeeks]: any = useState(10)
+  const [ammountOfWeeks, setAmmountOfWeeks]: any = useState(0)
   const [reqScore, setReqScore]: any = useState(80)
   const [capacity, setCapacity]: any = useState(20)
   const [trainerArray, setTrainerArray]: any = useState([])
-
   //For storing selected trainers
   const [selectedTrainer, setSelectedTrainer]: any = useState();
-  const [assosiates, setAssosiates]: any = useState([])
+
 
 
   //Get todays date in html formated way
@@ -41,7 +43,7 @@ export function GenerateNewBatch(props: any) {
     // Tested with hard code
     // setLocations(["Reston", "UTA", "Tampa"])
 
-    axiosWrapper("/curricula", "GET").then((data) => {
+    axiosWrapper("/skillsets", "GET").then((data) => {
       setSkillSet(data)
     })
 
@@ -61,12 +63,12 @@ export function GenerateNewBatch(props: any) {
           <div className="row">
             <div className="col">
               <label className="d-block generate-new-batch-label"> Skill </label>
-              <CreateDropDown myId="dropdown-skills" className="d-block col generate-new-batch-input" records={skillSet} handler={skillHandler} keyValue={["curriculumId", "name"]} defaultMessage="Select Skill" />
+              <CreateDropDown className="d-block col generate-new-batch-input" records={skillSet} handler={skillHandler} keyValue={["skillSetId", "name"]} defaultMessage="Select Skill" />
             </div>
 
             <div className="col">
               <label className="d-block generate-new-batch-label"> Location </label>
-              <CreateDropDown myId="dropdown-location" className="d-block col generate-new-batch-input" records={locations} handler={locHandler} keyValue={["locationId", "locationName"]} defaultMessage="Select Location" />
+              <CreateDropDown className="d-block col generate-new-batch-input" records={locations} handler={locHandler} keyValue={["locationId", "locationName"]} defaultMessage="Select Location" />
             </div>
           </div>
 
@@ -78,7 +80,7 @@ export function GenerateNewBatch(props: any) {
 
             <div className="col">
               <label className="d-block generate-new-batch-label" > Duration </label>
-              <input className="d-block col generate-new-batch-input" type="number" name="date" min="1" onChange={weekHandler} defaultValue={10} placeholder="#Weeks" step="1" />
+              <input className="d-block col generate-new-batch-input" type="number" name="date" min="1" onChange={weekHandler} placeholder="#Weeks" step="1" />
             </div>
           </div>
 
@@ -99,26 +101,12 @@ export function GenerateNewBatch(props: any) {
 
             <div className="row">
               <div className="col">
-                <label className="d-block generate-new-batch-label text-center">Associates</label>
-                <div className="row justify-content-center">
-                  <input className="btn-primary btn-generate-associates" type="submit" onClick={generateBatch} disabled={(capacity > 0 && reqScore > 0) ? false : true} value="Generate Associates" />
-                </div>
-                <div className="added-trainers-box">
-
-
-                  {assosiates.map((data: any, index: any) => {
-                    return (
-                      <p key={index}> {`${data.firstName} ${data.lastName}`}</p>
-                    )
-                  })}
-                </div>
-     
 
               </div>
               <div className="col">
                 {/* <label className="d-block">{trainerList.length && trainerArray.length < 2 ? "Trainers" : (trainerArray.length < 2 ? "Please select a skillset" : "Trainer Limit Reached")}</label> */}
                 <label className="d-block generate-new-batch-label text-center trainers-tabel">Trainers</label>
-                <CreateDropDown className={"select-trainer-dropdown"} records={trainerList} handler={trainerListHandler} keyValue={["trainer_id", "name"]} defaultMessage="Select Trainer" myId="changeValues1" />
+                <CreateDropDown className={"select-trainer-dropdown"} records={trainerList} handler={trainerListHandler} keyValue={["trainer_id", "name"]} defaultMessage="Select Trainer" />
                 <input className="btn-primary btn-add-trainer" type="submit" onClick={addTrainerHandler} disabled={(trainerList.length && selectedTrainer && (trainerArray.length < 2)) ? false : true} value="Add Trainer" />
 
                 <div className="added-trainers-box">
@@ -126,9 +114,9 @@ export function GenerateNewBatch(props: any) {
                   {trainerArray.map((data: any, index: any) => {
                     let findName: any = staticTrainerList.filter((ele: any) => ele.trainer_id == data);
                     findName = findName[0];
-
+                    console.log(staticTrainerList)
                     return (
-                      <p key={index} onClick={(e: any) => { removeTrainerHandler(e, findName.trainer_id) }}> {`${findName.firstName} ${findName.lastName}`}</p>
+                      <p key={index}> {`${findName.firstName} ${findName.lastName}`}</p>
                     )
                   })}
                 </div>
@@ -145,67 +133,9 @@ export function GenerateNewBatch(props: any) {
     </div>
   )
 
-
-  function generateBatch() {
-    axiosWrapper(`/associates/${reqScore}/score/${capacity}/capacity`, "GET").then((data) => {
-      console.log(data);
-      
-      data.forEach((ele:any)=>
-      {
-        if(ele.interviewScore<reqScore)
-        {
-          console.log(ele.interviewScore)
-        }
-        if(ele.batch!=null)
-        {
-          console.log(ele.batch)
-        }
-        if(ele.active)
-        {
-          console.log(ele.active);
-        }
-      })
-      setAssosiates(data);
-    })
-
-  }
-
-
-  function removeTrainerHandler(e: any, id: any) {
-    //assign the new array
-    let newTrainerArray = [];
-
-    newTrainerArray = trainerArray.filter((ele: any) => ele !== id);
-    setTrainerArray(newTrainerArray);
-    //Place removed trainer back into the drop down
-    let newTrainerList: any;
-
-    if (trainerList[0] == "empty") {
-      newTrainerList = [];
-    }
-    else {
-      newTrainerList = trainerList;
-    }
-
-
-    //get the trainer from the list
-    let trainerAddedBack = staticTrainerList.filter((ele: any) => ele.trainer_id == id)
-
-    newTrainerList.push(
-      {
-        "name": trainerAddedBack[0].firstName + " " + trainerAddedBack[0].lastName,
-        "trainer_id": trainerAddedBack[0].trainer_id
-      })
-    setTrainerList(newTrainerList);
-    let element: any = document.getElementById("changeValues1")
-    if (element) {
-      element.value = "none"
-    }
-    //going to need to add to this setTrainerList
-  }
   //Function to check if they have required information to submit
   function testReturn() {
-    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1) {
+    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && parseInt(reqScore) >= 0 && parseInt(capacity) >= 1) {
       return false;
     }
     return true;
@@ -250,11 +180,9 @@ export function GenerateNewBatch(props: any) {
   }
   function reqScoreHandler(e: any) {
     setReqScore(e.target.value);
-    setAssosiates([]);
 
   }
   function capacityHandler(e: any) {
-    setAssosiates([]);
     setCapacity(e.target.value);
 
   }
@@ -275,24 +203,24 @@ export function GenerateNewBatch(props: any) {
         if (tList[i].trainer_id == currentTrainer[j]) {
           flag = false;
           removedIndex = i;
-
+          console.log(i)
         }
       }
       if (flag) {
         updatedTrainerList.push(tList[i]);
       }
     }
-    setSelectedTrainer();
     if (updatedTrainerList.length) {
-      setTrainerList(updatedTrainerList)
+      if (updatedTrainerList[removedIndex]) {
+        setSelectedTrainer(updatedTrainerList[removedIndex].trainer_id)
+      }
+      else {
+        setSelectedTrainer(updatedTrainerList[0].trainer_id)
+      }
+
     }
-    else {
-      setTrainerList(["empty"])
-    }
-    let element: any = document.getElementById("changeValues1")
-    if (element) {
-      element.value = "none"
-    }
+
+    setTrainerList(updatedTrainerList)
   }
 
   function buttonHandler(e: any) {
@@ -319,13 +247,7 @@ export function GenerateNewBatch(props: any) {
       b[2] = "0" + b[2]
     }
     let endDate = (b[0] + "-" + b[1] + "-" + b[2]);
-
-
-    //get assosiateids
-    let assosiateIds: any = [];
-    assosiates.forEach((data: any) => {
-      assosiateIds.push(data.associateId);
-    })
+    console.log(b)
     //Create our batch object
     let saveObject: any =
     {
@@ -335,12 +257,12 @@ export function GenerateNewBatch(props: any) {
       "start_date": dataBaseDate,
       "end_date": endDate,
       "batch_duration": parseInt(ammountOfWeeks),
-      "batch_capacity": parseInt(capacity),
+      "batch_capacity": capacity,
       "required_score": reqScore,
-      "associate_ids": assosiateIds,
+      "associate_ids": [],
       "trainer_ids": trainerArray
     };
-    console.log(assosiateIds)
+
 
     console.log(saveObject)
 
