@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Chart from "react-google-charts";
 import {
-  getAllCurrentClientDemands,
   getTotalSupply,
   getFilteredSupply,
 } from "../Common/API/clientDemand";
 import { getUnconfirmedBatches } from "../Common/API/batch";
-import { ClientDemands } from "../../models/ClientDemands";
 import {
   Dropdown,
   DropdownToggle,
@@ -17,7 +14,6 @@ import {
   Col,
 } from "reactstrap";
 import { axiosClient } from "../Common/API/axios";
-import { batch } from "react-redux";
 
 export default function TestChart() {
   //Have to define/declare my dumb typescript variables
@@ -79,8 +75,6 @@ export default function TestChart() {
   useEffect(() => {
     (async () => {
       await getMatrixTotal();
-      //batchInfo(unconfirmedDropdownId);
-      //console.log(`calling filter`);
     })();
   }, [skillSetDropItem, clientDropItem, unconfirmedDropItem]);
 
@@ -111,7 +105,6 @@ export default function TestChart() {
     setUnconfirmedDropItem(e.target.textContent);
     setUnconfirmedDropdownId(e.target.value);
     batchInfo(e.target.value);
-    //console.log(e.target.value);
   };
 
   //Uses backend skill matrix to get total demand, total committed and total confirmed split up into 1m, 3m, current and total supply
@@ -151,14 +144,11 @@ export default function TestChart() {
 
   function batchInfo(id: number) {
     let batchID, batchDate, batchCap, batchSkill;
-    //console.log(id);
-    //console.log(dataUnconfirmed[0][0].batch_id);
 
     if (dataUnconfirmed) {
       for (let i = 0; i < dataUnconfirmed[0].length; i++) {
         if (id == dataUnconfirmed[0][i].batch_id) {
           batchID = dataUnconfirmed[0][i].batch_id;
-          console.log(batchID);
           batchDate = dataUnconfirmed[0][i].start_date;
           batchCap = dataUnconfirmed[0][i].batch_capacity;
           batchSkill = dataUnconfirmed[0][i].curriuclum_name;
@@ -168,7 +158,6 @@ export default function TestChart() {
       // let batchDate_OneM = new Date(batchDate).setMonth(
       //   new Date(batchDate).getMonth() + 2
       // );
-      console.log(batchCap);
       setGraphData({
         ...graphData,
         unconfirmed_1m: null,
@@ -186,8 +175,6 @@ export default function TestChart() {
       });
     }
   }
-  console.log(dataUnconfirmed && dataUnconfirmed[0]);
-  //console.log(graphData);
 
   return (
     <div>
@@ -294,8 +281,8 @@ export default function TestChart() {
       </Col>
 
       <Chart
-        width={"80vw"}
-        height={"80vh"}
+        width={"85vw"}
+        height={"75vh"}
         chartType="BarChart"
         loader={<div>Loading Chart</div>}
         data={[
@@ -331,7 +318,6 @@ export default function TestChart() {
           ],
         ]}
         options={{
-          title: "Client Demands vs Revature Supply",
           chartArea: { width: "50%" },
           orientation: "horizontal",
           isStacked: true,

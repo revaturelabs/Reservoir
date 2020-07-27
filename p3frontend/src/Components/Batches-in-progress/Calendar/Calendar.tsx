@@ -6,21 +6,11 @@ import { Batch } from "../../../models/Batch";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
 import { connect } from "react-redux";
-import { Toast } from "reactstrap";
-// import { TimelineModal } from "./TimelineModal";
 import { store } from "../../../redux/store";
-import {
-  ReduxTimelineBatchModal,
-  TimelineBatchModal,
-} from "./TimelineBatchModal";
+import { ReduxTimelineBatchModal } from "./TimelineBatchModal";
 import { EasyTooltip } from "../../Common/EasyTooltip";
 
-interface TimelineComponentProps {
-  batches: Batch[];
-}
-
 interface TimelineComponentState {
-  //batches:  any,
   groups: any;
   items: any;
 
@@ -28,7 +18,6 @@ interface TimelineComponentState {
   isOpen: boolean;
   toggle: any;
   batchIsOpen: boolean;
-  //  index : number
 }
 
 export class TimelineComponent extends React.Component<
@@ -38,7 +27,6 @@ export class TimelineComponent extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      //batches: null,
       groups: null,
       items: null,
 
@@ -46,7 +34,6 @@ export class TimelineComponent extends React.Component<
       isOpen: false,
       toggle: false,
       batchIsOpen: false,
-      //    index: 0,
     };
   }
 
@@ -58,7 +45,6 @@ export class TimelineComponent extends React.Component<
 
   changeState = () => {
     //sets the groups and items for the timeline component
-    console.log("hello");
     let mappedGroups: any[] = [];
     let mappedItems: any[] = [];
 
@@ -102,7 +88,6 @@ export class TimelineComponent extends React.Component<
         mappedGroups.push(group);
         mappedItems.push(item);
       });
-    console.log(mappedItems);
     this.setGroupsAndItems(mappedGroups, mappedItems);
   };
 
@@ -120,9 +105,6 @@ export class TimelineComponent extends React.Component<
     });
   };
   componentDidMount() {
-    let timer: any;
-    let alreadyClicked = false;
-    //await this.setBatches();
     let mappedGroups: any[] = [];
     let mappedItems: any[] = [];
 
@@ -143,9 +125,6 @@ export class TimelineComponent extends React.Component<
           canResize: false,
           canChangeGroup: false,
           color: "rgb(0,0, 0)",
-          // onItemClick:()=>{alert("sdf")},
-          //    onClick:()=>{alert("sfds")},
-          //selectedBgColor: "rgba(225, 166, 244, 1)",
 
           itemProps: {
             onContextMenu: (event: any) => {
@@ -162,7 +141,6 @@ export class TimelineComponent extends React.Component<
         mappedItems.push(item);
       });
     this.setGroupsAndItems(mappedGroups, mappedItems);
-    console.log(mappedGroups, mappedItems);
   }
 
   setIsOpen = () => {
@@ -184,26 +162,13 @@ export class TimelineComponent extends React.Component<
   };
   showBatchModal = (batch: Batch) => {
     this.props.batchClickActionMapper(batch);
-    //  this.setIndex(index)
     this.setBatchIsOpen();
-    console.log(store.getState().batch.batch);
   };
 
-  // setIndex = (index: number) => {
-  //     let newIndex = index
-  //     this.setState({
-  //         index : newIndex
-  //     })
-  // }
-
   render() {
-    console.log(this.state.items);
     if (this.state.items && this.state.items.length > 0) {
       return (
         <div>
-          {/* <Button color="" onClick={this.toggle} id="info">
-          <i className="fas fa-info-circle"></i>
-          </Button> */}
           <i
             className="fas fa-info-circle "
             onClick={this.toggle}
@@ -215,9 +180,6 @@ export class TimelineComponent extends React.Component<
             displayText="Double click batch to edit. Green Batches have trainers assigned, grey batches do not trainers."
           />
 
-          {/* <Toast isOpen={this.state.toggle}>
-            Double click batch to edit or right click to view information.
-          </Toast> */}
           <br />
 
           <Timeline
@@ -226,15 +188,7 @@ export class TimelineComponent extends React.Component<
             defaultTimeStart={moment().add(-4, "months")}
             defaultTimeEnd={moment().add(2, "months")}
           ></Timeline>
-          {/* {this.state.isOpen ? (
-            <TimelineModal
-              isOpen={this.state.isOpen}
-              toggle={this.setIsOpen}
-              batch={store.getState().batch.batch}
-            />
-          ) : (
-            <></>
-          )} */}
+
           {this.state.batchIsOpen ? (
             <ReduxTimelineBatchModal
               currentBatch={store.getState().batch.batch}

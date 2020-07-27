@@ -5,13 +5,6 @@ import axiosWrapper from "../functions/axiosWrapper";
 import { GenerateNewBatch } from "../GenerateNewBatch";
 import { isCompositeComponent } from "react-dom/test-utils";
 
-////////////////////////////////////
-
-
-
-
-
-
 //This is for displaying our current selected batch to modify
 export function FinalizeSpecificBatch(props:any)
 {
@@ -357,4 +350,3 @@ export function FinalizeSpecificBatch(props:any)
   }
 
 }
-

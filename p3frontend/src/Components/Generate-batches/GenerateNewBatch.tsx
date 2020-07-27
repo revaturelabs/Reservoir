@@ -6,9 +6,6 @@ import { Console } from "console";
 import { connect } from "react-redux";
 
 
-
-
-
 export function GenerateNewBatch(props: any) {
   //Data pulled from database
   const [locations, setLocations]: any = useState([]);
@@ -115,9 +112,7 @@ export function GenerateNewBatch(props: any) {
                     )
                   })}
                 </div>
-                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
-                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
-                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
+     
 
               </div>
               <div className="col">

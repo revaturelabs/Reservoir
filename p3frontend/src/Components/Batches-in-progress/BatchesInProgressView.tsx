@@ -3,7 +3,6 @@ import "../../stylesheets/batches-in-progress/Calendar.css";
 import "../../stylesheets/batches-in-progress/Table.css";
 import { Row, Col, Table, Container } from "reactstrap";
 import { EasyDropdown } from "../Common/EasyDropdown";
-import { prnt } from "../../Helpers/Prnt";
 import { TimelineRedux } from "./Calendar/Calendar";
 import { ErrorAlert } from "../../Helpers/ErrorAlert";
 import { Batch } from "../../models/Batch";
@@ -15,8 +14,6 @@ import { FilterForm } from "./FilterForm";
 import { convertDateToUTC } from "../../Helpers/convertDateToUTC";
 import { BatchForDisplay } from "./Table/BatchForDisplay";
 import { PageTitleBar } from "../Common/PageTitleBar";
-
-const doPrnt = true; //prnt will work
 
 export class InProgress extends React.Component<any, any> {
   constructor(props: any) {
@@ -139,26 +136,14 @@ export class InProgress extends React.Component<any, any> {
           >
             <Table bordered>
               <thead className="text-white">
-                <th>
-                  Batch
-                </th>
-                <th>
-                  Date
-                </th>
-                <th>
-                  Details
-                </th>
+                <th>Batch</th>
+                <th>Date</th>
+                <th>Details</th>
                 <th></th>
               </thead>
               <tbody>
                 {this.state.filteredBatches.map(
                   (batch: Batch, index: number) => {
-                    console.log(
-                      "filter is " +
-                      this.state.programType +
-                      ", rendering batch " +
-                      batch.batchId
-                    );
                     return (
                       <tr key={index}>
                         <BatchForDisplay batch={batch} parentTop={this} />
@@ -170,52 +155,22 @@ export class InProgress extends React.Component<any, any> {
             </Table>
           </div>
         ) : (
-            <TimelineRedux
-              batches={this.state.filteredBatches}
-              parentTop={this}
-            />
-          )}
-        {/* {this.state.viewType!=='Table'&&<TimelineComponent/>} */}
+          <TimelineRedux
+            batches={this.state.filteredBatches}
+            parentTop={this}
+          />
+        )}
       </Container>
     );
   }
 
   reset = () => {
-    console.log("helsf");
     let batch = this.state.batches;
-    console.log(batch);
+
     this.setState({
       filteredBatches: batch,
     });
   };
-
-  //sorts batchDisplayData using the given object property. batchForDisplay['id']
-  //order is ascending
-  // sortBatches = (propertyAsKey: any) => {
-  //   prnt(doPrnt, `InProgress sortBatches() has been reached`);
-
-  //   if (this.state.sortAscend) {
-  //     this.state.batchDisplayData.sort((a: any, b: any) => {
-  //       //compares numbers and strings. does not do date objects
-  //       if (a[propertyAsKey] < b[propertyAsKey]) {
-  //         return -1;
-  //       }
-  //       return 1;
-  //     });
-  //   } else {
-  //     this.state.batchDisplayData.sort((a: any, b: any) => {
-  //       if (a[propertyAsKey] < b[propertyAsKey]) {
-  //         return 1;
-  //       }
-  //       return -1;
-  //     });
-  //   }
-
-  //   this.setState({
-  //     //cause re-render as well
-  //     sortAscend: !this.state.sortAscend,
-  //   });
-  // };
 
   //fetches batches from the server, converts it to display data, and set it. checks for error edge cases.
   fetchTheBatchData = async () => {
@@ -241,7 +196,6 @@ export class InProgress extends React.Component<any, any> {
         return 0;
       });
 
-      console.log(sortedbatch);
       batchData = sortedbatch;
 
       // getting the selections for the filters from the batches
@@ -269,10 +223,8 @@ export class InProgress extends React.Component<any, any> {
 
       let clients: any[] = [];
       for (let cdList of clientDemandLists) {
-        console.log(cdList);
         for (let cd of cdList) {
           if (clients.indexOf(cd.client.name) === -1) {
-            console.log(cd.client.name);
             clients.push(cd.client.name);
           }
         }
@@ -284,12 +236,6 @@ export class InProgress extends React.Component<any, any> {
             "ERROR. There wasn't a data property in the server response",
         });
       } else {
-        prnt(
-          doPrnt,
-          `fetchTheBatchData() had a response. batchData=`,
-          batchData
-        );
-
         this.setState({
           batches: batchData,
           filteredBatches: batchData,
@@ -307,7 +253,6 @@ export class InProgress extends React.Component<any, any> {
   setProgramType = (
     value: string //filter
   ) => {
-    console.log(`Setting program type: ${value}`);
     this.setState({ programType: value });
   };
 
@@ -334,15 +279,9 @@ export class InProgress extends React.Component<any, any> {
         }
         return false;
       });
-      // this.setState({
-      // 	filteredBatches: filteredBatches,
-      // })
+
       return filteredBatches;
     } else {
-      // let batches = this.state.batches;
-      // this.setState({
-      // 	filteredBatches: this.state.batches,
-      // })
       return batchesToFilter;
     }
   };
@@ -351,13 +290,11 @@ export class InProgress extends React.Component<any, any> {
   filterBatchesByCurriculum = (batchesToFilter: Batch[]) => {
     if (this.state.curriculum !== "(none)") {
       let filtercurr = batchesToFilter;
-      console.log(filtercurr);
+
       let filtered = filtercurr.filter((batch: Batch) => {
         return batch.curriculum.name == this.state.curriculum;
       });
-      console.log(filtered);
 
-      // this.setState({filteredBatches:filtered,
       return filtered;
     } else {
       return batchesToFilter;
@@ -372,9 +309,7 @@ export class InProgress extends React.Component<any, any> {
         let filtered = filtercurr.filter((batch: Batch) => {
           return batch.programType === this.state.programType;
         });
-        console.log(filtered);
 
-        // this.setState({filteredBatches:filtered,
         return filtered;
       } else {
         return batchesToFilter;
@@ -384,7 +319,7 @@ export class InProgress extends React.Component<any, any> {
     }
   };
 
-  //Applies all the filters and sets state
+  //Applies all the filter
   applyFilters = () => {
     let batches = this.state.batches;
     let filteredBatches = this.filterBatchesByProgramType(batches);
