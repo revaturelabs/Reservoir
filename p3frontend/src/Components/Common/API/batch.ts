@@ -1,4 +1,4 @@
-import { Batch } from "../../../models/Batch";
+import { Batch, UnconfirmedBatch } from "../../../models/Batch";
 import { axiosClient } from "./axios";
 
 // Helper function to construct batch from response
@@ -26,6 +26,23 @@ const buildABatch = (respData: any): Batch => {
     curriculum,
     associates,
     programType
+  );
+};
+
+const buildUnconfirmedBatch = (respData: any): UnconfirmedBatch => {
+  const {
+    batch_id,
+    start_date,
+    location,
+    curriculum_name,
+    batch_capacity,
+  } = respData;
+  return new UnconfirmedBatch(
+    batch_id,
+    start_date,
+    location,
+    curriculum_name,
+    batch_capacity
   );
 };
 
@@ -148,6 +165,23 @@ export async function assignTrainer(
     console.log(`Trainer ${trainId} assigned to batch ${bId}`);
   } catch (e) {
     console.log("failed to assign trainer to batch", e.message);
+    throw e;
+  }
+}
+
+//Get batches by confirmed, unconfirmed, committed
+export async function getUnconfirmedBatches(): Promise<UnconfirmedBatch[]> {
+  try {
+    const response = await axiosClient.get("/batches/unconfirmed");
+    const respData = response.data;
+    console.log(respData);
+    const unconfirmedBatches: UnconfirmedBatch[] = respData.map((b: any) => {
+      return buildUnconfirmedBatch(b);
+    });
+    console.log(unconfirmedBatches);
+    return unconfirmedBatches;
+  } catch (e) {
+    console.log(`Failed to retrieve batches: ${e.message}`);
     throw e;
   }
 }

@@ -21,6 +21,7 @@ import {
 } from "reactstrap";
 import { OverviewClientDemand } from "./Components/Supply-demand/OverviewClientDemand";
 import { OverviewTraining } from "./Components/Generate-batches/OverviewTraining";
+import TestChart from "./Components/Supply-demand/test";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { ViewConsentRequests } from "./Components/Currently-unused/ViewConsentRequests";
@@ -181,7 +182,7 @@ export class App extends React.Component<any, any> {
             {
               end: "/batch/demand-overview",
               name: "Supply & Demand",
-              comp: <OverviewClientDemand />,
+              comp: <TestChart />,
             },
             {
               end: "/batch/training-overview",
