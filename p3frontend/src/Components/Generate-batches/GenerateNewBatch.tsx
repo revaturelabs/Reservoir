@@ -103,7 +103,7 @@ export function GenerateNewBatch(props: any) {
                 <div className="row justify-content-center">
                   <input className="btn-primary btn-generate-associates" type="submit" onClick={generateBatch} disabled={(capacity > 0 && reqScore > 0) ? false : true} value="Generate Associates" />
                 </div>
-                <div className="added-trainers-box">
+                <div className="added-associates-box">
 
 
                   {assosiates.map((data: any, index: any) => {
@@ -112,7 +112,7 @@ export function GenerateNewBatch(props: any) {
                     )
                   })}
                 </div>
-     
+
 
               </div>
               <div className="col">
@@ -149,19 +149,15 @@ export function GenerateNewBatch(props: any) {
   function generateBatch() {
     axiosWrapper(`/associates/${reqScore}/score/${capacity}/capacity`, "GET").then((data) => {
       console.log(data);
-      
-      data.forEach((ele:any)=>
-      {
-        if(ele.interviewScore<reqScore)
-        {
+
+      data.forEach((ele: any) => {
+        if (ele.interviewScore < reqScore) {
           console.log(ele.interviewScore)
         }
-        if(ele.batch!=null)
-        {
+        if (ele.batch != null) {
           console.log(ele.batch)
         }
-        if(ele.active)
-        {
+        if (ele.active) {
           console.log(ele.active);
         }
       })

@@ -95,6 +95,21 @@
   cursor: pointer;
 }
 
+/*///////////////////// GENERATE BATCH CONTAINER - ADD TRAINERS /////////////////////*/
+
+.added-associates-box {
+  background-color: #fff;
+  height: 150px;
+  border: solid 1px #000;
+  padding: 10px;
+  margin-top: 5px;
+  overflow-y: scroll;
+}
+
+.added-associates-box p {
+  line-height: 10px;
+}
+
 /*////////////////// DROPDOWNS ///////////////*/
 #dropdown-skills{
   width: 100%;
