@@ -22,8 +22,6 @@ eureka:
 zuul:
   host:
     connect-timeout-millis: 10000
-    socket-timeout-millis: 10000
-    connection-request-timeout-millis: 10000
   routes:    
     eureka:
       path: /eureka/**
@@ -34,4 +32,6 @@ zuul:
     reports:
       path: /reports/**
       service-id: reportsservice
-  
+      
+       
+      
