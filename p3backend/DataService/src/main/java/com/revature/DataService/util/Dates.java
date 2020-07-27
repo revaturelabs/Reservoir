@@ -23,4 +23,12 @@ public class Dates {
 	public static Date getThreeMonthsFromToday() {
 		return new Date(getToday().getTime() + 7889400000L);
 	}	
+	
+	public static Date calcPotentialFutureEndDate(int numWeeks) {
+		long weekInMillis = 604800000L;
+		long dayInMillis = 86400000L;
+		long threeDays = dayInMillis * 3;
+		long duration = weekInMillis * numWeeks;
+		return new Date(getToday().getTime() + (duration - threeDays));
+	}
 }
