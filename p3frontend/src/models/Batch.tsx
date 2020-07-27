@@ -49,18 +49,21 @@ export class UnconfirmedBatch {
   start_date: string;
   location: Location;
   curriculum_name: Curriculum;
+  skillSet_name: string;
 
   constructor(
     batch_id: number,
     batch_capacity: number,
     start_date: string,
     location: Location,
-    curriculum_name: Curriculum
+    curriculum_name: Curriculum,
+    skillSet_name: string
   ) {
     this.batch_id = batch_id;
     this.batch_capacity = batch_capacity;
     this.start_date = start_date;
     this.location = location;
     this.curriculum_name = curriculum_name;
+    this.skillSet_name = skillSet_name;
   }
 }

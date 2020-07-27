@@ -42,12 +42,11 @@ export async function getAllBatches(): Promise<Batch[]> {
   }
 }
 
-export async function getBatchById(bId: number): Promise<Batch> {
+export async function getBatchById(bId: number): Promise<any> {
   try {
     const response = await axiosClient.get(`/batches/${bId}`);
     const respData = response.data;
-    const theBatch: Batch = buildABatch(respData);
-    return theBatch;
+    return respData;
   } catch (e) {
     throw e;
   }

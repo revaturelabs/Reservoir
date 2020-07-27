@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Chart from "react-google-charts";
-import {
-  getTotalSupply,
-  getFilteredSupply,
-} from "../Common/API/clientDemand";
-import { getUnconfirmedBatches } from "../Common/API/batch";
+import { getTotalSupply, getFilteredSupply } from "../Common/API/clientDemand";
+import { getUnconfirmedBatches, getBatchById } from "../Common/API/batch";
+import { ClientDemands } from "../../models/ClientDemands";
 import {
   Dropdown,
   DropdownToggle,
@@ -31,37 +29,42 @@ export default function TestChart() {
     unconfirmed_3m: null,
     unconfirmed_curr: null,
     unconfirmed_supply: null,
+    crossover: null, //crossover variable of skillset and batches unconfirmed
   });
   const [dropdown, setDropdown] = useState({
     selected: "Select an Unconfirmed Batch",
   });
 
+  //all state varialbes for all 3 dropdowns
+
   const [clients, setClients]: [any[], any] = useState([]);
   const [skillSets, setSkillSet]: [any[], any] = useState([]);
-  //these are here temporarily untill we set up the redux store to handle this information
-  //ideally this would be used for the final implementation for more concise readability
+
   const [dropDownOpenClient, setDropDownOpenClient] = useState(false);
   const [dropDownOpenSkill, setDropDownOpenSkill] = useState(false);
   const [dropdownOpenUnconfirmed, setDropdownOpenUnconfirmed] = useState(false);
+
   const [clientDropdownId, setClientDropdownId] = useState(0);
   const [skillsetDropdownId, setSkillsetDropdownId] = useState(0);
   const [unconfirmedDropdownId, setUnconfirmedDropdownId] = useState(0);
+  const [skillMatch, setSkillMatch] = useState({});
+
   const toggleClient = () =>
     setDropDownOpenClient((prevStateClient) => !prevStateClient);
   const toggleSkill = () =>
     setDropDownOpenSkill((prevStateSkill) => !prevStateSkill);
   const toggleUnConfirmed = () =>
     setDropdownOpenUnconfirmed((prevStateSkill) => !prevStateSkill);
+
   const [clientDropItem, setClientDropItem] = useState(undefined);
   const [skillSetDropItem, setSkillSetDropItem] = useState(undefined);
   const [unconfirmedDropItem, setUnconfirmedDropItem] = useState(undefined);
 
-  //STORY POINT FOR TED
+  //For unconfirmed batch data specific
   const [dropdownUnconfirmed, setDropdownUnconfirmed] = useState([0]);
   const [dataUnconfirmed, setDataUnconfirmed]: any = useState();
 
-  //selected: "Select an Unconfirmed Batch",
-
+  //Use Effect one
   useEffect(() => {
     (async () => {
       //await getTotalDemand();
@@ -72,9 +75,12 @@ export default function TestChart() {
     })();
   }, []);
 
+  //Use Effect two
   useEffect(() => {
     (async () => {
       await getMatrixTotal();
+      //batchInfo(unconfirmedDropdownId);
+      //console.log(`calling filter`);
     })();
   }, [skillSetDropItem, clientDropItem, unconfirmedDropItem]);
 
@@ -96,9 +102,24 @@ export default function TestChart() {
     setClientDropdownId(e.target.value);
   };
   //sets the active drop down for skill sets
+  //Logic for unconfirmed backend
   const selectDropItemForSkill = (e: any) => {
     setSkillSetDropItem(e.target.textContent);
     setSkillsetDropdownId(e.target.value);
+
+    if (skillMatch === e.target.textContent || !e.target.value) {
+      console.log("Match!");
+      setGraphData({
+        ...graphData,
+        unconfirmed_supply: graphData.crossover,
+      });
+    } else {
+      console.log("NoMatch!");
+      setGraphData({
+        ...graphData,
+        unconfirmed_supply: null,
+      });
+    }
   };
 
   const selectDropItemForUnconfirmed = (e: any) => {
@@ -130,7 +151,7 @@ export default function TestChart() {
     });
   }
 
-  //STORY POINT FOR TED
+  ///////////Unconfirmed Batch Data
   async function getTotalUnConfirmed() {
     let dropdown = [];
     let unconfirmed = await getUnconfirmedBatches();
@@ -151,31 +172,28 @@ export default function TestChart() {
           batchID = dataUnconfirmed[0][i].batch_id;
           batchDate = dataUnconfirmed[0][i].start_date;
           batchCap = dataUnconfirmed[0][i].batch_capacity;
-          batchSkill = dataUnconfirmed[0][i].curriuclum_name;
+          batchSkill = dataUnconfirmed[0][i].skillSetName;
+          setSkillMatch(batchSkill);
         }
       }
-      //Date Filter by EndDate? I only have start date
-      // let batchDate_OneM = new Date(batchDate).setMonth(
-      //   new Date(batchDate).getMonth() + 2
-      // );
-      setGraphData({
-        ...graphData,
-        unconfirmed_1m: null,
-        unconfirmed_3m: null,
-        unconfirmed_curr: batchCap,
-        unconfirmed_supply: batchCap,
-      });
-    } else {
-      setGraphData({
-        ...graphData,
-        unconfirmed_1m: null,
-        unconfirmed_3m: null,
-        unconfirmed_curr: null,
-        unconfirmed_supply: null,
-      });
+
+      //////Skillset Matching to unconfirmed batch Logic
+      if (!skillsetDropdownId || batchSkill === skillSetDropItem) {
+        setGraphData({
+          ...graphData,
+          crossover: batchCap,
+          unconfirmed_supply: batchCap,
+        });
+      } else {
+        setGraphData({
+          ...graphData,
+          unconfirmed_supply: null,
+        });
+      }
     }
   }
 
+  //RENDERRRR
   return (
     <div>
       <Col>
@@ -281,8 +299,8 @@ export default function TestChart() {
       </Col>
 
       <Chart
-        width={"85vw"}
-        height={"75vh"}
+        width={"80vw"}
+        height={"80vh"}
         chartType="BarChart"
         loader={<div>Loading Chart</div>}
         data={[
@@ -318,12 +336,19 @@ export default function TestChart() {
           ],
         ]}
         options={{
+          title: "Client Demands vs Revature Supply",
           chartArea: { width: "50%" },
           orientation: "horizontal",
           isStacked: true,
           hAxis: {
             title: "Number of Associates",
             minValue: 0,
+          },
+          series: {
+            0: { color: "#F26925" },
+            1: { color: "#FCB414" },
+            2: { color: "#72A4C2" },
+            3: { color: "#474C55" },
           },
         }}
         // For tests
