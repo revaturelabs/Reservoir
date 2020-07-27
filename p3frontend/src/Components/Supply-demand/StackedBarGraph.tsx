@@ -6,7 +6,7 @@ import {
   getTotalSupply,
   getFilteredSupply,
 } from "../Common/API/clientDemand";
-import { getUnconfirmedBatches } from "../Common/API/batch";
+import { getUnconfirmedBatches, getBatchById } from "../Common/API/batch";
 import { ClientDemands } from "../../models/ClientDemands";
 import {
   Dropdown,
@@ -50,6 +50,7 @@ export default function TestChart() {
   const [clientDropdownId, setClientDropdownId] = useState(0);
   const [skillsetDropdownId, setSkillsetDropdownId] = useState(0);
   const [unconfirmedDropdownId, setUnconfirmedDropdownId] = useState(0);
+  const [skillMatch, setSkillMatch] = useState({});
   const toggleClient = () =>
     setDropDownOpenClient((prevStateClient) => !prevStateClient);
   const toggleSkill = () =>
@@ -164,11 +165,11 @@ export default function TestChart() {
           batchSkill = dataUnconfirmed[0][i].curriuclum_name;
         }
       }
-      //Date Filter by EndDate? I only have start date
-      // let batchDate_OneM = new Date(batchDate).setMonth(
-      //   new Date(batchDate).getMonth() + 2
-      // );
-      console.log(batchCap);
+
+      getBatchById(batchID).then((response) => {
+        setSkillMatch(response.curriculum.curriclumSkillset.skillSetName);
+      });
+
       setGraphData({
         ...graphData,
         unconfirmed_1m: null,
