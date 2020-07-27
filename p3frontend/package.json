@@ -60,9 +60,36 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test:coverage": "set CI=true && react-scripts test --coverage",
+    "generatedcoveragepage":"nyc --reporter=lcov --reporter=text-lcov npm run test:coverage",
     "eject": "react-scripts eject"
   },
+
+  "nyc": {
+    "check-coverage": true,
+    "exclude-after-remap":false,
+    "all": true,
+    "extension": [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src/**/!(*.test.*).[tj]s?(x)"
+    ],
+    "exclude": [
+      "src/models/**"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "report-dir": "docs/reports/coverage"
+  },
+
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -77,5 +104,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nyc": "^15.1.0"
   }
 }
