@@ -9,6 +9,7 @@ export const clickTypes = {
   REMOVE_TRAINER_BATCH: "REMOVE_TRAINER_BATCH",
   ADD_ASSOCIATE_BATCH: "ADD_ASSOCIATE_BATCH",
   REMOVE_ASSOCIATE_BATCH: "REMOVE_ASSOCIATE_BATCH",
+  SET_ACTIVE: "SET_ACTIVE"
 };
 
 export const batchClickActionMapper = (batchClicked: Batch) => {
@@ -19,6 +20,17 @@ export const batchClickActionMapper = (batchClicked: Batch) => {
     },
   };
 };
+
+//////// THIS ACTION IS TO SET "GENERATE NEW BATCH NAV BAR ITEM" TO ACTIVE AFTER SUBMITING A NEW BATCH \\\\\\\
+export const setActive = (data: any) => {
+  return {
+    type: clickTypes.BATCH_CLICK,
+    payload: {
+      data,
+    },
+  };
+};
+
 export const currentBatchClickActionMapper = (currentBatchClicked: Batch) => {
   return {
     type: clickTypes.CURRENT_BATCH_CLICK,

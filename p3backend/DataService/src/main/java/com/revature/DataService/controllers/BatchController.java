@@ -33,6 +33,7 @@ import com.revature.DataService.models.Batch;
 import com.revature.DataService.models.BatchState;
 import com.revature.DataService.models.Curriculum;
 import com.revature.DataService.models.Location;
+import com.revature.DataService.repositories.BatchStateRepository;
 import com.revature.DataService.services.BatchService;
 import com.revature.DataService.services.BatchStateService;
 import com.revature.DataService.services.CurriculumService;
@@ -41,7 +42,7 @@ import com.revature.DataService.services.LocationService;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/batches")
-public class BatchController {
+public class BatchController {	
 	@Autowired
 	BatchService batchService;
 
@@ -53,6 +54,9 @@ public class BatchController {
 	
 	@Autowired
 	CurriculumService curriculumService;
+	
+	@Autowired
+	BatchStateRepository batchStateRepo;
 	
 	
 	@GetMapping("/detailed-batch-dto")
@@ -77,7 +81,7 @@ public class BatchController {
 	}
 
 	@PostMapping
-	public ResponseEntity<DetailedBatchDTO> postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {		
+	public ResponseEntity<DetailedBatchDTO> postNewUnconfirmedBatch(@RequestBody @Valid DetailedBatchDTO detailedBatchDTO, Errors errors) {	
 		Curriculum curriculum = curriculumService.getById(detailedBatchDTO.getCurriculum_id());
 		Location location = locationService.getById(detailedBatchDTO.getLocation_id());
 		
@@ -95,6 +99,8 @@ public class BatchController {
 		);
 		
 		batch = batchService.saveUnconfirmedBatch(batch, detailedBatchDTO);
+		if(batch == null)
+			return new ResponseEntity<DetailedBatchDTO>(detailedBatchDTO, HttpStatus.FORBIDDEN);
 		detailedBatchDTO.setBatch_id(batch.getBatchId());
 		return new ResponseEntity<DetailedBatchDTO>(detailedBatchDTO,HttpStatus.CREATED);
 	}
@@ -138,10 +144,12 @@ public class BatchController {
 	}
 	
 	@GetMapping("/batch-states/{id}")
-	public BatchState getBatchStateById(@PathVariable int id) {
-		return batchStateService.getById(id);
+	public ResponseEntity<BatchState> getBatchStateById(@PathVariable int id) {
+		BatchState state = batchStateService.getById(id);
+		if(state != null)
+			return new ResponseEntity<BatchState>(state, HttpStatus.OK);
+		return new ResponseEntity<BatchState>(state, HttpStatus.NOT_FOUND);
 	}
-
 
 	@PatchMapping("{id}")
 	public ResponseEntity<Batch> updateBatchWithId(@RequestBody UpdateBatchDto dto, @PathVariable Integer id) {
@@ -153,6 +161,8 @@ public class BatchController {
 				if (state != null) {
 					oldBatch.setState(state);
 					newBatch = batchService.updateBatch(oldBatch);
+					if(newBatch == null)
+						return new ResponseEntity<Batch>(new Batch(), HttpStatus.FORBIDDEN);
 					return new ResponseEntity<>(newBatch, HttpStatus.OK);
 				}
 			}

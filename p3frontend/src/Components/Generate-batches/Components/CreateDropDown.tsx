@@ -15,10 +15,15 @@ export function CreateDropDown(props :any)
     
     //Get NEEDED data from the props
     let keyVal:Array<any>=props.records;
+
+    if(keyVal.length && keyVal[0]==="empty")
+    {
+        keyVal=[];
+    }
     if(props.records.length!=0)
     {
     return(
-            <select key={props.keyValue[0]} onChange={props.handler} defaultValue={props.defaultVal? props.defaultVal:"none"} id={props.myId?props.myId:"DropDown"}>
+            <select key={props.keyValue[0]} onChange={props.handler} defaultValue={props.defaultVal? props.defaultVal:"none"} id={props.myId?props.myId:"id_of_drop_down"}>
                 <option value="none" disabled hidden key={props.keyValue[1]}>{props.defaultMessage}</option>
                 {keyVal.map((data:any, id)=>
                     {

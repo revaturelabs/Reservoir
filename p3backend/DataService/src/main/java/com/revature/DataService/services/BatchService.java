@@ -25,6 +25,7 @@ import com.revature.DataService.repositories.TrainerRepository;
 public class BatchService {
 	private final String UNCONFIRMED_STATE = "unconfirmed";
 	private final String CONFIRMED_STATE = "confirmed";
+	private final String COMMITTED_STATE = "committed";
 
 	@Autowired
 	BatchRepository batchRepository;
@@ -102,6 +103,10 @@ public class BatchService {
 	// currently handles save and update.
 	public Batch saveUnconfirmedBatch(Batch batch, DetailedBatchDTO detailedBatchDTO) {
 		Optional<Batch> existingBatch = batchRepository.findById(batch.getBatchId());
+		BatchState committedState = batchStateRepo.findByState(COMMITTED_STATE);
+		if(existingBatch.isPresent())
+			if(existingBatch.get().getState().getId() == committedState.getId()) 
+				return null;
 		BatchState state = batchStateRepo.findByState(UNCONFIRMED_STATE);
 		batch.setState(state);
 		if(existingBatch.isPresent()) {
@@ -188,8 +193,13 @@ public class BatchService {
 	public Batch updateBatch(Batch batch) throws Exception {
 		Integer id = batch.getBatchId();
 
+		BatchState committedState = batchStateRepo.findByState(COMMITTED_STATE);
+		
 		Optional<Batch> existingBatch = batchRepository.findById(id);
 		if (existingBatch.isPresent()) {
+			
+			if(existingBatch.get().getState().getId() == committedState.getId()) 
+				return null;
 			return batchRepository.save(batch);
 		} else {
 			throw new Exception("batch failed to update");

@@ -22,9 +22,11 @@ export function FinalizeSpecificBatch(props:any)
   const [modifiedBatch, setModifiedBatch]:any=useState({});
 
   const [staticTrainers, setStaticTrainers]=useState([]);
-  const [currentTrainerList,setCurrentTrainerList]=useState([]);
+  const [currentTrainerList,setCurrentTrainerList]:any=useState([]);
   const [selectedTrainer, setSelectedTrainer]:any=useState();
 
+  //For tracking a useEffect
+  const [increment,setIncrement]:any=useState(0);
   let today = new Date();
   //THe backend requires us to add 1 to the day before we submit it
   let formatedDate= today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()).padStart(2, '0');
@@ -63,7 +65,7 @@ export function FinalizeSpecificBatch(props:any)
         axiosWrapper("/location","GET").then((data)=>{
           setLocations(data)
         })
-        axiosWrapper("/skillsets","GET").then((data)=>{
+        axiosWrapper("/curricula","GET").then((data)=>{
           setSkillSet(data)
         })
 
@@ -76,7 +78,7 @@ export function FinalizeSpecificBatch(props:any)
            {
              for (let i=0;i<trainerIds.length;i++)
              {
-               if (trainerIds[i]==element.trainer_ids)
+               if (trainerIds[i]==element.trainer_id)
                 {
                   return false;
                 }
@@ -93,19 +95,26 @@ export function FinalizeSpecificBatch(props:any)
                }
              )
            }
-    
            setCurrentTrainerList(initialDropDown)
         })
     })
   },[])
 
+  useEffect(()=>{
+    if(currentTrainerList==["empty"])
+    {
+      let element:any=document.getElementById("changeValues1")
+      element.value="none"
+    }
+  },[increment])
+  
   return(
     <div>
           <label>Location</label>
           <CreateDropDown records={locations} handler={locHandler} keyValue={["locationId","locationName"]} defaultMessage="Select Location" defaultVal={modifiedBatch.location_id}/>
 
-          <label>Skill</label>
-          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["skillSetId","name"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curriculum_id}/>
+          <label>Curriculum</label>
+          <CreateDropDown records={skillSet} handler={skillHandler} keyValue={["curriculumId","name"]} defaultMessage="Select Skill" defaultVal={modifiedBatch.curriculum_id}/>
 
           <label>Start Date:</label>
           <input type="date" name="date" min={formatedDate} max="2050-04-30" defaultValue={modifiedBatch.start_date} onChange={startDateHandler}/>
@@ -134,9 +143,8 @@ export function FinalizeSpecificBatch(props:any)
               {
                 let findName:any=staticTrainers.filter((ele:any)=>ele.trainer_id==data);
                 findName=findName[0];
-         
                 return(
-                  <h5 key={index}>{"Trainer "+(parseInt(index)+1)+":"+findName.firstName+" "+findName.lastName}</h5>
+                  <p key={index} onClick={(e:any) => {removeTrainerHandler(e, findName.trainer_id)}}>{"Trainer "+(parseInt(index)+1)+":"+findName.firstName+" "+findName.lastName}</p>
                 )
               })
               )
@@ -148,13 +156,63 @@ export function FinalizeSpecificBatch(props:any)
 
     </div>
   )
-    
+  function toggleSave()
+  {
+    ///make sure batch has load
+    if(Object.keys(modifiedBatch).length)
+    {
+      //if(modifiedBatch.required_score>=0 $$ modifiedBatch)
+    }
+  }
+
+  function removeTrainerHandler(e:any,trainer_id:any):any
+  {
+    let trainerIds=[...modifiedBatch.trainer_ids];
+    trainerIds=trainerIds.filter((ele)=>ele!=trainer_id);
+    setModifiedBatch({...modifiedBatch,"trainer_ids":trainerIds});
+
+    //Add it back to the dop down list now that is has been removed from the object
+    let a:any=staticTrainers.filter((element:any)=>
+    {
+      for (let i=0;i<trainerIds.length;i++)
+      {
+        if (trainerIds[i]==element.trainer_id)
+         {
+           return false;
+         }
+      }
+      return true; 
+    })
+    let initialDropDown:any=[];
+    for(let i=0;i<a.length;i++)
+    {
+      initialDropDown.push(
+        {
+          "trainer_id":a[i].trainer_id,
+          "name":a[i].firstName+" "+a[i].lastName
+        }
+      )
+    }
+    setCurrentTrainerList(initialDropDown)
+
+    //Reset default values
+    if(currentTrainerList.length)
+    {
+      let element:any=document.getElementById("changeValues1")
+      console.log(element)
+      if(element)
+      {
+      element.value="none"
+      }
+    }
+    setSelectedTrainer();
+  }
+
+
   function addTrainerHandler()
   {
     setModifiedBatch({...modifiedBatch, "trainer_ids":[...modifiedBatch.trainer_ids,parseInt(selectedTrainer)]});
     
-    
-
     let trainerIds=[...modifiedBatch.trainer_ids,parseInt(selectedTrainer)];
     let removedIndex;
     let a:any=staticTrainers.filter((element:any,index:number)=>
@@ -169,8 +227,8 @@ export function FinalizeSpecificBatch(props:any)
       }
       return true; 
     })
-    console.log(removedIndex)
-    console.log(a)
+
+   
     let initialDropDown:any=[];
 
     for(let i=0;i<a.length;i++)
@@ -185,7 +243,10 @@ export function FinalizeSpecificBatch(props:any)
     if(initialDropDown.length)
     {
       let element:any=document.getElementById("changeValues1")
+      if(element)
+      {
       element.value="none"
+      }
     }
     setSelectedTrainer();
     setCurrentTrainerList(initialDropDown)
@@ -200,8 +261,36 @@ export function FinalizeSpecificBatch(props:any)
   }
   function skillHandler(e:any)
   {
-    setModifiedBatch({...modifiedBatch, "curriculum_id":e.target.value})
 
+    setModifiedBatch({...modifiedBatch, "curriculum_id":e.target.value,"trainer_ids":[]})
+    axiosWrapper("trainer/curriculum/"+e.target.value,"GET").then((data:any)=>{
+      setStaticTrainers(data)
+      let displayedList:any=[];
+      if(data)
+      {
+        data.forEach((e:any,i:any)=>{
+          displayedList.push
+          ({
+            "trainer_id":data[i].trainer_id,
+            "name":data[i].firstName+" "+data[i].lastName
+          })
+        })
+      }
+      if (!displayedList.length)
+      {
+        setCurrentTrainerList(["empty"]);
+        let a=JSON.parse(JSON.stringify(increment))
+        setIncrement(a+1);
+      }
+      else
+      {
+        setCurrentTrainerList(displayedList)
+      }
+      
+    })
+    
+
+    
   }
 
   function startDateHandler(e:any)
@@ -232,7 +321,7 @@ export function FinalizeSpecificBatch(props:any)
     //save our data
     axiosWrapper("/batches","POST",saveObject).then((data)=>{
       //Redirect to batchs
-      console.log(modifiedBatch);
+  
       props.setView(0);
     })
 
