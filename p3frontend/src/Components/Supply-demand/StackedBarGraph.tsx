@@ -35,6 +35,7 @@ export default function TestChart() {
     unconfirmed_3m: null,
     unconfirmed_curr: null,
     unconfirmed_supply: null,
+    crossover: null, //crossover variable of skillset and batches unconfirmed
   });
   const [dropdown, setDropdown] = useState({
     selected: "Select an Unconfirmed Batch",
@@ -106,13 +107,26 @@ export default function TestChart() {
   const selectDropItemForSkill = (e: any) => {
     setSkillSetDropItem(e.target.textContent);
     setSkillsetDropdownId(e.target.value);
+
+    if (skillMatch === e.target.textContent || !e.target.value) {
+      console.log("Match!");
+      setGraphData({
+        ...graphData,
+        unconfirmed_supply: graphData.crossover,
+      });
+    } else {
+      console.log("NoMatch!");
+      setGraphData({
+        ...graphData,
+        unconfirmed_supply: null,
+      });
+    }
   };
 
   const selectDropItemForUnconfirmed = (e: any) => {
     setUnconfirmedDropItem(e.target.textContent);
     setUnconfirmedDropdownId(e.target.value);
     batchInfo(e.target.value);
-    //console.log(e.target.value);
   };
 
   //Uses backend skill matrix to get total demand, total committed and total confirmed split up into 1m, 3m, current and total supply
@@ -152,43 +166,38 @@ export default function TestChart() {
 
   function batchInfo(id: number) {
     let batchID, batchDate, batchCap, batchSkill;
-    //console.log(id);
-    //console.log(dataUnconfirmed[0][0].batch_id);
 
     if (dataUnconfirmed) {
       for (let i = 0; i < dataUnconfirmed[0].length; i++) {
         if (id == dataUnconfirmed[0][i].batch_id) {
           batchID = dataUnconfirmed[0][i].batch_id;
-          console.log(batchID);
           batchDate = dataUnconfirmed[0][i].start_date;
           batchCap = dataUnconfirmed[0][i].batch_capacity;
           batchSkill = dataUnconfirmed[0][i].curriuclum_name;
         }
       }
-
-      getBatchById(batchID).then((response) => {
-        setSkillMatch(response.curriculum.curriclumSkillset.skillSetName);
-      });
-
-      setGraphData({
-        ...graphData,
-        unconfirmed_1m: null,
-        unconfirmed_3m: null,
-        unconfirmed_curr: batchCap,
-        unconfirmed_supply: batchCap,
-      });
-    } else {
-      setGraphData({
-        ...graphData,
-        unconfirmed_1m: null,
-        unconfirmed_3m: null,
-        unconfirmed_curr: null,
-        unconfirmed_supply: null,
-      });
+      if (batchID) {
+        getBatchById(batchID).then((response) => {
+          setSkillMatch(response.curriculum.curriculumSkillset.skillSetName);
+        });
+      }
+      console.log(skillMatch);
+      console.log(skillSetDropItem);
+      console.log(skillsetDropdownId);
+      if (!skillsetDropdownId || skillMatch === skillSetDropItem) {
+        setGraphData({
+          ...graphData,
+          crossover: batchCap,
+          unconfirmed_supply: batchCap,
+        });
+      } else {
+        setGraphData({
+          ...graphData,
+          unconfirmed_supply: null,
+        });
+      }
     }
   }
-  console.log(dataUnconfirmed && dataUnconfirmed[0]);
-  //console.log(graphData);
 
   return (
     <div>
