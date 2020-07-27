@@ -30,7 +30,7 @@
 
 /* When link is clicked will set element to active and take this color */
 #generate-new-batch-active {
-  color: rgb(247, 105, 62);
+  color: rgba(242, 105, 38);
 }
 
 .generate-batch-nav-link {
@@ -39,7 +39,7 @@
 }
 
 .generate-batch-nav-link:hover {
- color: rgb(253, 130, 92);
+ color: rgb(187, 187, 187);
  cursor: pointer; 
 }
 
@@ -54,9 +54,9 @@
 
 .generate-new-batch-input {
   margin-bottom: 10px;
-
 }
 
+/*///////////////////// GENERATE BATCH CONTAINER - OPTIONAL /////////////////////*/
 .generate-new-batch-optional-container {
   background-color: rgba(165, 165, 165, 0.267);
   margin-top: 10px;
@@ -67,22 +67,78 @@
   border-bottom: 2px solid rgb(146, 146, 146);
   max-width: 90%;
   margin: auto;
+  margin-bottom: 15px;
   font-weight: 600;
   padding: 10px;
 }
 
+/*///////////////////// GENERATE BATCH CONTAINER - ADD TRAINERS /////////////////////*/
+
 .btn-add-trainer {
   margin-left: 5px;
-}
-
-.select-trainer-dropdown {
-  width: 79%;
 }
 
 .added-trainers-box {
   background-color: #fff;
   height: 150px;
   border: solid 1px #000;
-  padding: 5px;
+  padding: 10px;
   margin-top: 5px;
 }
+
+.added-trainers-box p {
+  line-height: 10px;
+}
+
+.added-trainers-box p:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/*////////////////// DROPDOWNS ///////////////*/
+#dropdown-skills{
+  width: 100%;
+}
+
+#dropdown-location{
+  width: 100%;
+}
+
+/* Trainers dropdown */
+#changeValues1{
+  width: 79%;
+}
+
+/*////////////// FINILIZE BATCH ////////////*/
+
+/*//////////////////// FINILIZE BATCH - BUTTONS //////////////////*/
+
+.finilize-batch-delete {
+  float: left;
+}
+
+.finilize-batch-update {
+  display: block;
+  margin: auto;
+}
+
+.finilize-batch-confirm {
+  float: right;
+}
+
+.finilize-batch-table-header th {
+  color: #fff;
+  font-weight: 600;
+}
+
+.finilize-batch-table-container {
+  overflow-y: scroll;
+  height: 300px;
+}
+
+.finilize-batch-table.sticky th {
+position: sticky;
+top: 0;
+background-color: rgba(242, 105, 38);
+}
+
