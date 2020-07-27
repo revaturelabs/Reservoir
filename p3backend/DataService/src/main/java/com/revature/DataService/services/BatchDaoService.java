@@ -23,4 +23,9 @@ public class BatchDaoService
 	{
 		return repo.save(b);
 	}
+	
+	public void deleteBatch(Integer batchId)
+	{
+		repo.deleteById(batchId);
+	}
 }
