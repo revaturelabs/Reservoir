@@ -35,7 +35,7 @@ public class SkillSetService {
 		Optional<ClientDemand> demand = clientDemandRepo.findByClientDemandIdAndDeadlineGreaterThanEqual(clientId,
 				today.toLocalDate());
 		
-		dto.setTotal_demand(demand.isPresent() ? dto.getTotal_demand() : 0);
+		dto.setTotal_demand(demand.isPresent() ? demand.get().getQuantity() : 0);
 		dto.setCommitted(populateSkillMatrix(1, today));
 		dto.setConfirmed(populateSkillMatrix(2, today));
 
@@ -52,7 +52,7 @@ public class SkillSetService {
 				today.toLocalDate(),skillsetId);
 
 		
-		dto.setTotal_demand(demand.isPresent() ? dto.getTotal_demand() : 0);
+		dto.setTotal_demand(demand.isPresent() ? demand.get().getQuantity() : 0);
 		dto.setCommitted(populateSkillMatrix(1, skillsetId, today));
 		dto.setConfirmed(populateSkillMatrix(2, skillsetId, today));
 		
