@@ -79,6 +79,13 @@ export function DisplayBatchs(props: any) {
     function handleConfirm() {
         let removeSingleBatch = [...batch];
 
+        axiosWrapper(`/batches/${props.batch}/confirm`, "GET").then(() => {
+            //update the local state
+            setBatch(removeSingleBatch.filter((value, index) => { return value.batchId != props.batch }));
+
+            props.setBatch();
+        })
+
     }
     function handleDelete() {
         let removeSingleBatch = [...batch];
