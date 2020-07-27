@@ -30,7 +30,7 @@
 
 /* When link is clicked will set element to active and take this color */
 #generate-new-batch-active {
-  color: rgb(247, 105, 62);
+  color: rgba(242, 105, 38);
 }
 
 .generate-batch-nav-link {
@@ -39,7 +39,7 @@
 }
 
 .generate-batch-nav-link:hover {
- color: rgb(253, 130, 92);
+ color: rgb(187, 187, 187);
  cursor: pointer; 
 }
 
@@ -114,18 +114,31 @@
 /*//////////////////// FINILIZE BATCH - BUTTONS //////////////////*/
 
 .finilize-batch-delete {
-  float: inline-start;  
+  float: left;
 }
 
 .finilize-batch-update {
-
+  display: block;
+  margin: auto;
 }
 
 .finilize-batch-confirm {
-  
+  float: right;
 }
 
-.finilize-batch-table-header {
+.finilize-batch-table-header th {
   color: #fff;
+  font-weight: 600;
+}
+
+.finilize-batch-table-container {
+  overflow-y: scroll;
+  height: 300px;
+}
+
+.finilize-batch-table.sticky th {
+position: sticky;
+top: 0;
+background-color: rgba(242, 105, 38);
 }
 

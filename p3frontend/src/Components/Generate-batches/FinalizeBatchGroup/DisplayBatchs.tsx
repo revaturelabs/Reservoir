@@ -8,7 +8,7 @@ import { allTheMapStateToProps } from "../../../redux/reducers";
 ////////////////////////////////////
 export function DisplayBatchs(props: any) {
     const [batch, setBatch]: any = useState([]);
-    const [selectedBatch, setSelectedBatch]: any = useState(-1);
+    const [selectedBatch, setSelectedBatch]: any = useState();
 
     useEffect(() => {
         axiosWrapper("/batches/uncommited", "GET").then((data) => {
@@ -26,15 +26,16 @@ export function DisplayBatchs(props: any) {
     ];
 
     return (
+
         <div className="container-fluid">
-            <div className="card">
-                <h3 className="text-center">Unconfirmed Batches</h3>
-                <table className="table table-striped">
+            <h3 className="text-center">Unconfirmed Batches</h3>
+            <div className="card finilize-batch-table-container">
+                <table className="table table-striped finilize-batch-table sticky">
                     <thead className="finilize-batch-table-header">
                         <tr>
                             {tableTittle.map((data, index) => {
                                 return (
-                                    <td key={index}>{data}</td>
+                                    <th key={index}>{data}</th>
                                 )
                             })}
                         </tr>
@@ -53,7 +54,12 @@ export function DisplayBatchs(props: any) {
                             return (
                                 <tr key={index} onClick={() => {
                                     props.setBatch(data.batchId);
-                                }}>
+                                }}
+
+                                    style={colorBac ? { backgroundColor: "gray", color: "#fff" } : { backgroundColor: "" }}
+
+                                >
+
                                     <td key={1}>{data.location.locationName}</td>
                                     <td key={2}>{data.curriculum.name}</td>
                                     <td key={3}>{data.startDate}</td>
@@ -64,14 +70,15 @@ export function DisplayBatchs(props: any) {
 
                     </tbody>
                 </table>
-
-                <div className="row justify-content-center">
-                    {allButtons.map((data: any, index: any) => {
-                        return (
+            </div>
+            <div className="row justify-content-center">
+                {allButtons.map((data: any, index: any) => {
+                    return (
+                        <div className="col">
                             <button key={index} className={`finilize-batch-buttons ${data[2]}`} disabled={props.batch ? false : true} onClick={data[1]}>{data[0]}</button>
-                        )
-                    })}
-                </div>
+                        </div>
+                    )
+                })}
             </div>
         </div>
     )
