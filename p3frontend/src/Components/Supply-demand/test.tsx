@@ -274,7 +274,7 @@ export default function TestChart() {
                   key="No Unconfirmed"
                   onClick={(e) => selectDropItemForUnconfirmed(e)}
                 >
-                  Clear Unconfirmed Batches
+                  No Batch Selected
                 </DropdownItem>
                 {dropdownUnconfirmed &&
                   dropdownUnconfirmed.map((s: any) => {
@@ -283,7 +283,7 @@ export default function TestChart() {
                         value={s}
                         onClick={(e) => selectDropItemForUnconfirmed(e)}
                       >
-                        {s}
+                        Batch {s}
                       </DropdownItem>
                     );
                   })}
