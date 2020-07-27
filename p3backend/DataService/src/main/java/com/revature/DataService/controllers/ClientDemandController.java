@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.DataService.models.ClientDemand;
 import com.revature.DataService.repositories.ClientDemandRepo;
 
+@CrossOrigin
 @RestController
 public class ClientDemandController {
   // Cut out the middleman, go straight to the repo!

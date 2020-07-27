@@ -13,7 +13,7 @@ import com.revature.DataService.models.BatchDAO;
 import com.revature.DataService.services.BatchDaoService;
 
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 public class BatchDAOController {
 	 

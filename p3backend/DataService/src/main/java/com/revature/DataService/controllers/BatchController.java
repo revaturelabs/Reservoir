@@ -39,7 +39,7 @@ import com.revature.DataService.services.BatchStateService;
 import com.revature.DataService.services.CurriculumService;
 import com.revature.DataService.services.LocationService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/batches")
 public class BatchController {	
