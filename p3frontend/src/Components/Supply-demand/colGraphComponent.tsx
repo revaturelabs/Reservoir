@@ -10,7 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import TestChart from "./test";
+import TestChart from "./StackedBarGraph";
 
 export default function ColumnChartTest(){
   return <TestChart />
