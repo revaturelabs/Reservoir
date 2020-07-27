@@ -10,6 +10,7 @@ public class BatchDTO {
 	private String curriculum_name;
 	private int batch_capacity;
 	
+	
 	public BatchDTO() {
 		super();
 	}

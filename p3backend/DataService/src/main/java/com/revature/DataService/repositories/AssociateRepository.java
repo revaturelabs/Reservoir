@@ -3,6 +3,7 @@ package com.revature.DataService.repositories;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -27,6 +28,6 @@ public interface AssociateRepository extends JpaRepository<Associate, Integer> {
   
   List<Associate> findByBatchBatchId(int id);
   
-  
+  List<Associate> findTop50ByBatchIsNullAndInterviewScoreGreaterThanEqual( double score);
   
 }
