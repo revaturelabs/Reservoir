@@ -54,15 +54,6 @@ public class BatchDTO {
 	public void setCurriculum_name(String curriculum_name) {
 		this.curriculum_name = curriculum_name;
 	}
-	
-	public String getSkillSetName() {
-		return skillSetName;
-	}
-
-	public void setSkillSetName(String skillSetName) {
-		this.skillSetName = skillSetName;
-	}
-
 	public int getBatch_capacity() {
 		return batch_capacity;
 	}
