@@ -173,18 +173,15 @@ export default function TestChart() {
           batchID = dataUnconfirmed[0][i].batch_id;
           batchDate = dataUnconfirmed[0][i].start_date;
           batchCap = dataUnconfirmed[0][i].batch_capacity;
-          batchSkill = dataUnconfirmed[0][i].curriuclum_name;
+          batchSkill = dataUnconfirmed[0][i].skillSetName;
+          setSkillMatch(batchSkill);
         }
       }
-      if (batchID) {
-        getBatchById(batchID).then((response) => {
-          setSkillMatch(response.curriculum.curriculumSkillset.skillSetName);
-        });
-      }
-      console.log(skillMatch);
+
+      console.log(batchSkill);
       console.log(skillSetDropItem);
       console.log(skillsetDropdownId);
-      if (!skillsetDropdownId || skillMatch === skillSetDropItem) {
+      if (!skillsetDropdownId || batchSkill === skillSetDropItem) {
         setGraphData({
           ...graphData,
           crossover: batchCap,
