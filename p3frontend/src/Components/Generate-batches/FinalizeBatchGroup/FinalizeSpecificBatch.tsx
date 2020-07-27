@@ -199,7 +199,7 @@ export function FinalizeSpecificBatch(props:any)
     if(currentTrainerList.length)
     {
       let element:any=document.getElementById("changeValues1")
-      console.log(element)
+
       if(element)
       {
       element.value="none"
