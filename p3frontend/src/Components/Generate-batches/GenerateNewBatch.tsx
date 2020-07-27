@@ -152,7 +152,24 @@ export function GenerateNewBatch(props: any) {
 
 
   function generateBatch() {
-    axiosWrapper(`/${reqScore}/score/${capacity}/capacity`, "GET").then((data) => {
+    axiosWrapper(`/associates/${reqScore}/score/${capacity}/capacity`, "GET").then((data) => {
+      console.log(data);
+      
+      data.forEach((ele:any)=>
+      {
+        if(ele.interviewScore<reqScore)
+        {
+          console.log(ele.interviewScore)
+        }
+        if(ele.batch!=null)
+        {
+          console.log(ele.batch)
+        }
+        if(ele.active)
+        {
+          console.log(ele.active);
+        }
+      })
       setAssosiates(data);
     })
 
@@ -323,12 +340,12 @@ export function GenerateNewBatch(props: any) {
       "start_date": dataBaseDate,
       "end_date": endDate,
       "batch_duration": parseInt(ammountOfWeeks),
-      "batch_capacity": capacity,
+      "batch_capacity": parseInt(capacity),
       "required_score": reqScore,
       "associate_ids": assosiateIds,
       "trainer_ids": trainerArray
     };
-
+    console.log(assosiateIds)
 
     console.log(saveObject)
 
