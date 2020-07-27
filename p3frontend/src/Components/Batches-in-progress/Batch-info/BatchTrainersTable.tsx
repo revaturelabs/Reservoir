@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Spinner } from "reactstrap";
 import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
-import { prnt } from "../../../Helpers/Prnt";
 import { axiosClient } from "../../Common/API/axios";
 import { DualTables } from "./DualTables";
 import { connect } from "react-redux";
@@ -11,9 +10,6 @@ import { getAllTrainers } from "../../Common/API/consent";
 import { allTheMapStateToProps } from "../../../redux/reducers";
 import { allTheActionMappers } from "../../../redux/action-mapper";
 import { store } from "../../../redux/store";
-import { PageTitleBar } from "../../Common/PageTitleBar";
-
-const doPrnt = true; //prnt may be toggled
 
 /*
   <BatchAssocTable currentBatch={aBatchObject}/>
@@ -47,12 +43,9 @@ export class BatchTrainersTable extends React.Component<
   }
 
   componentDidMount = async () => {
-    console.log(`BatchTrainersTable componentDidMount() has been reached`);
     let trains: Trainer[] = [];
     try {
       trains = await getAllTrainers();
-
-      prnt(true, `trains=`, trains);
 
       //props.currentBatch does not exist here for some reason
       // trains = trains.filter((trainer: Trainer) => {
@@ -64,7 +57,6 @@ export class BatchTrainersTable extends React.Component<
         isLoaded: true,
       });
     } catch (e) {
-      prnt(true, `Catch e=${e.emssage}`);
       this.setState({
         errorObject: e,
         errorMessage: "Could not retrieve all trainers",
@@ -73,8 +65,6 @@ export class BatchTrainersTable extends React.Component<
   };
 
   render() {
-    prnt(doPrnt, `BatchTrainersTable render() has been reached`);
-
     if (this.props.currentBatch == null)
       return <>BatchTrainersTable this.props.currentBatch is null</>;
 
@@ -102,7 +92,6 @@ export class BatchTrainersTable extends React.Component<
             onMoveToRight={(item) => this.updateTraierBatch(item, true)}
             messageLeft="None in the system"
             messageRight="None assigned to this batch"
-            // arrayLeft={this.state.allTrainers}
             arrayLeft={trains}
             arrayRight={this.props.currentBatch.trainers}
             headerLeft={
@@ -138,8 +127,6 @@ export class BatchTrainersTable extends React.Component<
       false, the assoc is assigned to no batch at all. null
   */
   updateTraierBatch = async (train: Trainer, moveToBatch: boolean) => {
-    prnt(doPrnt, `BatchTrainersTable updateTraierBatch() has been reached`);
-
     try {
       if (moveToBatch) {
         let request = {
@@ -147,10 +134,7 @@ export class BatchTrainersTable extends React.Component<
           batchId: this.props.currentBatch.batchId,
         };
 
-        prnt(doPrnt, `post request=`, request);
-
         let response = await axiosClient.post("/trainerBatch", request);
-        prnt(doPrnt, `response.data=${response.data}`);
 
         this.props.addTrainerToBatchActionMapper(
           store.getState().batch.batch,
@@ -163,10 +147,6 @@ export class BatchTrainersTable extends React.Component<
             batchId: this.props.currentBatch.batchId,
           },
         };
-        prnt(doPrnt, `delete request=`, request);
-
-        let response = await axiosClient.delete("/trainerBatch", request);
-        prnt(doPrnt, `response.data=${response.data}`);
 
         this.props.removeTrainerFromBatchActionMapper(
           store.getState().batch.batch,

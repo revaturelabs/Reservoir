@@ -31,5 +31,7 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
   public List<Batch> findByStateState(String batchName);
   
   public List<Batch> findByStateId(int id);
+  
+  public List<Batch> findByStateIdAndCurriculumCurriculumSkillsetSkillSetId(int stateId, int skillsetId);
 
 }
