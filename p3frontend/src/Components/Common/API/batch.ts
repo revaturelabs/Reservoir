@@ -29,23 +29,6 @@ const buildABatch = (respData: any): Batch => {
   );
 };
 
-const buildUnconfirmedBatch = (respData: any): UnconfirmedBatch => {
-  const {
-    batch_id,
-    start_date,
-    location,
-    curriculum_name,
-    batch_capacity,
-  } = respData;
-  return new UnconfirmedBatch(
-    batch_id,
-    start_date,
-    location,
-    curriculum_name,
-    batch_capacity
-  );
-};
-
 export async function getAllBatches(): Promise<Batch[]> {
   try {
     const response = await axiosClient.get("/batches");
@@ -173,12 +156,7 @@ export async function assignTrainer(
 export async function getUnconfirmedBatches(): Promise<UnconfirmedBatch[]> {
   try {
     const response = await axiosClient.get("/batches/unconfirmed");
-    const respData = response.data;
-    console.log(respData);
-    const unconfirmedBatches: UnconfirmedBatch[] = respData.map((b: any) => {
-      return buildUnconfirmedBatch(b);
-    });
-    console.log(unconfirmedBatches);
+    const unconfirmedBatches = response.data;
     return unconfirmedBatches;
   } catch (e) {
     console.log(`Failed to retrieve batches: ${e.message}`);
