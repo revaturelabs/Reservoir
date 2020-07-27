@@ -6,43 +6,6 @@ import '../../stylesheets/spinner.css';
 interface ISpinnerProps {
   area:string
 }
-// export class Spinner extends React.Component<ISpinnerProps, any> {
-
-//   constructor(props:ISpinnerProps){
-//     super(props);
-//   }
-  
-
-//   getPromiseInProgress = () =>{
-//     const {promiseInProgress} = usePromiseTracker({area: this.props.area});
-//     return promiseInProgress;
-//   }
-   
-
-//   render(){
-//     let promiseInProgress =this.getPromiseInProgress()
-//     if(promiseInProgress){
-//       return(
-//         <div className="spinner">
-//           <Loader type="ThreeDots" color="#2BAD60" height={100} width={100} />
-//         </div>
-//       )
-//     } else{
-//       return (
-//         <></>
-//       )
-//     }
-//   }
-  
-//   // return (
-//   //   {promiseInProgress} && (
-//   //     <div className="spinner">
-//   //       <Loader type="ThreeDots" color="#2BAD60" height={100} width={100} />
-//   //     </div>
-//   //   )
-//   // );
-// };
-
 
 export const Spinner = ({area} : ISpinnerProps) => {
   
@@ -59,11 +22,4 @@ export const Spinner = ({area} : ISpinnerProps) => {
       <></>
     )
   }
-  // return (
-  //   {promiseInProgress} && (
-  //     <div className="spinner">
-  //       <Loader type="ThreeDots" color="#2BAD60" height={100} width={100} />
-  //     </div>
-  //   )
-  // );
 };

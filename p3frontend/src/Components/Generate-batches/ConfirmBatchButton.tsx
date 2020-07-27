@@ -29,7 +29,6 @@ class ConfirmBatchButton extends React.Component<
         const newBatch = await updateBatch(this.props.batch.batchId, confData);
         this.props.batchUpdateActionMapper(newBatch);
       } catch (e) {
-        console.log("Confirm click failed", e.message);
       }
     } else {
       alert("No batch selected. Confirm click failed");

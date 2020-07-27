@@ -16,7 +16,6 @@ import { Batch } from "../../../models/Batch";
 import { ErrorAlert } from "../../../Helpers/ErrorAlert";
 import { axiosClient } from "../../Common/API/axios";
 import { BatchTrainersTableRedux } from "../Batch-info/BatchTrainersTable";
-import { store } from "../../../redux/store";
 import { BatchAssocTableRedux } from "../Batch-info/BatchAssocTable";
 import { TrainerAssignmentRedux } from "../Batch-info/TrainerAssignment";
 
@@ -41,7 +40,6 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
   }
 
   render() {
-    
     return (
       <>
         <Modal
