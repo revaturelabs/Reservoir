@@ -8,7 +8,6 @@ public class BatchDTO {
 	private String location;
 	private Date start_date;
 	private String curriculum_name;
-	private String skillSetName;
 	private int batch_capacity;
 	
 	
@@ -16,13 +15,12 @@ public class BatchDTO {
 		super();
 	}
 	
-	public BatchDTO(int batch_id, String location, Date start_date, String curriculum_name, String skillSetName, int batch_capacity) {
+	public BatchDTO(int batch_id, String location, Date start_date, String curriculum_name, int batch_capacity) {
 		super();
 		this.batch_id = batch_id;
 		this.location = location;
 		this.start_date = start_date;
 		this.curriculum_name = curriculum_name;
-		this.skillSetName = skillSetName;
 		this.batch_capacity = batch_capacity;
 	}
 
