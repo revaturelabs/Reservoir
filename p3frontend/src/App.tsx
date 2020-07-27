@@ -176,7 +176,7 @@ export class App extends React.Component<any, any> {
             // },
             {
               end: "/home",
-              name: "Batches in Progress",
+              name: "Reservoir",
               comp: <ReduxInProgress />,
             },
             {
@@ -188,6 +188,11 @@ export class App extends React.Component<any, any> {
               end: "/batch/training-overview",
               name: "Generate Batches",
               comp: <OverviewTraining />,
+            },
+            {
+              end: "/batch/batches-in-progress",
+              name: "Batches in Progress",
+              comp: <ReduxInProgress />,
             },
             // {
             //   end: "/trainer-assign",
