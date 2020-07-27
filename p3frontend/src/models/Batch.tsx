@@ -42,3 +42,25 @@ export class Batch {
     this.programType = programType;
   }
 }
+//REAL TIME Unconfirmed Batch Module
+export class UnconfirmedBatch {
+  batch_id: number;
+  batch_capacity: number;
+  start_date: string;
+  location: Location;
+  curriculum_name: Curriculum;
+
+  constructor(
+    batch_id: number,
+    batch_capacity: number,
+    start_date: string,
+    location: Location,
+    curriculum_name: Curriculum
+  ) {
+    this.batch_id = batch_id;
+    this.batch_capacity = batch_capacity;
+    this.start_date = start_date;
+    this.location = location;
+    this.curriculum_name = curriculum_name;
+  }
+}
