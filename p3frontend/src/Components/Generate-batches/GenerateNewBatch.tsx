@@ -105,12 +105,24 @@ export function GenerateNewBatch(props: any) {
                 </div>
                 <div className="added-associates-box">
 
-
-                  {assosiates.map((data: any, index: any) => {
-                    return (
-                      <p key={index}> {`${data.firstName} ${data.lastName}`}</p>
+                  {(()=>{
+                    let names:any=[];
+                    assosiates.forEach((element:any) => 
+                    {
+                     names.push(element.firstName+" "+element.lastName);
+                    });
+                    names.sort();
+                    return(
+                        <div>   
+                          {names.map((data: any, index: any) => {
+                          return (
+                            <p key={index}> {data}</p>
+                          )
+                          })}
+                        </div>
                     )
-                  })}
+                  })()}
+               
                 </div>
 
 
@@ -148,19 +160,6 @@ export function GenerateNewBatch(props: any) {
 
   function generateBatch() {
     axiosWrapper(`/associates/${reqScore}/score/${capacity}/capacity`, "GET").then((data) => {
-      console.log(data);
-
-      data.forEach((ele: any) => {
-        if (ele.interviewScore < reqScore) {
-          console.log(ele.interviewScore)
-        }
-        if (ele.batch != null) {
-          console.log(ele.batch)
-        }
-        if (ele.active) {
-          console.log(ele.active);
-        }
-      })
       setAssosiates(data);
     })
 
@@ -201,7 +200,10 @@ export function GenerateNewBatch(props: any) {
   }
   //Function to check if they have required information to submit
   function testReturn() {
-    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1) {
+    const MAX_CAPACITY=50;
+    const MAX_SCORE=100;
+    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1 && (parseInt(reqScore) <= MAX_SCORE) && (parseInt(capacity) <= MAX_CAPACITY))  
+    {
       return false;
     }
     return true;
