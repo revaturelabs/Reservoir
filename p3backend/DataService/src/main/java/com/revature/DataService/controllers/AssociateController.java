@@ -21,7 +21,6 @@ import com.revature.DataService.services.AssociateService;
 @RestController
 
 @RequestMapping(path = "/associates")
-
 public class AssociateController
 {
   @Autowired
@@ -30,7 +29,6 @@ public class AssociateController
   @GetMapping("/{score}/score/{capacity}/capacity")
   public ResponseEntity<List<Associate>> getAvailableAssociatesWithMinimumRequiredScore(@PathVariable double score, @PathVariable int capacity){
 	  List<Associate> associates = associateService.getAvailableAssociatesWithMinimumRequiredScore(score, capacity);
-	  System.out.println(associates.size());
 	  if(associates.size() > 0)
 		  return new ResponseEntity<List<Associate>>(associates, HttpStatus.OK);
 	 return new ResponseEntity<List<Associate>>(associates, HttpStatus.NOT_FOUND);
