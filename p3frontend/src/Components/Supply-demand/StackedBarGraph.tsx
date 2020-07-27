@@ -339,6 +339,12 @@ export default function TestChart() {
             title: "Number of Associates",
             minValue: 0,
           },
+          series: {
+            0: { color: "#F26925" },
+            1: { color: "#FCB414" },
+            2: { color: "#72A4C2" },
+            3: { color: "#474C55" },
+          },
         }}
         // For tests
         rootProps={{ "data-testid": "3" }}
