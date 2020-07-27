@@ -54,16 +54,111 @@ export async function getAllCurrentClientDemands(): Promise<ClientDemands[]> {
 
 //Axios request for back end matrix
 //Could have labeled objects by timeframe/curr/supply first i guess
+export async function getFilteredSupply(client: any, skillset: any): Promise<GraphData> {
+  if (client && skillset) {
+    try {
+      const response = await axiosClient.get(`/skillsets/matrix?clientid=${client}&skillsetid=${skillset}`);
+      console.log(`Client: ${client}, Skillset: ${skillset}`)
+      let total_demand: number = response.data.total_demand;
+      let committed_1m: number = response.data.committed.total_1_month;
+      let committed_3m: number = response.data.committed.total_3_months;
+      let committed_curr: number =
+        response.data.committed.total_currently_available;
+      let committed_supply: number = response.data.committed.total_supply;
+      let confirmed_1m: number = response.data.confirmed.total_1_month;
+      let confirmed_3m: number = response.data.confirmed.total_3_months;
+      let confirmed_curr: number =
+        response.data.confirmed.total_currently_available;
+      let confirmed_supply: number = response.data.confirmed.total_supply;
+
+      let matrix = {
+        total_demand,
+        committed_1m,
+        committed_3m,
+        committed_curr,
+        committed_supply,
+        confirmed_1m,
+        confirmed_3m,
+        confirmed_curr,
+        confirmed_supply,
+      };
+      return matrix;
+    } catch (error) {
+      console.log(`Failed to get filtered client demands: `, error);
+      throw error;
+    }
+  }
+  else if (client && !skillset) {
+    try {
+      const response = await axiosClient.get(`/skillsets/matrix?clientid=${client}`);
+      console.log(`Client: ${client}, Skillset: ${skillset}`)
+      let total_demand: number = response.data.total_demand;
+      let committed_1m: number = response.data.committed.total_1_month;
+      let committed_3m: number = response.data.committed.total_3_months;
+      let committed_curr: number =
+        response.data.committed.total_currently_available;
+      let committed_supply: number = response.data.committed.total_supply;
+      let confirmed_1m: number = response.data.confirmed.total_1_month;
+      let confirmed_3m: number = response.data.confirmed.total_3_months;
+      let confirmed_curr: number =
+        response.data.confirmed.total_currently_available;
+      let confirmed_supply: number = response.data.confirmed.total_supply;
+
+      let matrix = {
+        total_demand,
+        committed_1m,
+        committed_3m,
+        committed_curr,
+        committed_supply,
+        confirmed_1m,
+        confirmed_3m,
+        confirmed_curr,
+        confirmed_supply,
+      };
+      return matrix;
+    } catch (error) {
+      console.log(`Failed to get filtered client demands: `, error);
+      throw error;
+    }
+  }
+  else if (skillset && !client) {
+    try {
+      const response = await axiosClient.get(`/skillsets/matrix?skillsetid=${skillset}`);
+      console.log(`Client: ${client}, Skillset: ${skillset}`)
+      let total_demand: number = response.data.total_demand;
+      let committed_1m: number = response.data.committed.total_1_month;
+      let committed_3m: number = response.data.committed.total_3_months;
+      let committed_curr: number =
+        response.data.committed.total_currently_available;
+      let committed_supply: number = response.data.committed.total_supply;
+      let confirmed_1m: number = response.data.confirmed.total_1_month;
+      let confirmed_3m: number = response.data.confirmed.total_3_months;
+      let confirmed_curr: number =
+        response.data.confirmed.total_currently_available;
+      let confirmed_supply: number = response.data.confirmed.total_supply;
+
+      let matrix = {
+        total_demand,
+        committed_1m,
+        committed_3m,
+        committed_curr,
+        committed_supply,
+        confirmed_1m,
+        confirmed_3m,
+        confirmed_curr,
+        confirmed_supply,
+      };
+      return matrix;
+    } catch (error) {
+      console.log(`Failed to get filtered client demands: `, error);
+      throw error;
+    }
+  }
+  else return getTotalSupply();
+}
 export async function getTotalSupply(): Promise<GraphData> {
   try {
     const response = await axiosClient.get("/skillsets/matrix");
-
-    // const demandArr: ClientDemands[] = response.data.map(
-    //   (cl: ClientDemands) => {
-    //     return buildCliDem(cl);
-    //   }
-    // );
-    // return demandArr;
     let total_demand: number = response.data.total_demand;
     let committed_1m: number = response.data.committed.total_1_month;
     let committed_3m: number = response.data.committed.total_3_months;
