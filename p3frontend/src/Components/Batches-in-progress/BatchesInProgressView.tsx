@@ -126,9 +126,16 @@ export class InProgress extends React.Component<any, any> {
         <br />
         <br />
         {this.state.viewType === "Table" ? (
-          <div className="batches-in-progress-table-container card">
-            <Table bordered className="table table-striped">
-              <thead className="text-white batches-in-progress-table sticky">
+          <div
+            style={{
+              overflowY: "scroll",
+              maxHeight: "55vh",
+              borderStyle: "solid",
+              borderWidth: "1px",
+            }}
+          >
+            <Table bordered>
+              <thead className="text-white">
                 <th>Batch</th>
                 <th>Date</th>
                 <th>Details</th>
@@ -148,11 +155,11 @@ export class InProgress extends React.Component<any, any> {
             </Table>
           </div>
         ) : (
-            <TimelineRedux
-              batches={this.state.filteredBatches}
-              parentTop={this}
-            />
-          )}
+          <TimelineRedux
+            batches={this.state.filteredBatches}
+            parentTop={this}
+          />
+        )}
       </Container>
     );
   }
