@@ -107,7 +107,7 @@
     ]
   },
   "devDependencies": {
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
     "eslint-plugin-react": "^7.20.4"
