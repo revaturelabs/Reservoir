@@ -23,7 +23,6 @@ const buildCliDem = (res: any): ClientDemands => {
 export async function getAllClientDemands(): Promise<ClientDemands[]> {
   try {
     const response = await axiosClient.get("/client-demand");
-    console.log(response.data);
     const demandArr: ClientDemands[] = response.data.map(
       (cl: ClientDemands) => {
         return buildCliDem(cl);
@@ -31,7 +30,6 @@ export async function getAllClientDemands(): Promise<ClientDemands[]> {
     );
     return demandArr;
   } catch (error) {
-    console.log(`Failed to get all client demands: `, error);
     throw error;
   }
 }
@@ -47,7 +45,6 @@ export async function getAllCurrentClientDemands(): Promise<ClientDemands[]> {
     );
     return demandArr;
   } catch (error) {
-    console.log(`Failed to get all current client demands: `, error);
     throw error;
   }
 }
@@ -58,7 +55,6 @@ export async function getFilteredSupply(client: any, skillset: any): Promise<Gra
   if (client && skillset) {
     try {
       const response = await axiosClient.get(`/skillsets/matrix?clientid=${client}&skillsetid=${skillset}`);
-      console.log(`Client: ${client}, Skillset: ${skillset}`)
       let total_demand: number = response.data.total_demand;
       let committed_1m: number = response.data.committed.total_1_month;
       let committed_3m: number = response.data.committed.total_3_months;
@@ -84,14 +80,12 @@ export async function getFilteredSupply(client: any, skillset: any): Promise<Gra
       };
       return matrix;
     } catch (error) {
-      console.log(`Failed to get filtered client demands: `, error);
       throw error;
     }
   }
   else if (client && !skillset) {
     try {
       const response = await axiosClient.get(`/skillsets/matrix?clientid=${client}`);
-      console.log(`Client: ${client}, Skillset: ${skillset}`)
       let total_demand: number = response.data.total_demand;
       let committed_1m: number = response.data.committed.total_1_month;
       let committed_3m: number = response.data.committed.total_3_months;
@@ -117,14 +111,12 @@ export async function getFilteredSupply(client: any, skillset: any): Promise<Gra
       };
       return matrix;
     } catch (error) {
-      console.log(`Failed to get filtered client demands: `, error);
       throw error;
     }
   }
   else if (skillset && !client) {
     try {
       const response = await axiosClient.get(`/skillsets/matrix?skillsetid=${skillset}`);
-      console.log(`Client: ${client}, Skillset: ${skillset}`)
       let total_demand: number = response.data.total_demand;
       let committed_1m: number = response.data.committed.total_1_month;
       let committed_3m: number = response.data.committed.total_3_months;
@@ -150,7 +142,6 @@ export async function getFilteredSupply(client: any, skillset: any): Promise<Gra
       };
       return matrix;
     } catch (error) {
-      console.log(`Failed to get filtered client demands: `, error);
       throw error;
     }
   }
@@ -184,7 +175,6 @@ export async function getTotalSupply(): Promise<GraphData> {
     };
     return matrix;
   } catch (error) {
-    console.log(`Failed to get all current client demands: `, error);
     throw error;
   }
 }

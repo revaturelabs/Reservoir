@@ -1,14 +1,10 @@
-import { CreateDropDown } from "../Components/CreateDropDown";
-import { PageTitleBar } from "../../Common/PageTitleBar";
 import React, { useState, useEffect } from "react";
 import axiosWrapper from "../functions/axiosWrapper";
-import { GenerateNewBatch } from "../GenerateNewBatch";
-import { allTheMapStateToProps } from "../../../redux/reducers";
+
 
 ////////////////////////////////////
 export function DisplayBatchs(props: any) {
     const [batch, setBatch]: any = useState([]);
-    const [selectedBatch, setSelectedBatch]: any = useState(-1);
 
     useEffect(() => {
         axiosWrapper("/batches/uncommited", "GET").then((data) => {
@@ -90,7 +86,6 @@ export function DisplayBatchs(props: any) {
     function handleDelete() {
         let removeSingleBatch = [...batch];
 
-        console.log(props.batch);
         axiosWrapper(`/batches/${props.batch}`, "DELETE").then(() => {
             //update the local state
             setBatch(removeSingleBatch.filter((value, index) => { return value.batchId != props.batch }));

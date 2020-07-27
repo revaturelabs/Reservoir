@@ -114,7 +114,6 @@ export function GenerateNewBatch(props: any) {
                   {trainerArray.map((data: any, index: any) => {
                     let findName: any = staticTrainerList.filter((ele: any) => ele.trainer_id == data);
                     findName = findName[0];
-                    console.log(staticTrainerList)
                     return (
                       <p key={index}> {`${findName.firstName} ${findName.lastName}`}</p>
                     )
@@ -203,7 +202,6 @@ export function GenerateNewBatch(props: any) {
         if (tList[i].trainer_id == currentTrainer[j]) {
           flag = false;
           removedIndex = i;
-          console.log(i)
         }
       }
       if (flag) {
@@ -247,7 +245,6 @@ export function GenerateNewBatch(props: any) {
       b[2] = "0" + b[2]
     }
     let endDate = (b[0] + "-" + b[1] + "-" + b[2]);
-    console.log(b)
     //Create our batch object
     let saveObject: any =
     {
@@ -262,9 +259,6 @@ export function GenerateNewBatch(props: any) {
       "associate_ids": [],
       "trainer_ids": trainerArray
     };
-
-
-    console.log(saveObject)
 
     //save our batch/
 
