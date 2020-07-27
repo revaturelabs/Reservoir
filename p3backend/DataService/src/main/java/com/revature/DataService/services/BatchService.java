@@ -20,13 +20,11 @@ import com.revature.DataService.repositories.AssociateRepository;
 import com.revature.DataService.repositories.BatchRepository;
 import com.revature.DataService.repositories.BatchStateRepository;
 import com.revature.DataService.repositories.TrainerRepository;
+import com.revature.DataService.util.BatchStates;
+import com.revature.DataService.util.Dates;
 
 @Service
 public class BatchService {
-	private final String UNCONFIRMED_STATE = "unconfirmed";
-	private final String CONFIRMED_STATE = "confirmed";
-	private final String COMMITTED_STATE = "committed";
-
 	@Autowired
 	BatchRepository batchRepository;
 
@@ -49,21 +47,15 @@ public class BatchService {
 	public SupplyMetricsDTO getBatchSupplyMetricsById(int id) {	
 		SupplyMetricsDTO dto = null;
 		Optional<Batch> batchOptional = batchRepository.findById(id);
-		
-		Date today = new Date(System.currentTimeMillis());
-		Date tomorrow = new Date(today.getTime() + 86400000L);
-		Date oneMonthFromToday = new Date(today.getTime() + 2629800000L);
-		Date oneMonthOneDayFromToday = new Date(today.getTime() + 2716200000L);
-		Date threeMonthsFromToday = new Date(today.getTime() + 7889400000L);
 				
 		if(batchOptional.isPresent()) {
 			dto = new SupplyMetricsDTO();
 			Batch batch = batchOptional.get();
-			if(batch.getEndDate().before(today) || batch.getEndDate().equals(today)) 
+			if(batch.getEndDate().before(Dates.getToday()) || batch.getEndDate().equals(Dates.getToday())) 
 				dto.setTotal_currently_available(batch.getBatchCapacity());	
-			 else if (batch.getEndDate().after(today) && batch.getEndDate().before(oneMonthFromToday)) 
+			 else if (batch.getEndDate().after(Dates.getToday()) && batch.getEndDate().before(Dates.getOneMonthFromToday())) 
 				dto.setTotal_1_month(batch.getBatchCapacity());			
-			 else if (batch.getEndDate().after(oneMonthOneDayFromToday) && batch.getEndDate().before(threeMonthsFromToday)) 
+			 else if (batch.getEndDate().after(Dates.getOneMonthAndOneDayFromToday()) && batch.getEndDate().before(Dates.getThreeMonthsFromToday())) 
 				dto.setTotal_3_months(batch.getBatchCapacity());		
 			dto.setTotal_supply(dto.getTotal_1_month() + dto.getTotal_3_months() + dto.getTotal_currently_available());
 		}	
@@ -71,7 +63,7 @@ public class BatchService {
 	}
 	
 	public Batch batchStateUnconfirmedToConfirmed(int id) {
-		BatchState state = batchStateRepo.findByState(CONFIRMED_STATE);
+		BatchState state = batchStateRepo.findByState(BatchStates.CONFIRMED);
 		Optional<Batch> batch = batchRepository.findById(id);		
 		if(batch.isPresent()) {
 			batch.get().setState(state);
@@ -103,11 +95,11 @@ public class BatchService {
 	// currently handles save and update.
 	public Batch saveUnconfirmedBatch(Batch batch, DetailedBatchDTO detailedBatchDTO) {
 		Optional<Batch> existingBatch = batchRepository.findById(batch.getBatchId());
-		BatchState committedState = batchStateRepo.findByState(COMMITTED_STATE);
+		BatchState committedState = batchStateRepo.findByState(BatchStates.COMMITTED);
 		if(existingBatch.isPresent())
 			if(existingBatch.get().getState().getId() == committedState.getId()) 
 				return null;
-		BatchState state = batchStateRepo.findByState(UNCONFIRMED_STATE);
+		BatchState state = batchStateRepo.findByState(BatchStates.UNCONFIRMED);
 		batch.setState(state);
 		if(existingBatch.isPresent()) {
 			Optional<BatchState> bState = batchStateRepo.findById(existingBatch.get().getState().getId());
@@ -154,20 +146,20 @@ public class BatchService {
 		List<BatchDTO> unconfirmedBatches = new ArrayList<>();
 
 		for (Batch batch : batches) {
-			unconfirmedBatches.add(new BatchDTO(batch.getBatchId(), batch.getLocation().getLocationName(),
-					batch.getStartDate(), batch.getCurriculum().getName(), batch.getBatchCapacity()));
+			unconfirmedBatches.add(new BatchDTO(batch.getBatchId(), batch.getLocation().getLocationName(), 
+					batch.getStartDate(), batch.getCurriculum().getName(), batch.getCurriculum().getCurriculumSkillset().getSkillSetName(),batch.getBatchCapacity()));
 		}
 		return unconfirmedBatches;
 	}
 	
 	public List<BatchDTO> getUnconfirmedBatchesBySkillsetId(int id) {
-		int batchStateId = batchStateRepo.findByState(UNCONFIRMED_STATE).getId();
+		int batchStateId = batchStateRepo.findByState(BatchStates.UNCONFIRMED).getId();
 		List<Batch> batches = batchRepository.findByStateIdAndCurriculumCurriculumSkillsetSkillSetId(batchStateId,id);
 		List<BatchDTO> unconfirmedBatches = new ArrayList<>();
 
 		for (Batch batch : batches) {
 			unconfirmedBatches.add(new BatchDTO(batch.getBatchId(), batch.getLocation().getLocationName(),
-					batch.getStartDate(), batch.getCurriculum().getName(), batch.getBatchCapacity()));
+					batch.getStartDate(), batch.getCurriculum().getName(),batch.getCurriculum().getCurriculumSkillset().getSkillSetName(), batch.getBatchCapacity()));
 		}
 		return unconfirmedBatches;
 	}
@@ -193,7 +185,7 @@ public class BatchService {
 	public Batch updateBatch(Batch batch) throws Exception {
 		Integer id = batch.getBatchId();
 
-		BatchState committedState = batchStateRepo.findByState(COMMITTED_STATE);
+		BatchState committedState = batchStateRepo.findByState(BatchStates.COMMITTED);
 		
 		Optional<Batch> existingBatch = batchRepository.findById(id);
 		if (existingBatch.isPresent()) {
