@@ -28,7 +28,7 @@ export function GenerateNewBatch(props: any) {
 
   //For storing selected trainers
   const [selectedTrainer, setSelectedTrainer]: any = useState();
-  const [assosiates,setAssosiates]:any=useState([])
+  const [assosiates, setAssosiates]: any = useState([])
 
 
   //Get todays date in html formated way
@@ -64,12 +64,12 @@ export function GenerateNewBatch(props: any) {
           <div className="row">
             <div className="col">
               <label className="d-block generate-new-batch-label"> Skill </label>
-              <CreateDropDown className="d-block col generate-new-batch-input" records={skillSet} handler={skillHandler} keyValue={["curriculumId", "name"]} defaultMessage="Select Skill" />
+              <CreateDropDown myId="dropdown-skills" className="d-block col generate-new-batch-input" records={skillSet} handler={skillHandler} keyValue={["curriculumId", "name"]} defaultMessage="Select Skill" />
             </div>
 
             <div className="col">
               <label className="d-block generate-new-batch-label"> Location </label>
-              <CreateDropDown className="d-block col generate-new-batch-input" records={locations} handler={locHandler} keyValue={["locationId", "locationName"]} defaultMessage="Select Location" />
+              <CreateDropDown myId="dropdown-location" className="d-block col generate-new-batch-input" records={locations} handler={locHandler} keyValue={["locationId", "locationName"]} defaultMessage="Select Location" />
             </div>
           </div>
 
@@ -102,26 +102,28 @@ export function GenerateNewBatch(props: any) {
 
             <div className="row">
               <div className="col">
-                <label className="d-block generate-new-batch-label text-center trainers-tabel">Associates</label>
-                <input className="btn-primary btn-add-trainer" type="submit" onClick={generateBatch} disabled={(capacity>0 && reqScore>0) ? false : true} value="Generate Associates" />
+                <label className="d-block generate-new-batch-label text-center">Associates</label>
+                <div className="row justify-content-center">
+                  <input className="btn-primary btn-generate-associates" type="submit" onClick={generateBatch} disabled={(capacity > 0 && reqScore > 0) ? false : true} value="Generate Associates" />
+                </div>
                 <div className="added-trainers-box">
-                
 
-                  {assosiates.map((data: any, index: any) => {                    
+
+                  {assosiates.map((data: any, index: any) => {
                     return (
                       <p key={index}> {`${data.firstName} ${data.lastName}`}</p>
                     )
                   })}
                 </div>
-                                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
-                                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
-                                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
+                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
+                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
+                {/* dddddddddddddddddddddddddddddddddddddddddddd */}
 
               </div>
               <div className="col">
                 {/* <label className="d-block">{trainerList.length && trainerArray.length < 2 ? "Trainers" : (trainerArray.length < 2 ? "Please select a skillset" : "Trainer Limit Reached")}</label> */}
                 <label className="d-block generate-new-batch-label text-center trainers-tabel">Trainers</label>
-                <CreateDropDown className={"select-trainer-dropdown"} records={trainerList} handler={trainerListHandler} keyValue={["trainer_id", "name"]} defaultMessage="Select Trainer" myId="changeValues1"/>
+                <CreateDropDown className={"select-trainer-dropdown"} records={trainerList} handler={trainerListHandler} keyValue={["trainer_id", "name"]} defaultMessage="Select Trainer" myId="changeValues1" />
                 <input className="btn-primary btn-add-trainer" type="submit" onClick={addTrainerHandler} disabled={(trainerList.length && selectedTrainer && (trainerArray.length < 2)) ? false : true} value="Add Trainer" />
 
                 <div className="added-trainers-box">
@@ -129,9 +131,9 @@ export function GenerateNewBatch(props: any) {
                   {trainerArray.map((data: any, index: any) => {
                     let findName: any = staticTrainerList.filter((ele: any) => ele.trainer_id == data);
                     findName = findName[0];
-                    
+
                     return (
-                      <p key={index} onClick={(e:any) => {removeTrainerHandler(e, findName.trainer_id)}}> {`${findName.firstName} ${findName.lastName}`}</p>
+                      <p key={index} onClick={(e: any) => { removeTrainerHandler(e, findName.trainer_id) }}> {`${findName.firstName} ${findName.lastName}`}</p>
                     )
                   })}
                 </div>
@@ -149,54 +151,49 @@ export function GenerateNewBatch(props: any) {
   )
 
 
-  function generateBatch()
-  {
-    axiosWrapper(`/${reqScore}/score/${capacity}/capacity`,"GET").then((data)=>{
+  function generateBatch() {
+    axiosWrapper(`/${reqScore}/score/${capacity}/capacity`, "GET").then((data) => {
       setAssosiates(data);
     })
 
   }
 
 
-  function removeTrainerHandler(e:any, id:any)
-  {
+  function removeTrainerHandler(e: any, id: any) {
     //assign the new array
-    let newTrainerArray=[];
-    
-    newTrainerArray=trainerArray.filter((ele:any)=>ele!==id);
+    let newTrainerArray = [];
+
+    newTrainerArray = trainerArray.filter((ele: any) => ele !== id);
     setTrainerArray(newTrainerArray);
     //Place removed trainer back into the drop down
-    let newTrainerList:any;
+    let newTrainerList: any;
 
-    if(trainerList[0]=="empty")
-    {
-      newTrainerList=[];
+    if (trainerList[0] == "empty") {
+      newTrainerList = [];
     }
-    else
-    {
-      newTrainerList=trainerList;
+    else {
+      newTrainerList = trainerList;
     }
-  
-    
+
+
     //get the trainer from the list
-    let trainerAddedBack=staticTrainerList.filter((ele:any)=>ele.trainer_id==id)
-    
+    let trainerAddedBack = staticTrainerList.filter((ele: any) => ele.trainer_id == id)
+
     newTrainerList.push(
       {
-        "name":trainerAddedBack[0].firstName+" "+trainerAddedBack[0].lastName,
+        "name": trainerAddedBack[0].firstName + " " + trainerAddedBack[0].lastName,
         "trainer_id": trainerAddedBack[0].trainer_id
       })
-      setTrainerList(newTrainerList);
-      let element:any=document.getElementById("changeValues1")
-      if(element)
-      {
-      element.value="none"
-      }
+    setTrainerList(newTrainerList);
+    let element: any = document.getElementById("changeValues1")
+    if (element) {
+      element.value = "none"
+    }
     //going to need to add to this setTrainerList
   }
   //Function to check if they have required information to submit
   function testReturn() {
-    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks>=1) {
+    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1) {
       return false;
     }
     return true;
@@ -266,7 +263,7 @@ export function GenerateNewBatch(props: any) {
         if (tList[i].trainer_id == currentTrainer[j]) {
           flag = false;
           removedIndex = i;
-  
+
         }
       }
       if (flag) {
@@ -274,18 +271,15 @@ export function GenerateNewBatch(props: any) {
       }
     }
     setSelectedTrainer();
-    if(updatedTrainerList.length)
-    {
+    if (updatedTrainerList.length) {
       setTrainerList(updatedTrainerList)
     }
-    else
-    {
+    else {
       setTrainerList(["empty"])
     }
-    let element:any=document.getElementById("changeValues1")
-    if(element)
-    {
-    element.value="none"
+    let element: any = document.getElementById("changeValues1")
+    if (element) {
+      element.value = "none"
     }
   }
 
@@ -316,9 +310,8 @@ export function GenerateNewBatch(props: any) {
 
 
     //get assosiateids
-    let assosiateIds:any=[];
-    assosiates.forEach((data:any)=>
-    {
+    let assosiateIds: any = [];
+    assosiates.forEach((data: any) => {
       assosiateIds.push(data.associateId);
     })
     //Create our batch object

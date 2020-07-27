@@ -18,55 +18,61 @@ export function DisplayBatchs(props: any) {
     const tableTittle = ["Location", "Curriculum", "Start-Date", "Batch Capacity"];
 
     //the button names and their given onclicks
-    const allButtons: any[any] = [["Update", handleUpdate], ["Confirm Batch", handleConfirm], ["Delete", handleDelete]];
+    const allButtons: any[any] = [
+        ["Delete", handleDelete, "btn btn-danger finilize-batch-delete"],
+        ["Update", handleUpdate, "btn btn-primary finilize-batch-update"],
+        ["Confirm Batch", handleConfirm, "btn btn-success finilize-batch-confirm"]
+
+    ];
 
     return (
-        <div>
-            <h3>Unconfirmed Batches</h3>
-            <table>
-                <thead>
-                    <tr>
-                        {tableTittle.map((data, index) => {
+        <div className="container-fluid">
+            <div className="card">
+                <h3 className="text-center">Unconfirmed Batches</h3>
+                <table className="table table-striped">
+                    <thead className="finilize-batch-table-header">
+                        <tr>
+                            {tableTittle.map((data, index) => {
+                                return (
+                                    <td key={index}>{data}</td>
+                                )
+                            })}
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        {batch.map((data: any, index: number) => {
+
+                            //Handle the selected row
+                            let colorBac = 0;
+                            if (props.batch && props.batch === data.batchId) {
+                                colorBac = 1;
+                            }
                             return (
-                                <td key={index}>{data}</td>
+                                <tr key={index} onClick={() => {
+                                    props.setBatch(data.batchId);
+                                }}>
+                                    <td key={1}>{data.location.locationName}</td>
+                                    <td key={2}>{data.curriculum.name}</td>
+                                    <td key={3}>{data.startDate}</td>
+                                    <td key={4}>{data.batchCapacity}</td>
+                                </tr>
                             )
                         })}
-                    </tr>
-                </thead>
 
+                    </tbody>
+                </table>
 
-                <tbody>
-
-                    {batch.map((data: any, index: number) => {
-
-                        //Handle the selected row
-                        let colorBac = 0;
-                        if (props.batch && props.batch === data.batchId) {
-                            colorBac = 1;
-                        }
+                <div className="row justify-content-center">
+                    {allButtons.map((data: any, index: any) => {
                         return (
-                            <tr key={index} onClick={() => {
-                                props.setBatch(data.batchId);
-
-                            }}
-
-                                style={colorBac ? { backgroundColor: "gray" } : { backgroundColor: "silver" }}
-                            >
-                                <td key={1}>{data.location.locationName}</td>
-                                <td key={2}>{data.curriculum.name}</td>
-                                <td key={3}>{data.startDate}</td>
-                                <td key={4}>{data.batchCapacity}</td>
-                            </tr>
+                            <button key={index} className={`finilize-batch-buttons ${data[2]}`} disabled={props.batch ? false : true} onClick={data[1]}>{data[0]}</button>
                         )
                     })}
-
-                </tbody>
-            </table>
-
-            {allButtons.map((data: any, index: any) => {
-                return (<button key={index} className="button button1" disabled={props.batch ? false : true} onClick={data[1]}>{data[0]}</button>)
-            })}
-
+                </div>
+            </div>
         </div>
     )
 

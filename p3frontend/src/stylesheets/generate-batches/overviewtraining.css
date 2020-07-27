@@ -54,9 +54,9 @@
 
 .generate-new-batch-input {
   margin-bottom: 10px;
-
 }
 
+/*///////////////////// GENERATE BATCH CONTAINER - OPTIONAL /////////////////////*/
 .generate-new-batch-optional-container {
   background-color: rgba(165, 165, 165, 0.267);
   margin-top: 10px;
@@ -67,22 +67,65 @@
   border-bottom: 2px solid rgb(146, 146, 146);
   max-width: 90%;
   margin: auto;
+  margin-bottom: 15px;
   font-weight: 600;
   padding: 10px;
 }
 
+/*///////////////////// GENERATE BATCH CONTAINER - ADD TRAINERS /////////////////////*/
+
 .btn-add-trainer {
   margin-left: 5px;
-}
-
-.select-trainer-dropdown {
-  width: 79%;
 }
 
 .added-trainers-box {
   background-color: #fff;
   height: 150px;
   border: solid 1px #000;
-  padding: 5px;
+  padding: 10px;
   margin-top: 5px;
 }
+
+.added-trainers-box p {
+  line-height: 10px;
+}
+
+.added-trainers-box p:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/*////////////////// DROPDOWNS ///////////////*/
+#dropdown-skills{
+  width: 100%;
+}
+
+#dropdown-location{
+  width: 100%;
+}
+
+/* Trainers dropdown */
+#changeValues1{
+  width: 79%;
+}
+
+/*////////////// FINILIZE BATCH ////////////*/
+
+/*//////////////////// FINILIZE BATCH - BUTTONS //////////////////*/
+
+.finilize-batch-delete {
+  float: inline-start;  
+}
+
+.finilize-batch-update {
+
+}
+
+.finilize-batch-confirm {
+  
+}
+
+.finilize-batch-table-header {
+  color: #fff;
+}
+
