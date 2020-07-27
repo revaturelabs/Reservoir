@@ -70,6 +70,6 @@ class CurriculumServiceTest {
 	// 	assertNotNull(CurriculumsTest.get(1));
 	// 	assertNotNull(CurriculumsTest.get(2));
 	// 	assertTrue(CurriculumsTest.size()>0);
-	// }
+	}
 
 }
