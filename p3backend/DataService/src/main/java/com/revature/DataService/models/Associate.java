@@ -1,15 +1,12 @@
 package com.revature.DataService.models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,117 +14,107 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(schema = "project3", name = "associate")
 public class Associate {
+	@Id
+	@Column(name = "associate_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer associateId;
 
+	@Column(name = "first_name")
+	private String firstName;
 
-  public Associate() {
-    super();
+	@Column(name = "last_name")
+	private String lastName;
 
-  }
+	@Column(name = "email")
+	private String email;
 
+	@Column(name = "active")
+	private boolean active;
 
-  @Id
-  @Column(name = "associate_id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer associateId;
+	@Column(name = "interview_score")
+	private double interviewScore;
 
-  @Column(name = "first_name")
-  private String firstName;
+	@JsonIgnoreProperties({ "associate", "associates", "trainers", "consent", "clientDemands" })
+	@ManyToOne
+	@JoinColumn(name = "assigned_batch_id")
+	private Batch batch;
 
-  @Column(name = "last_name")
-  private String lastName;
+	public Associate() {
+		super();
+	}
 
-  @Column(name = "email")
-  private String email;
+	public Associate(Integer associateId, String firstName, String lastName, String email, boolean active,
+			double interviewScore, Batch batch) {
+		super();
+		this.associateId = associateId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.active = active;
+		this.interviewScore = interviewScore;
+		this.batch = batch;
+	}
 
-  @Column(name = "active")
-  private boolean active;
+	public Integer getAssociateId() {
+		return associateId;
+	}
 
-  @Column(name = "interview_score")
-  private double interviewScore;
+	public void setAssociateId(Integer associateId) {
+		this.associateId = associateId;
+	}
 
+	public String getFirstName() {
+		return firstName;
+	}
 
-  // Associate to Batch
-  @JsonIgnoreProperties({"associate", "associates", "trainers", "consent", "clientDemands"})
-  @ManyToOne
-  @JoinColumn(name = "assigned_batch_id")
-  private Batch batch;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public Integer getAssociateId() {
-    return associateId;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public void setAssociateId(Integer associateId) {
-    this.associateId = associateId;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public String getFirstName() {
-    return firstName;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public boolean isActive() {
+		return active;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
+	public double getInterviewScore() {
+		return interviewScore;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public void setInterviewScore(double interviewScore) {
+		this.interviewScore = interviewScore;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public Batch getBatch() {
+		return batch;
+	}
 
-  public boolean isActive() {
-    return active;
-  }
+	public void setBatch(Batch batch) {
+		this.batch = batch;
+	}
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
-
-  public double getInterviewScore() {
-    return interviewScore;
-  }
-
-  public void setInterviewScore(double interviewScore) {
-    this.interviewScore = interviewScore;
-  }
-
-  public Batch getBatch() {
-    return batch;
-  }
-
-  public void setBatch(Batch batch) {
-    this.batch = batch;
-  }
-
-  public Associate(Integer associateId, String firstName, String lastName, String email,
-      boolean active, double interviewScore, Batch batch) {
-    super();
-    this.associateId = associateId;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.active = active;
-    this.interviewScore = interviewScore;
-    this.batch = batch;
-  }
-
-  @Override
-  public String toString() {
-    return "Associate [associateId=" + associateId + ", firstName=" + firstName + ", lastName="
-        + lastName + ", email=" + email + ", active=" + active + ", interviewScore="
-        + interviewScore + ", batch=" + batch + "]";
-  }
-
-
-
+	@Override
+	public String toString() {
+		return "Associate [associateId=" + associateId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", email=" + email + ", active=" + active + ", interviewScore=" + interviewScore + ", batch=" + batch
+				+ "]";
+	}
 }

@@ -1,6 +1,7 @@
 package com.revature.DataService.models;
 
 import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,92 +18,85 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(schema = "project3", name = "clientdemand")
 public class ClientDemand {
 
-  @Id
-  @Column(name = "client_demand_id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer clientDemandId;
+	@Id
+	@Column(name = "client_demand_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer clientDemandId;
 
-  @Column(name = "quantity")
-  private Integer quantity;
+	@Column(name = "quantity")
+	private Integer quantity;
 
-  @Column(name = "deadline")
-  private LocalDate deadline;
+	@Column(name = "deadline")
+	private LocalDate deadline;
 
-  // Batch to curriculum
-  @JsonIgnoreProperties({"clientDemands", "trainers", "curriculum"})
-  @ManyToOne
-  @JoinColumn(name = "clientdemand_skillset_id")
-  private Skillset clientDemandSkillset;
+	// Batch to curriculum
+	@JsonIgnoreProperties({ "clientDemands", "trainers", "curriculum" })
+	@ManyToOne
+	@JoinColumn(name = "clientdemand_skillset_id")
+	private Skillset clientDemandSkillset;
 
+	@JsonIgnoreProperties({ "clientDemand" })
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "client_id")
+	private Client client;
 
-  @JsonIgnoreProperties({"clientDemand"})
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "client_id")
-  private Client client;
+	public ClientDemand() {
+		super();
+	}
 
-  public Integer getClientDemandId() {
-    return clientDemandId;
-  }
+	public ClientDemand(Integer clientDemandId, Integer quantity, LocalDate deadline, Skillset clientDemandSkillset,
+			Client client) {
+		super();
+		this.clientDemandId = clientDemandId;
+		this.quantity = quantity;
+		this.deadline = deadline;
+		this.clientDemandSkillset = clientDemandSkillset;
+		this.client = client;
+	}
 
-  public void setClientDemandId(Integer clientDemandId) {
-    this.clientDemandId = clientDemandId;
-  }
+	public Integer getClientDemandId() {
+		return clientDemandId;
+	}
 
-  public Integer getQuantity() {
-    return quantity;
-  }
+	public void setClientDemandId(Integer clientDemandId) {
+		this.clientDemandId = clientDemandId;
+	}
 
-  public void setQuantity(Integer quantity) {
-    this.quantity = quantity;
-  }
+	public Integer getQuantity() {
+		return quantity;
+	}
 
-  public LocalDate getDeadline() {
-    return deadline;
-  }
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
 
-  public void setDeadline(LocalDate deadline) {
-    this.deadline = deadline;
-  }
+	public LocalDate getDeadline() {
+		return deadline;
+	}
 
-  public Skillset getClientDemandSkillset() {
-    return clientDemandSkillset;
-  }
+	public void setDeadline(LocalDate deadline) {
+		this.deadline = deadline;
+	}
 
-  public void setClientDemandSkillset(Skillset clientDemandSkillset) {
-    this.clientDemandSkillset = clientDemandSkillset;
-  }
+	public Skillset getClientDemandSkillset() {
+		return clientDemandSkillset;
+	}
 
-  public Client getClient() {
-    return client;
-  }
+	public void setClientDemandSkillset(Skillset clientDemandSkillset) {
+		this.clientDemandSkillset = clientDemandSkillset;
+	}
 
-  public void setClient(Client client) {
-    this.client = client;
-  }
+	public Client getClient() {
+		return client;
+	}
 
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
-  @Override
-  public String toString() {
-    return "ClientDemand [clientDemandId=" + clientDemandId + ", quantity=" + quantity
-        + ", deadline=" + deadline + ", clientDemandSkillset=" + clientDemandSkillset + ", client="
-        + client + "]";
-  }
-
-  public ClientDemand(Integer clientDemandId, Integer quantity, LocalDate deadline,
-      Skillset clientDemandSkillset, Client client) {
-    super();
-    this.clientDemandId = clientDemandId;
-    this.quantity = quantity;
-    this.deadline = deadline;
-    this.clientDemandSkillset = clientDemandSkillset;
-    this.client = client;
-  }
-
-  public ClientDemand() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
-
-
+	@Override
+	public String toString() {
+		return "ClientDemand [clientDemandId=" + clientDemandId + ", quantity=" + quantity + ", deadline=" + deadline
+				+ ", clientDemandSkillset=" + clientDemandSkillset + ", client=" + client + "]";
+	}
 }

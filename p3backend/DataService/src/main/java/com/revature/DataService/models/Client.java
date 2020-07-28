@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,64 +17,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(schema = "project3", name = "client")
 public class Client {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "client_id")
-  private Integer clientId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "client_id")
+	private Integer clientId;
 
-  @Column(name = "name")
-  private String name;
+	@Column(name = "name")
+	private String name;
 
-  // Multiplicity
+	@JsonIgnoreProperties({ "client" })
+	@OneToMany(mappedBy = "client", cascade = CascadeType.MERGE)
+	private List<ClientDemand> clientDemand;
 
+	public Client() {
+		super();
+	}
 
-  @JsonIgnoreProperties({"client"})
-  @OneToMany(mappedBy = "client", cascade = CascadeType.MERGE)
-  private List<ClientDemand> clientDemand;
+	public Client(Integer clientId, String name, List<ClientDemand> clientDemand) {
+		super();
+		this.clientId = clientId;
+		this.name = name;
+		this.clientDemand = clientDemand;
+	}
 
+	public Integer getClientId() {
+		return clientId;
+	}
 
-  public Integer getClientId() {
-    return clientId;
-  }
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 
-  public void setClientId(Integer clientId) {
-    this.clientId = clientId;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public List<ClientDemand> getClientDemand() {
+		return clientDemand;
+	}
 
-  public List<ClientDemand> getClientDemand() {
-    return clientDemand;
-  }
+	public void setClientDemand(List<ClientDemand> clientDemand) {
+		this.clientDemand = clientDemand;
+	}
 
-  public void setClientDemand(List<ClientDemand> clientDemand) {
-    this.clientDemand = clientDemand;
-  }
-
-  @Override
-  public String toString() {
-    return "Client [clientId=" + clientId + ", name=" + name + ", clientDemand=" + clientDemand
-        + "]";
-  }
-
-  public Client(Integer clientId, String name, List<ClientDemand> clientDemand) {
-    super();
-    this.clientId = clientId;
-    this.name = name;
-    this.clientDemand = clientDemand;
-  }
-
-  public Client() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
-
-
+	@Override
+	public String toString() {
+		return "Client [clientId=" + clientId + ", name=" + name + ", clientDemand=" + clientDemand + "]";
+	}
 }
