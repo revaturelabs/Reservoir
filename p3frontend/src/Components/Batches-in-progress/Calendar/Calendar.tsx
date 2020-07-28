@@ -134,6 +134,15 @@ export class TimelineComponent extends React.Component<
             onDoubleClick: () => {
               this.showBatchModal(batch);
             },
+            style: batch.trainers.length
+              ? {
+                  background: "green",
+                  border: "1px solid black",
+                }
+              : {
+                  background: "rgb(185, 185, 186)",
+                  border: "1px solid white",
+                },
           },
         };
 

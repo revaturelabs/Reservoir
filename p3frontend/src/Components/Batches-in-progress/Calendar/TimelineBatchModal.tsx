@@ -20,13 +20,13 @@ import { BatchAssocTableRedux } from "../Batch-info/BatchAssocTable";
 import { TrainerAssignmentRedux } from "../Batch-info/TrainerAssignment";
 
 interface IPBatchViewModal {
-  currentBatch: Batch;
+  currentBatch: any;
   parentTop: any;
   isOpen: boolean;
   toggle: () => void;
 
-  batchClickActionMapper: (batch: Batch) => void;
-  batchUpdateActionMapper: (batch: Batch) => void;
+  batchClickActionMapper: (batch: any) => void;
+  batchUpdateActionMapper: (batch: any) => void;
 }
 
 export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
@@ -74,43 +74,25 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
               </Col>
             </Row>
             <Row>
-              <Col>
+              {/* <Col>
                 <b>Program Type: </b>
               </Col>
               <Col>
                 {this.props.currentBatch.programType === "null"
                   ? "N/A"
                   : this.props.currentBatch.programType}
-              </Col>
+              </Col> */}
             </Row>
             <Row>
               <Col>
-                <b>Confirmed</b>
+                <b>Batch State</b>
                 <br />
-
-                <ButtonGroup>
-                  <Button
-                    color={
-                      this.props.currentBatch.isConfirmed
-                        ? "primary"
-                        : "secondary"
-                    }
-                    onClick={this.patchABatchChangeIsConfirmed}
-                  >
-                    Yes
-                  </Button>
-                  <Button
-                    color={
-                      this.props.currentBatch.isConfirmed
-                        ? "secondary"
-                        : "primary"
-                    }
-                    onClick={this.patchABatchChangeIsConfirmed}
-                  >
-                    No
-                  </Button>
-                </ButtonGroup>
               </Col>
+              {/* <Col>
+                {this.props.currentBatch.isConfirmed
+                  ? "Committed"
+                  : "Confirmed"}
+              </Col> */}
             </Row>
             <Row>
               <ErrorAlert
@@ -227,7 +209,6 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
         `/batches/${this.props.currentBatch.batchId}`,
         request
       );
-
       this.props.batchUpdateActionMapper(this.props.currentBatch);
       this.setState({});
     } catch (e) {
