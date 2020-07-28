@@ -1,4 +1,4 @@
-package com.revature.DataService.models;
+package com.revature.pkg.model;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.revature.DataService.util;
+package com.revature.pkg.util;
 
 public class BatchStates {
 	public static final String COMMITTED = "Committed";

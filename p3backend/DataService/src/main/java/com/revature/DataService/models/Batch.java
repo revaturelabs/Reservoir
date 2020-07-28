@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(schema = "project3", name = "batch")
 public class Batch implements Serializable {
-
 	private static final long serialVersionUID = -6203909294638399555L;
 
 	@Id
@@ -67,19 +66,15 @@ public class Batch implements Serializable {
 	@Column(name = "program_type")
 	private String programType;
 
-	// WORKING
-	// Batch to consent
-	// Getting rid of this at Nick's request
-
 	@JsonIgnoreProperties({ "batch", "trainerSkills" })
 	@OneToMany(mappedBy = "batch")
 	private List<Consent> consent;
 
 	@JsonIgnoreProperties({ "batches" })
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="state_id")
+	@JoinColumn(name = "state_id")
 	private BatchState state;
-	
+
 	@Column(name = "batch_capacity")
 	private int batchCapacity;
 
@@ -104,9 +99,9 @@ public class Batch implements Serializable {
 	private void initLists() {
 		trainers = new ArrayList<>();
 		associates = new ArrayList<>();
-		consent = new ArrayList<>();		
+		consent = new ArrayList<>();
 	}
-	
+
 	public int getBatchCapacity() {
 		return batchCapacity;
 	}
@@ -231,5 +226,4 @@ public class Batch implements Serializable {
 			return false;
 		return true;
 	}
-
 }
