@@ -25,6 +25,8 @@ public class Dates {
 	}	
 	
 	public static Date calcPotentialFutureEndDate(Date startDate,int numWeeks) {
+		if(numWeeks > 15)
+			numWeeks = 15;
 		long weekInMillis = 604800000L;
 		long dayInMillis = 86400000L;
 		long threeDays = dayInMillis * 3;
