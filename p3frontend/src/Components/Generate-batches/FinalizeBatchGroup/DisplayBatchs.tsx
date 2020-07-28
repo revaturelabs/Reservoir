@@ -91,20 +91,15 @@ export function DisplayBatchs(props: any) {
     {
         if(props.batch)
         {
-            console.log(props.batch)
             let selectedBatch=batch.filter((ele:any)=>{return ele.batchId==props.batch})
             if(selectedBatch.length)
             {
                 selectedBatch=selectedBatch[0];
-                console.log(batch.filter((ele:any)=>{return ele.batchId==props.batch}))
-                console.log(selectedBatch.trainers)
-                console.log(selectedBatch.associates)
                 if(selectedBatch && selectedBatch.trainers.length && selectedBatch.associates.length)
                 {
                     return true;
                 }   
             }
-        
         }
         return false;
     }
