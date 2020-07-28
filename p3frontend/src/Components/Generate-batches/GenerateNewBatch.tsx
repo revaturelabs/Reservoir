@@ -300,8 +300,9 @@ export function GenerateNewBatch(props: any) {
 
 
     //Add 1 to the day value of date
+    //no longer adding 1 to the day value
     let a: any = startDate.split("-");
-    a[2] = parseInt(a[2]) + 1;
+    a[2] = parseInt(a[2]);
 
     //make sure its in proper format
     if (a[2] < 10) {

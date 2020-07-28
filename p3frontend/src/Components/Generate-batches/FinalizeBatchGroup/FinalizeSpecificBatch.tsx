@@ -242,7 +242,7 @@ export function FinalizeSpecificBatch(props: any) {
 
   function toggleSave() 
   {
-    if(modifiedBatch.start_date && parseInt(modifiedBatch.required_score)>=0 && modifiedBatch.required_score<=100 && modifiedBatch.batch_capacity>=1 && modifiedBatch.batch_capacity<=50)
+    if(modifiedBatch.start_date && parseInt(modifiedBatch.required_score)>=1 && modifiedBatch.required_score<=100 && modifiedBatch.batch_capacity>=1 && modifiedBatch.batch_capacity<=50)
     {
       return false;
     }
@@ -412,11 +412,12 @@ export function FinalizeSpecificBatch(props: any) {
   }
 
   //ment to alter our date to add 1 to it in order to store to database
+  //no longer adding 1 to the day
   function modifyDay(date: any) {
     //comes in form Year/Month/Day
     if (date !== null) {
       let a = date.split("-");
-      a[2] = parseInt(a[2]) + 1;
+      a[2] = parseInt(a[2]);
       if (a[2] < 10) {
         a[2] = "0" + a[2];
       }
