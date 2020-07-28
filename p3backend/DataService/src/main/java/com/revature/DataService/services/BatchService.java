@@ -93,12 +93,15 @@ public class BatchService {
 	}
 		
 	// currently handles save and update.
-	public Batch saveUnconfirmedBatch(Batch batch, DetailedBatchDTO detailedBatchDTO) {
+	public Batch saveUnconfirmedBatch(Batch batch, DetailedBatchDTO detailedBatchDTO) {	
+		batch.setEndDate(Dates.calcPotentialFutureEndDate(detailedBatchDTO.getStart_date(),detailedBatchDTO.getBatch_duration()));	
 		Optional<Batch> existingBatch = batchRepository.findById(batch.getBatchId());
 		BatchState committedState = batchStateRepo.findByState(BatchStates.COMMITTED);
-		if(existingBatch.isPresent())
+		if(existingBatch.isPresent()) {
+			batch.setEndDate(detailedBatchDTO.getEnd_date());
 			if(existingBatch.get().getState().getId() == committedState.getId()) 
 				return null;
+		}
 		BatchState state = batchStateRepo.findByState(BatchStates.UNCONFIRMED);
 		batch.setState(state);
 		if(existingBatch.isPresent()) {
@@ -138,6 +141,8 @@ public class BatchService {
 				  batch.getTrainers().add(t.get());
 			}
 		}
+		
+		detailedBatchDTO.setEnd_date(batch.getEndDate());
 		return batchRepository.save(batch);
 	}
 
