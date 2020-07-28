@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axiosWrapper from "../functions/axiosWrapper";
 import { GenerateNewBatch } from "../GenerateNewBatch";
 import { isCompositeComponent } from "react-dom/test-utils";
+import { faTruckMonster } from "@fortawesome/free-solid-svg-icons";
 
 //This is for displaying our current selected batch to modify
 export function FinalizeSpecificBatch(props: any) {
@@ -230,7 +231,7 @@ export function FinalizeSpecificBatch(props: any) {
             <input className="btn btn-secondary update-batch-button-cancel" type="submit" onClick={viewChanger} value="Cancel" />
           </div>
           <div className="col">
-            <input className="btn btn-success update-batch-button-save" type="submit" onClick={buttonHandler} value="Save" />
+            <input className="btn btn-success update-batch-button-save" type="submit" onClick={buttonHandler} value="Save" disabled={toggleSave()}/>
           </div>
         </div>
 
@@ -238,11 +239,14 @@ export function FinalizeSpecificBatch(props: any) {
 
     </div>
   )
-  function toggleSave() {
-    ///make sure batch has load
-    if (Object.keys(modifiedBatch).length) {
-      //if(modifiedBatch.required_score>=0 $$ modifiedBatch)
+
+  function toggleSave() 
+  {
+    if(modifiedBatch.start_date && parseInt(modifiedBatch.required_score)>=0 && modifiedBatch.required_score<=100 && modifiedBatch.batch_capacity>=1 && modifiedBatch.batch_capacity<=50)
+    {
+      return false;
     }
+    return true;
   }
   function associateHandler() {
     axiosWrapper(`/associates/${modifiedBatch.required_score}/score/${modifiedBatch.batch_capacity}/capacity`, "GET").then((data) => {

@@ -202,7 +202,7 @@ export function GenerateNewBatch(props: any) {
   function testReturn() {
     const MAX_CAPACITY=50;
     const MAX_SCORE=100;
-    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1 && (parseInt(reqScore) <= MAX_SCORE) && (parseInt(capacity) <= MAX_CAPACITY))  
+    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1 && (parseInt(reqScore) <= MAX_SCORE) && (parseInt(reqScore) >= 1)&& (parseInt(capacity) <= MAX_CAPACITY))  
     {
       return false;
     }
