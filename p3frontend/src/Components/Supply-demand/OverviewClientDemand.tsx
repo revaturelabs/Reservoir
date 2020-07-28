@@ -22,7 +22,7 @@ export class OverviewClientDemand extends React.Component<any, any> {
             <h3 className="center-text">Client Demands vs Revature Supply</h3>
           </Col>
         </Row>
-        <Row>
+        <Row className="center-items-div">
           <TestChart />
         </Row>
         <Row>

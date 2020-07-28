@@ -272,7 +272,7 @@ export default function TestChart() {
               >
                 {unconfirmedDropItem
                   ? unconfirmedDropItem
-                  : "View Potential of Unconfirmed Batches"}
+                  : "Unconfirmed Batches"}
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem
@@ -337,7 +337,7 @@ export default function TestChart() {
         ]}
         options={{
           title: "Client Demands vs Revature Supply",
-          chartArea: { width: "50%" },
+          chartArea: { left: "auto", width: "50%" },
           orientation: "horizontal",
           isStacked: true,
           hAxis: {
