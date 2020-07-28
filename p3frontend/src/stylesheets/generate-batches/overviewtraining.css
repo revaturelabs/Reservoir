@@ -44,7 +44,7 @@
 }
 
 
-/*/////// GENERATE NEW BATCH ////////*/
+
 /*///////////////////// GENERATE BATCH CONTAINER - LABELS AND INPUTS /////////////////////*/
 
 .generate-new-batch-label {
@@ -73,6 +73,7 @@
 }
 
 /*///////////////////// GENERATE BATCH CONTAINER - ADD TRAINERS /////////////////////*/
+
 .btn-add-trainer {
   margin-left: 5px;
 }
@@ -94,30 +95,23 @@
   cursor: pointer;
 }
 
-/*///////////////////// GENERATE BATCH CONTAINER - ADD ASSOCIATES /////////////////////*/
+/*///////////////////// GENERATE BATCH CONTAINER - ADD TRAINERS /////////////////////*/
+
 .added-associates-box {
   background-color: #fff;
   height: 150px;
   border: solid 1px #000;
-  padding-left: 5px;
-  padding-top: 5px;
+  padding: 10px;
   margin-top: 5px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .added-associates-box p {
   line-height: 10px;
 }
 
-.associates-list {
-  margin-bottom: -10px;
-}
-
 /*////////////////// DROPDOWNS ///////////////*/
-#dropdown-skills{
-  width: 100%;
-}
-
+#dropdown-skills, 
 #dropdown-location{
   width: 100%;
 }
@@ -136,30 +130,55 @@
 }
 
 .finilize-batch-update {
-  display: block;
-  margin: auto;
+  text-align: center;
+  
 }
 
 .finilize-batch-confirm {
   float: right;
 }
 
+/*//////////////////////// FINILIZE BATCH - TABLE /////////////////////*/
+
+/*//////////////////////////// FINILIZE BATCH - TABLE HEADER ///////////////////////*/
 .finilize-batch-table-header th {
   color: #fff;
-  font-weight: 300;
+  font-weight: 600;
 }
 
 .finilize-batch-table-container {
   overflow-y: scroll;
-  overflow-x: hidden;
-  height: 300px;
-  padding-top: -5;
+  height:65vh;
 }
 
 .finilize-batch-table.sticky th {
 position: sticky;
 top: 0;
 background-color: rgba(242, 105, 38);
-transform: scale(1.03);
 }
 
+/*//////////////// UPDATE BATCH ///////////////*/
+
+/*////////////////////////////// DROPDOWNS /////////////////////////*/
+#update-batch-dropdown-curriculum,
+#update-batch-dropdown-location {
+  width: 100%;
+}
+
+/* Trainers dropdown */
+#addTrainerUpdateBatch {
+  width: 79%;
+}
+
+.update-batch-buttons {
+  margin-top: 15px;
+}
+
+.update-batch-button-cancel {
+  float: left;
+}
+
+.update-batch-button-save{
+  float: right;
+
+}

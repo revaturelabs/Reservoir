@@ -14,10 +14,10 @@ export const GerenateBatchTitleBar = (props: IPageTitleBarProps) => {
             <div className="row page-title-bar">
                 <Container>
                     <p onClick={() => props.setView(1)} onMouseDown={() => { props.setActive(1) }} id={!props.active ? "" : "generate-new-batch-active"}
-                        className="float-right generate-batch-nav-link">Finalize A Batch</p>
+                        className="float-right generate-batch-nav-link">Unconfirmed Batches</p>
 
                     <p onClick={() => props.setView(0)} onMouseDown={() => { props.setActive(0) }} id={!props.active ? "generate-new-batch-active" : ""}
-                        className="float-right generate-batch-nav-link">Initialize A Batch</p>
+                        className="float-right generate-batch-nav-link">Initialize Batch</p>
 
                     <div className="middle-text">{props.pageTitle}</div>
 

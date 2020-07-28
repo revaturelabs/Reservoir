@@ -68,7 +68,7 @@ export function DisplayBatchs(props: any) {
             <div className="row justify-content-center">
                 {allButtons.map((data: any, index: any) => {
                     return (
-                        <div className="col">
+                        <div className="col" key={index}>
                             <button key={index} className={`finilize-batch-buttons ${data[2]}`} disabled={props.batch ? false : true} onClick={data[1]}>{data[0]}</button>
                         </div>
                     )
