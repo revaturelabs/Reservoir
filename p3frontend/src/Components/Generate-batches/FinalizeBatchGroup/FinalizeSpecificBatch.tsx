@@ -120,7 +120,10 @@ export function FinalizeSpecificBatch(props: any) {
     setModifiedBatch({ ...modifiedBatch, "associate_ids": ids })
   }, [associateNames])
 
-  //Track the increment changes
+  /*
+  *The majory implementation of this got lost in merges
+  *I dont think there is currently any use for this UseEffect
+  */
   useEffect(() => {
     if (currentTrainerList == ["empty"]) {
       let element: any = document.getElementById("addTrainerUpdateBatch")
@@ -381,7 +384,10 @@ export function FinalizeSpecificBatch(props: any) {
       else {
         setCurrentTrainerList(displayedList)
       }
-
+      let element: any = document.getElementById("addTrainerUpdateBatch")
+      if (element) {
+        element.value = "none"
+      }
     })
 
 
