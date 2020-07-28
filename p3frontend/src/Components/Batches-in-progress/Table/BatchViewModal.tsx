@@ -104,17 +104,19 @@ export class BatchViewModal extends React.Component<IPBatchViewModal, any> {
               </Col>
             </Row>
             <Row>
-              <Col>
+              {/* ///////What is a program type */}
+              {/* <Col>
                 <b>Program Type: </b>
               </Col>
               <Col>
                 {this.props.currentBatch.programType === "null"
                   ? "N/A"
                   : this.props.currentBatch.programType}
-              </Col>
+              </Col> */}
             </Row>
             <Row>
-              <Col>
+              {/* ////this isConfirmed makes absolutely no sense */}
+              {/* <Col>
                 <b>Confirmed</b>
                 <br />
 
@@ -140,7 +142,7 @@ export class BatchViewModal extends React.Component<IPBatchViewModal, any> {
                     No
                   </Button>
                 </ButtonGroup>
-              </Col>
+              </Col> */}
             </Row>
             <Row>
               <ErrorAlert
