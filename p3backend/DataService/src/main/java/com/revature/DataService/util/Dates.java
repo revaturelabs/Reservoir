@@ -24,11 +24,11 @@ public class Dates {
 		return new Date(getToday().getTime() + 7889400000L);
 	}	
 	
-	public static Date calcPotentialFutureEndDate(int numWeeks) {
+	public static Date calcPotentialFutureEndDate(Date startDate,int numWeeks) {
 		long weekInMillis = 604800000L;
 		long dayInMillis = 86400000L;
 		long threeDays = dayInMillis * 3;
-		long duration = weekInMillis * numWeeks;
-		return new Date(getToday().getTime() + (duration - threeDays));
+		long duration = weekInMillis * numWeeks ;
+		return new Date(startDate.getTime() + (duration - threeDays));
 	}
 }
