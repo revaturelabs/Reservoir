@@ -125,17 +125,25 @@
 
 /*//////////////////// FINILIZE BATCH - BUTTONS //////////////////*/
 
-.finilize-batch-delete {
+.finilize-batch-delete { 
   float: left;
 }
 
 .finilize-batch-update {
-  text-align: center;
+  display: block;
+  margin: auto;  
   
 }
 
 .finilize-batch-confirm {
   float: right;
+}
+
+/*Due to the CONFIRM button being bigger in relation to the others, the UPDATE button does not look centerd. Pushed it to the left when screen hits 768px width*/
+@media only screen and (max-width: 768px) {
+  .finilize-batch-update { 
+    float: left;
+  }
 }
 
 /*//////////////////////// FINILIZE BATCH - TABLE /////////////////////*/
