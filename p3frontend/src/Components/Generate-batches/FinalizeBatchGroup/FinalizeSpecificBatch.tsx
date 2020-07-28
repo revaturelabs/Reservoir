@@ -99,7 +99,14 @@ export function FinalizeSpecificBatch(props: any) {
             }
           )
         }
-        setCurrentTrainerList(initialDropDown)
+        if(initialDropDown.length==0)
+        {
+          setCurrentTrainerList(["empty"])
+        }
+        else{
+          setCurrentTrainerList(initialDropDown)
+        }
+        
       })
     })
   }, [])
@@ -326,14 +333,23 @@ export function FinalizeSpecificBatch(props: any) {
         }
       )
     }
-    if (initialDropDown.length) {
-      let element: any = document.getElementById("addTrainerUpdateBatch")
-      if (element) {
-        element.value = "none"
-      }
-    }
+
     setSelectedTrainer();
-    setCurrentTrainerList(initialDropDown)
+    if(initialDropDown.length==0)
+    {
+      setCurrentTrainerList(["empty"])
+    }
+    else{
+      setCurrentTrainerList(initialDropDown)
+    }
+
+   
+    let element: any = document.getElementById("addTrainerUpdateBatch")
+    if (element) {
+      element.value = "none"
+    }
+  
+  
   }
 
 
