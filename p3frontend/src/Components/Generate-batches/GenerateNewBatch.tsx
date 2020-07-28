@@ -328,7 +328,7 @@ export function GenerateNewBatch(props: any) {
     //Create our batch object
     let saveObject: any =
     {
-      "batch_id": 0,
+      "batch_id": null,
       "curriculum_id": parseInt(skill),
       "location_id": parseInt(loc),
       "start_date": dataBaseDate,
