@@ -202,7 +202,8 @@ export function GenerateNewBatch(props: any) {
   function testReturn() {
     const MAX_CAPACITY=50;
     const MAX_SCORE=100;
-    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1 && (parseInt(reqScore) <= MAX_SCORE) && (parseInt(reqScore) >= 1)&& (parseInt(capacity) <= MAX_CAPACITY))  
+    const MAX_WEEKS=15; 
+    if (loc && skill && startDate && ammountOfWeeks && parseInt(ammountOfWeeks) && parseFloat(ammountOfWeeks) % 1 === 0 && (parseInt(reqScore) >= 0) && (parseInt(capacity) >= 1) && ammountOfWeeks >= 1 && (parseInt(reqScore) <= MAX_SCORE) && (parseInt(reqScore) >= 1)&& (parseInt(capacity) <= MAX_CAPACITY) && parseFloat(ammountOfWeeks)<= MAX_WEEKS && parseInt(ammountOfWeeks)>=1)  
     {
       return false;
     }
@@ -328,11 +329,11 @@ export function GenerateNewBatch(props: any) {
     //Create our batch object
     let saveObject: any =
     {
-      "batch_id": 0,
+      "batch_id": null,
       "curriculum_id": parseInt(skill),
       "location_id": parseInt(loc),
       "start_date": dataBaseDate,
-      "end_date": endDate,
+      "end_date": endDate, //This doesnt matter
       "batch_duration": parseInt(ammountOfWeeks),
       "batch_capacity": parseInt(capacity),
       "required_score": reqScore,

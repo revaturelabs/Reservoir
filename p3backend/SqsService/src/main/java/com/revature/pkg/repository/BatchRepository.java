@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.pkg.model.Batch;
+import com.revature.pkg.model.BatchState;
 
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Integer>{
@@ -46,20 +47,20 @@ public interface BatchRepository extends JpaRepository<Batch, Integer>{
 	
 	@Transactional
 	@Modifying(clearAutomatically = true)
-	  @Query(value = "insert into project3.batch values(default,:start,:end,:isConfirmed,:score,:programType,"
-	  		+ ":locationid,:curriculumid)",
+	  @Query(value = "insert into project3.batch (batch_capacity, curriculum_id, end_date, interview_score_lower, location_id, program_type, start_date, state_id) values"
+	  		+ "(:batchCapacity, :curriculumid, :end, :score, :locationid,:programType, :start,:state)",
 		      nativeQuery = true)
-	void createBatch(Date start,Date end,boolean isConfirmed,Integer score,String programType,
-			Integer locationid, Integer curriculumid);
+	void createBatch(Date start,Date end,Integer stateId,Integer score,String programType,
+			Integer locationid, Integer curriculumid, Integer batchCapacity);
 	
 	
 	@Transactional
 	@Modifying(clearAutomatically = true)
-	  @Query(value = "update project3.batch set start_date=:start, end_date=:end,isconfirmed=:isConfirmed,interview_score_lower=:score,"
-	  		+ "program_type=:programType,location_id=:locationid,curriculum_id=:curriculumid where batch_id=:batchId",
+	  @Query(value = "update project3.batch set start_date=:start, end_date=:end,state_id=:stateId,interview_score_lower=:score,"
+	  		+ "program_type=:programType,location_id=:locationid,curriculum_id=:curriculumid, batch_capacity=:batchCapacity where batch_id=:batchId",
 		      nativeQuery = true)
-	void updateBatch(Date start,Date end,boolean isConfirmed,Integer score,String programType,
-			Integer locationid, Integer curriculumid, Integer batchId);
+	void updateBatch(Date start,Date end,Integer stateId,Integer score,String programType,
+			Integer locationid, Integer curriculumid, Integer batchId, Integer batchCapacity);
 	  
 
 }

@@ -87,6 +87,7 @@ export class TimelineComponent extends React.Component<
             onDoubleClick: () => {
               this.showBatchModal(batch);
             },
+
             style: batch.trainers.length
               ? {
                   background: "green",
@@ -155,6 +156,7 @@ export class TimelineComponent extends React.Component<
             onDoubleClick: () => {
               this.showBatchModal(batch);
             },
+
             style: batch.trainers.length
               ? {
                   background: "green",
@@ -232,8 +234,8 @@ export class TimelineComponent extends React.Component<
           <Timeline
             groups={this.state.groups}
             items={this.state.items}
-            defaultTimeStart={moment().add(-4, "months")}
-            defaultTimeEnd={moment().add(2, "months")}
+            defaultTimeStart={moment().add(-1, "months")}
+            defaultTimeEnd={moment().add(4, "months")}
           ></Timeline>
           {/* {this.state.isOpen ? (
             <TimelineModal

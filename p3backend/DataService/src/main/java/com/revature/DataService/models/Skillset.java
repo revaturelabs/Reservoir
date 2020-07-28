@@ -11,9 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,120 +20,98 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(schema = "project3", name = "skillset")
 public class Skillset {
 
+	public Skillset() {
+		super();
+	}
 
+	public Skillset(Integer skillSetId, String skillSetName, List<Skills> skills, List<Trainer> trainers,
+			List<ClientDemand> clientDemands, List<Curriculum> curricula) {
+		super();
+		this.skillSetId = skillSetId;
+		this.skillSetName = skillSetName;
+		this.skills = skills;
+		this.trainers = trainers;
+		this.clientDemands = clientDemands;
+		this.curricula = curricula;
+	}
 
-  public Skillset() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
+	@Id
+	@Column(name = "skillset_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer skillSetId;
 
-  public Skillset(Integer skillSetId, String skillSetName, List<Skills> skills,
-      List<Trainer> trainers, List<ClientDemand> clientDemands, List<Curriculum> curricula) {
-    super();
-    this.skillSetId = skillSetId;
-    this.skillSetName = skillSetName;
-    this.skills = skills;
-    this.trainers = trainers;
-    this.clientDemands = clientDemands;
-    this.curricula = curricula;
-  }
+	@Column(name = "name")
+	private String skillSetName;
 
+	@JsonIgnoreProperties({ "skillSets" })
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "skillsetskills", schema = "project3", joinColumns = @JoinColumn(name = "skillset_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+	private List<Skills> skills;
 
-  @Id
-  @Column(name = "skillset_id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer skillSetId;
+	@JsonIgnoreProperties({ "trainerSkills", "firstName", "lastName", "email", "consent", "batches" })
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "trainerskills", schema = "project3", joinColumns = @JoinColumn(name = "skillset_id"), inverseJoinColumns = @JoinColumn(name = "trainer_id"))
+	private List<Trainer> trainers;
 
-  @Column(name = "name")
-  private String skillSetName;
+	@JsonIgnoreProperties({ "clientDemandSkillset", "quantity", "deadline" })
+	@OneToMany(mappedBy = "clientDemandSkillset")
+	private List<ClientDemand> clientDemands;
 
-  // Skills to SkillSet
-  @JsonIgnoreProperties({"skillSets"})
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "skillsetskills", schema = "project3",
-      joinColumns = @JoinColumn(name = "skillset_id"),
-      inverseJoinColumns = @JoinColumn(name = "skill_id"))
-  private List<Skills> skills;
+	@JsonIgnoreProperties({ "curriculumSkillset", "batch", "location", "associates", "consent" })
+	@OneToMany(mappedBy = "curriculumSkillset")
+	private List<Curriculum> curricula;
 
-  // SkillSet to Trainer currently only show the trainer id
-  @JsonIgnoreProperties({"trainerSkills", "firstName", "lastName", "email", "consent", "batches"})
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "trainerskills", schema = "project3",
-      joinColumns = @JoinColumn(name = "skillset_id"),
-      inverseJoinColumns = @JoinColumn(name = "trainer_id"))
-  private List<Trainer> trainers;
+	public Integer getSkillSetId() {
+		return skillSetId;
+	}
 
+	public void setSkillSetId(Integer skillSetId) {
+		this.skillSetId = skillSetId;
+	}
 
+	public String getSkillSetName() {
+		return skillSetName;
+	}
 
-  // SkillSet to ClientDemand
-  @JsonIgnoreProperties({"clientDemandSkillset", "quantity", "deadline"})
-  @OneToMany(mappedBy = "clientDemandSkillset")
-  private List<ClientDemand> clientDemands;
+	public void setSkillSetName(String skillSetName) {
+		this.skillSetName = skillSetName;
+	}
 
+	public List<Skills> getSkills() {
+		return skills;
+	}
 
+	public void setSkills(List<Skills> skills) {
+		this.skills = skills;
+	}
 
-  // SkillSet to Curriculum
-  @JsonIgnoreProperties({"curriculumSkillset", "batch", "location", "associates", "consent"})
-  @OneToMany(mappedBy = "curriculumSkillset")
-  private List<Curriculum> curricula;
+	public List<Trainer> getTrainers() {
+		return trainers;
+	}
 
-  public Integer getSkillSetId() {
-    return skillSetId;
-  }
+	public void setTrainers(List<Trainer> trainers) {
+		this.trainers = trainers;
+	}
 
-  public void setSkillSetId(Integer skillSetId) {
-    this.skillSetId = skillSetId;
-  }
+	public List<ClientDemand> getClientDemands() {
+		return clientDemands;
+	}
 
-  public String getSkillSetName() {
-    return skillSetName;
-  }
+	public void setClientDemands(List<ClientDemand> clientDemands) {
+		this.clientDemands = clientDemands;
+	}
 
-  public void setSkillSetName(String skillSetName) {
-    this.skillSetName = skillSetName;
-  }
+	public List<Curriculum> getCurricula() {
+		return curricula;
+	}
 
-  public List<Skills> getSkills() {
-    return skills;
-  }
+	public void setCurricula(List<Curriculum> curricula) {
+		this.curricula = curricula;
+	}
 
-  public void setSkills(List<Skills> skills) {
-    this.skills = skills;
-  }
-
-  public List<Trainer> getTrainers() {
-    return trainers;
-  }
-
-  public void setTrainers(List<Trainer> trainers) {
-    this.trainers = trainers;
-  }
-
-
-
-  public List<ClientDemand> getClientDemands() {
-    return clientDemands;
-  }
-
-  public void setClientDemands(List<ClientDemand> clientDemands) {
-    this.clientDemands = clientDemands;
-  }
-
-  public List<Curriculum> getCurricula() {
-    return curricula;
-  }
-
-  public void setCurricula(List<Curriculum> curricula) {
-    this.curricula = curricula;
-  }
-
-  @Override
-  public String toString() {
-    return "Skillset [skillSetId=" + skillSetId + ", skillSetName=" + skillSetName + ", skills="
-        + skills + ", trainers=" + trainers + ", clientDemands=" + clientDemands + ", curricula="
-        + curricula + "]";
-  }
-
-
-
+	@Override
+	public String toString() {
+		return "Skillset [skillSetId=" + skillSetId + ", skillSetName=" + skillSetName + ", skills=" + skills
+				+ ", trainers=" + trainers + ", clientDemands=" + clientDemands + ", curricula=" + curricula + "]";
+	}
 }

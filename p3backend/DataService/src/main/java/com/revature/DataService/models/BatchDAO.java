@@ -1,68 +1,56 @@
 package com.revature.DataService.models;
 
 import java.sql.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(schema = "project3", name = "batch")
 public class BatchDAO {
-	
-	  @Id
-	  @Column(name = "batch_id")
-	  @GeneratedValue(strategy = GenerationType.IDENTITY)
-	  private Integer batchId;
 
-	  @Column(name = "start_date")
-	  private Date startDate;
+	@Id
+	@Column(name = "batch_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer batchId;
 
-	  @Column(name = "end_date")
-	  private Date endDate;
-	  
-	  
-	  @Column(name = "state_id")
-	  private Integer state;
+	@Column(name = "start_date")
+	private Date startDate;
 
-	  
-	  @Column(name = "interview_score_lower")
-	  private Integer interviewScoreLower;
-	  
-	  @Column(name="program_type")
-	  private String programType;
-	  
-	  @Column(name="location_id")
-	  private Integer locationId;
-	  
-	  @Column(name="curriculum_id")
-	  private Integer curiculum_id;
-	  
-		@Column(name = "batch_capacity")
-		private int batchCapacity;
-	  
-	  
-	  public int getBatchCapacity() {
-			return batchCapacity;
-		}
+	@Column(name = "end_date")
+	private Date endDate;
 
-		public void setBatchCapacity(int batchCapacity) {
-			this.batchCapacity = batchCapacity;
-		}
+	@Column(name = "state_id")
+	private Integer state;
 
-	//Getters and setters
+	@Column(name = "interview_score_lower")
+	private Integer interviewScoreLower;
+
+	@Column(name = "program_type")
+	private String programType;
+
+	@Column(name = "location_id")
+	private Integer locationId;
+
+	@Column(name = "curriculum_id")
+	private Integer curiculum_id;
+
+	@Column(name = "batch_capacity")
+	private int batchCapacity;
+
+	public int getBatchCapacity() {
+		return batchCapacity;
+	}
+
+	public void setBatchCapacity(int batchCapacity) {
+		this.batchCapacity = batchCapacity;
+	}
+
+	// Getters and setters
 	public Integer getBatchId() {
 		return batchId;
 	}

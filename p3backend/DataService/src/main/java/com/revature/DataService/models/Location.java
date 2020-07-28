@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,70 +16,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(schema = "project3", name = "location")
 public class Location {
 
-  public Location() {
-    super();
-  }
+	public Location() {
+		super();
+	}
 
-  public Location(Integer locationId, String locationName, List<Batch> batches) {
-    super();
-    this.locationId = locationId;
-    this.locationName = locationName;
-    this.batches = batches;
-  }
+	public Location(Integer locationId, String locationName, List<Batch> batches) {
+		super();
+		this.locationId = locationId;
+		this.locationName = locationName;
+		this.batches = batches;
+	}
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "location_id")
+	private Integer locationId;
 
+	@Column(name = "location_name")
+	private String locationName;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "location_id")
-  private Integer locationId;
+	@JsonIgnoreProperties({ "location", "trainers", "curriculum", "associates", "consent", "batches", "state" })
+	@OneToMany(mappedBy = "location")
+	private List<Batch> batches;
 
+	public Integer getLocationId() {
+		return locationId;
+	}
 
-  @Column(name = "location_name")
-  private String locationName;
+	public void setLocationId(Integer locationId) {
+		this.locationId = locationId;
+	}
 
+	public String getLocationName() {
+		return locationName;
+	}
 
-  // Location to Batches
-  @JsonIgnoreProperties({"location", "trainers", "curriculum", "associates", "consent","batches","state"})
-  @OneToMany(mappedBy = "location")
-  private List<Batch> batches;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
 
+	public List<Batch> getBatches() {
+		return batches;
+	}
 
-  public Integer getLocationId() {
-    return locationId;
-  }
+	public void setBatches(List<Batch> batches) {
+		this.batches = batches;
+	}
 
-
-  public void setLocationId(Integer locationId) {
-    this.locationId = locationId;
-  }
-
-
-  public String getLocationName() {
-    return locationName;
-  }
-
-
-  public void setLocationName(String locationName) {
-    this.locationName = locationName;
-  }
-
-
-  public List<Batch> getBatches() {
-    return batches;
-  }
-
-
-  public void setBatches(List<Batch> batches) {
-    this.batches = batches;
-  }
-
-  @Override
-  public String toString() {
-    return "Location [locationId=" + locationId + ", locationName=" + locationName + ", batches="
-        + batches + "]";
-  }
-
-
-
+	@Override
+	public String toString() {
+		return "Location [locationId=" + locationId + ", locationName=" + locationName + ", batches=" + batches + "]";
+	}
 }
