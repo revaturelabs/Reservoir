@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
+import Chart from "react-google-charts";
 import { getTotalSupply, getFilteredSupply } from "../Common/API/clientDemand";
 import { getUnconfirmedBatches, getBatchById } from "../Common/API/batch";
-import { Row, Col } from "reactstrap";
+import { ClientDemands } from "../../models/ClientDemands";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Row,
+  Col,
+} from "reactstrap";
 import { axiosClient } from "../Common/API/axios";
-import StackBarDropDown from "./StackBarDropDown";
-import Graph from "./Graph";
 
 export default function TestChart() {
   //Have to define/declare my dumb typescript variables
@@ -99,8 +106,7 @@ export default function TestChart() {
   const selectDropItemForSkill = (e: any) => {
     setSkillSetDropItem(e.target.textContent);
     setSkillsetDropdownId(e.target.value);
-    console.log(e.target.value);
-    console.log(e.target.textContent);
+
     if (skillMatch === e.target.textContent || !e.target.value) {
       console.log("Match!");
       setGraphData({
@@ -193,54 +199,160 @@ export default function TestChart() {
       <Col>
         <Row>
           <Col className="center-items-div">
-            <StackBarDropDown
-              dropDownOpen={dropDownOpenClient}
-              toggle={toggleClient}
-              dropItem={clientDropItem}
-              default="All Clients"
-              dropObjects={clients}
-              callBack={selectDropItemForClient}
-              type="client"
-            />
+            <Dropdown isOpen={dropDownOpenClient} toggle={toggleClient}>
+              <DropdownToggle
+                caret
+                className="viewOrangeBtn"
+                data-toggle="dropdown"
+                araia-expanded={dropDownOpenClient}
+              >
+                {clientDropItem ? clientDropItem : "All Clients"}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem
+                  key="All Clients"
+                  onClick={(e) => selectDropItemForClient(e)}
+                >
+                  All Clients
+                </DropdownItem>
+                {clients &&
+                  clients.map((s: any) => {
+                    return (
+                      <DropdownItem
+                        value={s.clientId}
+                        onClick={(e) => selectDropItemForClient(e)}
+                      >
+                        {s.name}
+                      </DropdownItem>
+                    );
+                  })}
+              </DropdownMenu>
+            </Dropdown>
           </Col>
           <Col className="center-items-div">
-            <StackBarDropDown
-              dropDownOpen={dropDownOpenSkill}
-              toggle={toggleSkill}
-              dropItem={skillSetDropItem}
-              default="All Skill Sets"
-              dropObjects={skillSets}
-              callBack={selectDropItemForSkill}
-              type="skillSet"
-            />
+            <Dropdown isOpen={dropDownOpenSkill} toggle={toggleSkill}>
+              <DropdownToggle
+                caret
+                className="viewOrangeBtn"
+                data-toggle="dropdown"
+                araia-expanded={dropDownOpenSkill}
+              >
+                {skillSetDropItem ? skillSetDropItem : "All Skill Sets"}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem
+                  key="All Skill Sets"
+                  onClick={(e) => selectDropItemForSkill(e)}
+                >
+                  All Skill Sets
+                </DropdownItem>
+                {skillSets &&
+                  skillSets.map((s: any) => {
+                    return (
+                      <DropdownItem
+                        value={s.skillSetId}
+                        onClick={(e) => selectDropItemForSkill(e)}
+                      >
+                        {s.name}
+                      </DropdownItem>
+                    );
+                  })}
+              </DropdownMenu>
+            </Dropdown>
           </Col>
           <Col>
-            <StackBarDropDown
-              dropDownOpen={dropdownOpenUnconfirmed}
+            <Dropdown
+              isOpen={dropdownOpenUnconfirmed}
               toggle={toggleUnConfirmed}
-              dropItem={unconfirmedDropItem}
-              default="Unconfirmed Batches"
-              dropObjects={dropdownUnconfirmed}
-              callBack={selectDropItemForUnconfirmed}
-            />
+            >
+              <DropdownToggle
+                caret
+                className="viewOrangeBtn"
+                data-toggle="dropdown"
+              >
+                {unconfirmedDropItem
+                  ? unconfirmedDropItem
+                  : "Unconfirmed Batches"}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem
+                  key="No Unconfirmed"
+                  onClick={(e) => selectDropItemForUnconfirmed(e)}
+                >
+                  No Batch Selected
+                </DropdownItem>
+                {dropdownUnconfirmed &&
+                  dropdownUnconfirmed.map((s: any) => {
+                    return (
+                      <DropdownItem
+                        value={s}
+                        onClick={(e) => selectDropItemForUnconfirmed(e)}
+                      >
+                        Batch {s}
+                      </DropdownItem>
+                    );
+                  })}
+              </DropdownMenu>
+            </Dropdown>
           </Col>
         </Row>
       </Col>
 
-      <Graph
-        total_demand={graphData.total_demand}
-        committed_supply={graphData.committed_supply}
-        confirmed_supply={graphData.confirmed_supply}
-        unconfirmed_supply={graphData.unconfirmed_supply}
-        committed_curr={graphData.committed_curr}
-        confirmed_curr={graphData.confirmed_curr}
-        unconfirmed_curr={graphData.unconfirmed_curr}
-        committed_1m={graphData.committed_1m}
-        confirmed_1m={graphData.confirmed_1m}
-        unconfirmed_1m={graphData.unconfirmed_1m}
-        committed_3m={graphData.committed_3m}
-        confirmed_3m={graphData.confirmed_3m}
-        unconfirmed_3m={graphData.unconfirmed_3m}
+      <Chart
+        width={"80vw"}
+        height={"80vh"}
+        chartType="BarChart"
+        loader={<div>Loading Chart</div>}
+        data={[
+          ["S&D", "Demand", "Committed", "Confirmed", "Unconfirmed"],
+          ["Total Demand", graphData.total_demand, undefined, undefined, 0],
+          [
+            "Total Supply",
+            undefined,
+            graphData.committed_supply,
+            graphData.confirmed_supply,
+            graphData.unconfirmed_supply,
+          ],
+          [
+            "Total Available Currently",
+            undefined,
+            graphData.committed_curr,
+            graphData.confirmed_curr,
+            graphData.unconfirmed_curr,
+          ],
+          [
+            "Total Available in 1 Month",
+            undefined,
+            graphData.committed_1m,
+            graphData.confirmed_1m,
+            graphData.unconfirmed_1m,
+          ],
+          [
+            "Total Available in 3 Months",
+            undefined,
+            graphData.committed_3m,
+            graphData.confirmed_3m,
+            graphData.unconfirmed_3m,
+          ],
+        ]}
+        options={{
+          title: "Client Demands vs Revature Supply",
+          chartArea: { left: "auto", width: "50%" },
+          orientation: "horizontal",
+          isStacked: true,
+          hAxis: {
+            title: "Number of Associates",
+            minValue: 0,
+          },
+          series: {
+            0: { color: "#F26925" },
+            1: { color: "#FCB414" },
+            2: { color: "#72A4C2" },
+            3: { color: "#474C55" },
+          },
+        }}
+        // For tests
+        rootProps={{ "data-testid": "3" }}
       />
     </div>
   );
