@@ -99,14 +99,7 @@ export function FinalizeSpecificBatch(props: any) {
             }
           )
         }
-        if(initialDropDown.length==0)
-        {
-          setCurrentTrainerList(["empty"])
-        }
-        else{
-          setCurrentTrainerList(initialDropDown)
-        }
-        
+        setCurrentTrainerList(initialDropDown)
       })
     })
   }, [])
@@ -333,23 +326,14 @@ export function FinalizeSpecificBatch(props: any) {
         }
       )
     }
-
+    if (initialDropDown.length) {
+      let element: any = document.getElementById("addTrainerUpdateBatch")
+      if (element) {
+        element.value = "none"
+      }
+    }
     setSelectedTrainer();
-    if(initialDropDown.length==0)
-    {
-      setCurrentTrainerList(["empty"])
-    }
-    else{
-      setCurrentTrainerList(initialDropDown)
-    }
-
-   
-    let element: any = document.getElementById("addTrainerUpdateBatch")
-    if (element) {
-      element.value = "none"
-    }
-  
-  
+    setCurrentTrainerList(initialDropDown)
   }
 
 
