@@ -87,7 +87,6 @@ export class TimelineBatchModal extends React.Component<IPBatchViewModal, any> {
             </Row>
             <Row>
               <Col>
-                <b>Batch State</b>
                 <br />
               </Col>
               {/* <Col>
