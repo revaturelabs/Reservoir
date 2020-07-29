@@ -9,7 +9,7 @@ export function DisplayBatchs(props: any) {
             setBatch(data);
         });
     }, []);
-    const tableTittle = ["Location", "Curriculum", "Start-Date", "Batch Capacity"];
+    const tableTittle = ["ID", "Location", "Curriculum", "Start-Date", "Batch Capacity"];
 
     //the button names and their given onclicks
     const allButtons: any[any] = [
@@ -53,7 +53,7 @@ export function DisplayBatchs(props: any) {
                                     style={colorBac ? { backgroundColor: "gray", color: "#fff" } : { backgroundColor: "" }}
 
                                 >
-
+                                    <td key={0}>{data.batchId}</td>
                                     <td key={1}>{data.location.locationName}</td>
                                     <td key={2}>{data.curriculum.name}</td>
                                     <td key={3}>{data.startDate}</td>
