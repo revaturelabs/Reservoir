@@ -1,3 +1,4 @@
+# Sprint 1
 * [Mohamed Ahmed](https://github.com/mohamedctm)
 * [John Agens](https://github.com/J-Agens)
 * [Liam Allard](https://github.com/lallard13)
@@ -13,3 +14,16 @@
 * [Marven Mathelier](https://github.com/marven250)
 * [Nick Steen](https://github.com/steenn30)
 * [Ben Worrell](https://github.com/BenjaminWorrell)
+
+# Sprint 2 (7/14/20-7/30/20) - Batch 786 - Java-React-200526
+* [Amauri Tapia](https://github.com/amauritapia)
+* [Brennan Kersey](https://github.com/BrennanK)
+* [Dave McAllister](https://github.com/democallister)
+* [Daniel Sandley](https://github.com/dSandley20)
+* [Duanny Matos](https://github.com/duannymatos)
+* [Eric Last](https://github.com/elast27)
+* [James Bell](https://github.com/jsbell406)
+* [Logan Gantner](https://github.com/logantner)
+* [Rennie Wallin](https://github.com/Rennie-Wallin)
+* [Robert Comstock III](https://github.com/ThirdStockIII)
+* [Ted Young](https://github.com/thetedyoung)
