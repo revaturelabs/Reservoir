@@ -67,6 +67,16 @@ export function DisplayBatchs(props: any) {
             </div>
             <div className="row justify-content-center">
                 {allButtons.map((data: any, index: any) => {
+                    
+                    if(data==allButtons[2])
+                    {
+                        console.log(batch)
+                        return (
+                            <div className="col" key={index}>
+                                <button key={index} className={`finilize-batch-buttons ${data[2]}`} disabled={(props.batch && handleDisablingConfirm())? false : true} onClick={data[1]}>{data[0]}</button>
+                            </div>
+                        )
+                    }
                     return (
                         <div className="col" key={index}>
                             <button key={index} className={`finilize-batch-buttons ${data[2]}`} disabled={props.batch ? false : true} onClick={data[1]}>{data[0]}</button>
@@ -77,7 +87,22 @@ export function DisplayBatchs(props: any) {
         </div>
     )
 
-
+    function handleDisablingConfirm()
+    {
+        if(props.batch)
+        {
+            let selectedBatch=batch.filter((ele:any)=>{return ele.batchId==props.batch})
+            if(selectedBatch.length)
+            {
+                selectedBatch=selectedBatch[0];
+                if(selectedBatch && selectedBatch.trainers.length && selectedBatch.associates.length)
+                {
+                    return true;
+                }   
+            }
+        }
+        return false;
+    }
 
     function handleUpdate() {
         props.setView(1);
